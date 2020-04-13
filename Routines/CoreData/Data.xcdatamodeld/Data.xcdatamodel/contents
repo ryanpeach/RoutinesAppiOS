@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="16119" systemVersion="19D76" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <entity name="AlarmData" representedClassName="AlarmData" syncable="YES" codeGenerationType="category">
-        <attribute name="daysOfWeek" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+    <entity name="AlarmData" representedClassName="AlarmData" syncable="YES">
+        <attribute name="daysOfWeek_" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="name" optional="YES" attributeType="String"/>
-        <attribute name="time" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="time_" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <relationship name="taskData" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TaskData" inverseName="alarmData" inverseEntity="TaskData"/>
     </entity>
-    <entity name="SubTaskData" representedClassName="SubTaskData" syncable="YES" codeGenerationType="class">
+    <entity name="SubTaskData" representedClassName="SubTaskData" syncable="YES">
         <attribute name="id" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <relationship name="taskData" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TaskData" inverseName="subTaskData" inverseEntity="TaskData"/>
     </entity>
-    <entity name="TaskData" representedClassName="TaskData" syncable="YES" codeGenerationType="class">
-        <attribute name="duration" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+    <entity name="TaskData" representedClassName="TaskData" syncable="YES">
+        <attribute name="duration_" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="id" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <relationship name="alarmData" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="AlarmData" inverseName="taskData" inverseEntity="AlarmData"/>
