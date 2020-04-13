@@ -9,7 +9,9 @@
 import SwiftUI
 
 struct TaskListView: View {
-    @Binding var alarmData: AlarmData
+    let alarmId: UUID
+    
+    @Binding private var alarmData: alarmData
     
     var body: some View {
         VStack {

@@ -9,7 +9,10 @@
 import SwiftUI
 
 struct TaskDetailView: View {
-    @Binding var taskData: TaskData
+    let alarmId: UUID
+    let taskId: UUID
+    
+    @Binding private var taskData: TaskData
     
     var body: some View {
         VStack {
@@ -20,7 +23,7 @@ struct TaskDetailView: View {
             .navigationBarTitle(Text(self.taskData.name))
             .navigationBarItems(
                 trailing:
-                NavigationLink(destination: TaskCreationView(taskData: $taskData)) {
+                NavigationLink(destination: TaskEditorView(taskData: $taskData)) {
                     Text("Edit")
                 }
             )

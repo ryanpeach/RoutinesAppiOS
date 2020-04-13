@@ -9,7 +9,10 @@
 import SwiftUI
 
 struct TaskRowView: View {
-    @Binding var taskData: TaskData
+    let alarmId: UUID
+    let taskId: UUID
+    
+    @Binding private var taskData: TaskData
     
     var body: some View {
         NavigationLink(destination: TaskDetailView(taskData: self.$taskData)) {

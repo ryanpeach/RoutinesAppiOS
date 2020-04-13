@@ -7,15 +7,24 @@
 //
 
 import SwiftUI
+import CoreData
 
 struct AlarmsView: View {
-    @State var alarmDataList: Array<AlarmData>
+    @Environment(\.managedObjectContext) var managedObjectContext
+    @FetchRequest(
+        entity: AlarmData.entity(),
+        sortDescriptors: [
+            NSSortDescriptor(
+                keyPath: \AlarmData.time,
+                ascending: true
+            )
+    ]) var alarmDataList: FetchedResults<AlarmData>
     
     var body: some View {
         NavigationView {
             List{
-                ForEach(0..<self.alarmDataList.count) { i in
-                    AlarmsRow(alarm: self.$alarmDataList[i])
+                ForEach(self.alarmDataList) { al in
+                    AlarmsRow(alarmId: al.id)
                 }
                 .onDelete(perform: self.delete)
                 .onMove(perform: self.move)

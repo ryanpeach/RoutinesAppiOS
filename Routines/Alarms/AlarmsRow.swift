@@ -45,11 +45,13 @@ struct DaysOfWeekView: View {
 }
 
 struct AlarmsRow: View {
-    @Binding var alarm: AlarmData
+    let alarmId: UUID
+    
+    @Binding private var alarmData: AlarmData
     
     var body: some View {
         NavigationLink(destination: TaskListView(
-            alarmData: self.$alarm
+            alarmId: self.alarmId
         )) {
             VStack() {
                 HStack() {
@@ -80,15 +82,9 @@ struct AlarmsRow: View {
     }
 }
 
-struct AlarmsRow_Previewer: View {
-    @State var alarmData: AlarmData
-    var body: some View {
-        AlarmsRow(alarm: self.$alarmData)
-    }
-}
 
 struct AlarmsRow_Previews: PreviewProvider {
     static var previews: some View {
-        AlarmsRow_Previewer(alarmData: alarmDataList[0])
+        AlarmsRow(alarmData: alarmDataList[0].id)
     }
 }

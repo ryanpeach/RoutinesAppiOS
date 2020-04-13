@@ -71,10 +71,13 @@ extension View {
 struct TaskEditorView: View {
     let alarmId: UUID
     let taskId: UUID
+    
+    @Binding private var taskData: TaskData
     @State private var isShowingAlert = false
     
     var body: some View {
         VStack {
+            TextField(self.taskData.name, text: self.taskData.$name)
             Spacer().frame(height: 30)
             TimePickerRelativeView(time: self.$taskData.duration)
             Spacer().frame(height: 30)
@@ -87,7 +90,6 @@ struct TaskEditorView: View {
                 .onDelete(perform: self.delete)
                 .onMove(perform: self.move)
             }
-            .navigationBarTitle(Text("Editing: "+self.taskData.name))
             .navigationBarItems(
                 trailing: EditButton()
             )
@@ -126,7 +128,7 @@ struct TaskEditorView: View {
     }
 }
 
-struct TaskCreationView_Previewer: View {
+struct TaskEditorView_Previewer: View {
     @State var taskData: TaskData
     
     var body: some View {
@@ -134,10 +136,10 @@ struct TaskCreationView_Previewer: View {
     }
 }
 
-struct TaskCreationView_Previews: PreviewProvider {
+struct TaskEditorView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            TaskCreationView_Previewer(
+            TaskEditorView_Previewer(
                 taskData: alarmDataList[0].taskList[1]
             )
         }
