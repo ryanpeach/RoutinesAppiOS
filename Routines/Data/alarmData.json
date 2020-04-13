@@ -1,0 +1,13 @@
+{
+    {
+        "id": 0,
+        "name": "Morning",
+        "time": {
+            "hour": 7,
+            "minute": 30
+        }
+        "daysOfWeek": {
+            "DayOfWeek.Monday"
+        }
+    }
+}

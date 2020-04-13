@@ -10,7 +10,15 @@ import SwiftUI
 
 struct AlarmsView: View {
     var body: some View {
-        Text("Hello, World!")
+        NavigationView {
+            List(alarmData) { al in
+                NavigationLink(destination: TaskListView(taskData: al.taskList)) {
+                    AlarmsRow(alarm: al)
+                }
+            }
+            .padding(10)
+            .navigationBarTitle(Text("Alarms"))
+        }
     }
 }
 
