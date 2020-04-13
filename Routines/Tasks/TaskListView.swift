@@ -9,15 +9,25 @@
 import SwiftUI
 
 struct TaskListView: View {
-    var taskData: Array<TaskData>
+    var name: String
+    var taskList: Array<TaskData>
     
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        List(self.taskList) { td in
+            NavigationLink(destination: TaskDetailView(taskData: td)) {
+                TaskRowView(taskData: td)
+            }
+        }
+        .padding(10)
+        .navigationBarTitle(Text(self.name))
     }
 }
 
 struct TaskListView_Previews: PreviewProvider {
     static var previews: some View {
-        TaskListView(taskData: alarmData[0].taskList)
+        TaskListView(
+            name: alarmData[0].name,
+            taskList: alarmData[0].taskList
+        )
     }
 }

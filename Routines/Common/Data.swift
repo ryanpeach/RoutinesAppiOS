@@ -17,19 +17,30 @@ enum DayOfWeek {
 }
 
 struct Time: Hashable {
-    var hour: Int
-    var minute: Int
+    var minutes: Int
+    
+    func getHours() -> Int {
+        self.minutes / 60
+    }
+    
+    func getMinutes() -> Int {
+        self.minutes % 60
+    }
+    
+    static func fromDayTime(hour: Int, minutes: Int) -> Time {
+        Time(minutes: hour * 60 + minutes)
+    }
     
     func string() -> String {
-        String(format: "%02d", self.hour)+":"+String(format: "%02d", self.minute)
+        String(format: "%02d", self.getHours())+":"+String(format: "%02d", self.getMinutes())
     }
 }
 
 struct TaskData: Hashable, Identifiable {
     var id: Int
     var name: String
-    var duration: Time?
-    var subtasks: Array<SubTaskData>?
+    var duration: Time
+    var subtasks: Array<SubTaskData>
 }
 
 struct SubTaskData: Hashable, Identifiable {
@@ -45,7 +56,11 @@ struct AlarmData: Hashable, Identifiable {
     var taskList: [TaskData]
     
     func getDuration() -> Time {
-        Time(hour: 0, minute: 0)
+        var out = Time(minutes: 0)
+        for td in self.taskList {
+            out.minutes += td.duration.minutes
+        }
+        return out
     }
 }
 
@@ -53,9 +68,9 @@ let alarmData = [
     AlarmData (
         id: 0,
         name: "Morning",
-        time: Time(
+        time: Time.fromDayTime(
             hour: 7,
-            minute: 30
+            minutes: 30
         ),
         daysOfWeek: Set([
             DayOfWeek.Monday,
@@ -68,8 +83,23 @@ let alarmData = [
             TaskData(
                 id: 0,
                 name: "Wake Up",
-                duration: Optional.none,
-                subtasks: Optional.none
+                duration: Time(minutes: 0),
+                subtasks: []
+            ),
+            TaskData(
+                id: 1,
+                name: "Go Running",
+                duration: Time(minutes: 20),
+                subtasks: [
+                    SubTaskData(
+                        id: 0,
+                        name: "Wear Headband"
+                    ),
+                    SubTaskData(
+                        id: 1,
+                        name: "Bring Water"
+                    )
+                ]
             )
         ]
     )

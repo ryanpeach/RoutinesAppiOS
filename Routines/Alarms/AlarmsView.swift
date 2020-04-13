@@ -12,7 +12,10 @@ struct AlarmsView: View {
     var body: some View {
         NavigationView {
             List(alarmData) { al in
-                NavigationLink(destination: TaskListView(taskData: al.taskList)) {
+                NavigationLink(destination: TaskListView(
+                    name: al.name,
+                    taskList: al.taskList
+                )) {
                     AlarmsRow(alarm: al)
                 }
             }
