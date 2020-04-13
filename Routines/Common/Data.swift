@@ -6,6 +6,8 @@
 //  Copyright © 2020 Peach. All rights reserved.
 //
 
+import Foundation
+
 enum DayOfWeek {
     case Monday
     case Tuesday
@@ -16,61 +18,42 @@ enum DayOfWeek {
     case Sunday
 }
 
-struct Time: Hashable {
-    var minutes: Int
-    
-    func getHours() -> Int {
-        self.minutes / 60
-    }
-    
-    func getMinutes() -> Int {
-        self.minutes % 60
-    }
-    
-    static func fromDayTime(hour: Int, minutes: Int) -> Time {
-        Time(minutes: hour * 60 + minutes)
-    }
-    
-    func string() -> String {
-        String(format: "%02d", self.getHours())+":"+String(format: "%02d", self.getMinutes())
-    }
-}
-
 struct TaskData: Hashable, Identifiable {
-    var id: Int
+    var id: UUID
     var name: String
-    var duration: Time
+    var duration: RelativeTime
     var subtasks: Array<SubTaskData>
 }
 
 struct SubTaskData: Hashable, Identifiable {
-    var id: Int
+    var id: UUID
     var name: String
 }
 
 struct AlarmData: Hashable, Identifiable {
-    var id: Int
+    var id: UUID
     var name: String
-    var time: Time
+    var time: RelativeTime
     var daysOfWeek: Set<DayOfWeek>
     var taskList: [TaskData]
     
-    func getDuration() -> Time {
-        var out = Time(minutes: 0)
+    func getDuration() -> RelativeTime {
+        var sec: TimeInterval = 0.0
         for td in self.taskList {
-            out.minutes += td.duration.minutes
+            sec += td.duration.timeInterval
         }
-        return out
+        return RelativeTime.fromSeconds(seconds: sec)
     }
 }
 
-let alarmData = [
+var alarmDataList: Array<AlarmData> = [
     AlarmData (
-        id: 0,
+        id: UUID(),
         name: "Morning",
-        time: Time.fromDayTime(
-            hour: 7,
-            minutes: 30
+        time: RelativeTime.fromDayTime(
+            hours: 7,
+            minutes: 30,
+            seconds: 0.0
         ),
         daysOfWeek: Set([
             DayOfWeek.Monday,
@@ -81,22 +64,22 @@ let alarmData = [
         ]),
         taskList: [
             TaskData(
-                id: 0,
+                id: UUID(),
                 name: "Wake Up",
-                duration: Time(minutes: 0),
+                duration: RelativeTime.fromSeconds(seconds: 0.0),
                 subtasks: []
             ),
             TaskData(
-                id: 1,
+                id: UUID(),
                 name: "Go Running",
-                duration: Time(minutes: 20),
+                duration: RelativeTime.fromSeconds(seconds: 20.0*60),
                 subtasks: [
                     SubTaskData(
-                        id: 0,
+                        id: UUID(),
                         name: "Wear Headband"
                     ),
                     SubTaskData(
-                        id: 1,
+                        id: UUID(),
                         name: "Bring Water"
                     )
                 ]

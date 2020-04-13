@@ -9,20 +9,39 @@
 import SwiftUI
 
 struct TaskDetailView: View {
-    var taskData: TaskData
+    @Binding var taskData: TaskData
     
     var body: some View {
-        List(taskData.subtasks) { sub_td in
-            Text(sub_td.name)
+        VStack {
+            Text(taskData.duration.stringMS())
+            List (taskData.subtasks) { sub_td in
+                Text(sub_td.name)
+            }
+            .navigationBarTitle(Text(self.taskData.name))
+            .navigationBarItems(
+                trailing:
+                NavigationLink(destination: TaskCreationView(taskData: $taskData)) {
+                    Text("Edit")
+                }
+            )
         }
-        .navigationBarTitle(Text(self.taskData.name))
+    }
+}
+
+struct TaskDetailView_Previewer: View {
+    @State var taskData: TaskData
+    
+    var body: some View {
+        NavigationView {
+            TaskDetailView(
+                taskData: self.$taskData
+            )
+        }
     }
 }
 
 struct TaskDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        TaskDetailView(
-            taskData: alarmData[0].taskList[0]
-        )
+        TaskDetailView_Previewer(taskData: alarmDataList[0].taskList[1])
     }
 }

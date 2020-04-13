@@ -45,39 +45,50 @@ struct DaysOfWeekView: View {
 }
 
 struct AlarmsRow: View {
-    var alarm: AlarmData
+    @Binding var alarm: AlarmData
     
     var body: some View {
-        VStack() {
-            HStack() {
-                Spacer()
-                Text(self.alarm.name)
-                Spacer()
-                VStack {
-                    HStack{
-                        Spacer()
-                        Text("Time: ")
-                        Text(self.alarm.time.string())
-                    }
-                    HStack {
-                        Spacer()
-                        Text("Duration: ")
-                        Text(self.alarm.getDuration().string())
+        NavigationLink(destination: TaskListView(
+            alarmData: self.$alarm
+        )) {
+            VStack() {
+                HStack() {
+                    Spacer()
+                    Text(self.alarm.name)
+                    Spacer()
+                    VStack {
+                        HStack{
+                            Spacer()
+                            Text("Time: ")
+                            Text(self.alarm.time.stringHMS())
+                        }
+                        HStack {
+                            Spacer()
+                            Text("Duration: ")
+                            Text(self.alarm.getDuration().stringHMS())
+                        }
                     }
                 }
+                Spacer().frame(height: 20)
+                DaysOfWeekView(daysOfWeek: self.alarm.daysOfWeek)
             }
-            Spacer().frame(height: 20)
-            DaysOfWeekView(daysOfWeek: self.alarm.daysOfWeek)
+    //        .overlay(
+    //            RoundedRectangle(cornerRadius: 16)
+    //                .stroke(Color.black, lineWidth: 4)
+    //        )
         }
-//        .overlay(
-//            RoundedRectangle(cornerRadius: 16)
-//                .stroke(Color.black, lineWidth: 4)
-//        )
+    }
+}
+
+struct AlarmsRow_Previewer: View {
+    @State var alarmData: AlarmData
+    var body: some View {
+        AlarmsRow(alarm: self.$alarmData)
     }
 }
 
 struct AlarmsRow_Previews: PreviewProvider {
     static var previews: some View {
-        AlarmsRow(alarm: alarmData[0]).previewLayout(.fixed(width: 500, height: 100))
+        AlarmsRow_Previewer(alarmData: alarmDataList[0])
     }
 }

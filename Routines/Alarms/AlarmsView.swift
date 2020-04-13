@@ -9,24 +9,34 @@
 import SwiftUI
 
 struct AlarmsView: View {
+    @State var alarmDataList: Array<AlarmData>
+    
     var body: some View {
         NavigationView {
-            List(alarmData) { al in
-                NavigationLink(destination: TaskListView(
-                    name: al.name,
-                    taskList: al.taskList
-                )) {
-                    AlarmsRow(alarm: al)
+            List{
+                ForEach(0..<self.alarmDataList.count) { i in
+                    AlarmsRow(alarm: self.$alarmDataList[i])
                 }
+                .onDelete(perform: self.delete)
+                .onMove(perform: self.move)
             }
             .padding(10)
             .navigationBarTitle(Text("Alarms"))
+            .navigationBarItems(trailing: EditButton())
         }
+    }
+    
+    func delete(at offsets: IndexSet) {
+        self.alarmDataList.remove(atOffsets: offsets)
+    }
+    
+    func move(from source: IndexSet, to destination: Int) {
+        self.alarmDataList.move(fromOffsets: source, toOffset: destination)
     }
 }
 
 struct AlarmsView_Previews: PreviewProvider {
     static var previews: some View {
-        AlarmsView()
+        AlarmsView(alarmDataList: alarmDataList)
     }
 }

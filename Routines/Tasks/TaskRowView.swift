@@ -9,19 +9,28 @@
 import SwiftUI
 
 struct TaskRowView: View {
-    var taskData: TaskData
+    @Binding var taskData: TaskData
     
     var body: some View {
-        HStack{
-            Text(self.taskData.name)
-            Spacer()
-            Text(self.taskData.duration.string())
+        NavigationLink(destination: TaskDetailView(taskData: self.$taskData)) {
+            HStack{
+                Text(self.taskData.name)
+                Spacer()
+                Text(self.taskData.duration.stringMS())
+            }
         }
+    }
+}
+
+struct TaskRowView_Previewer: View {
+    @State var taskData: TaskData
+    var body: some View {
+        TaskRowView(taskData: self.$taskData)
     }
 }
 
 struct TaskRowView_Previews: PreviewProvider {
     static var previews: some View {
-        TaskRowView(taskData: alarmData[0].taskList[0])
+        TaskRowView_Previewer(taskData: alarmDataList[0].taskList[1]).previewLayout(.fixed(width: 500, height: 100))
     }
 }
