@@ -8,6 +8,21 @@
 
 import SwiftUI
 import CoreData
+import Combine
+
+struct MyBackButton: View {
+    let label: String
+    let closure: () -> ()
+
+    var body: some View {
+        Button(action: { self.closure() }) {
+            HStack {
+                Image(systemName: "chevron.left")
+                Text(label)
+            }
+        }
+    }
+}
 
 struct AlarmsView: View {
     @Environment(\.managedObjectContext) var managedObjectContext
@@ -19,6 +34,8 @@ struct AlarmsView: View {
                 ascending: true
             )
     ]) var alarmDataList: FetchedResults<AlarmData>
+    
+    @State var createMode = false
     
     var body: some View {
         NavigationView {
@@ -33,15 +50,17 @@ struct AlarmsView: View {
                 .navigationBarTitle(Text("Alarms"))
                 .navigationBarItems(trailing: EditButton())
                 
+                
                 // Add Item Button
-                NavigationLink(
-                    destination: AlarmCreator()
-                ) {
+                Button(action: {
+                    self.createMode = true
+                }) {
                     HStack {
                         Text("Add Item")
                         Image(systemName: "plus")
                     }
                 }
+                NavigationLink(destination: AlarmCreator(createMode: $createMode), isActive: $createMode) { EmptyView() }
             }
         }
     }
@@ -53,3 +72,27 @@ struct AlarmsView: View {
         }
     }
 }
+
+
+struct AlarmsView_Previews: PreviewProvider {
+    static let moc = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
+    static var previews: some View {
+        let alarmData = AlarmData(context: moc)
+        alarmData.id = UUID()
+        alarmData.name = "Morning"
+        alarmData.daysOfWeek_ = daysOfWeekToInt(daysOfWeek: [
+            DayOfWeek.Monday,
+            DayOfWeek.Tuesday,
+            DayOfWeek.Wednesday,
+            DayOfWeek.Thursday,
+            DayOfWeek.Friday
+        ])
+        do {
+            try self.moc.save()
+        } catch {
+            // handle the Core Data error
+        }
+        return AlarmsView()
+    }
+}
+

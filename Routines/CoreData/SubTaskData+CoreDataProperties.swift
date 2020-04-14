@@ -2,7 +2,7 @@
 //  SubTaskData+CoreDataProperties.swift
 //  Routines
 //
-//  Created by PEACH,RYAN (K-Atlanta,ex1) on 4/13/20.
+//  Created by PEACH,RYAN (K-Atlanta,ex1) on 4/14/20.
 //  Copyright © 2020 Peach. All rights reserved.
 //
 //
@@ -17,9 +17,9 @@ extension SubTaskData {
         return NSFetchRequest<SubTaskData>(entityName: "SubTaskData")
     }
 
+    @NSManaged public var id: UUID
+    @NSManaged public var name: String
     @NSManaged public var order: Int16
-    @NSManaged public var name: String?
-    @NSManaged public var id: UUID?
-    @NSManaged public var taskData: TaskData?
+    @NSManaged public var taskData: TaskData
 
 }

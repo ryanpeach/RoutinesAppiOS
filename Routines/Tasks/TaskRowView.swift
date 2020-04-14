@@ -7,17 +7,37 @@
 //
 
 import SwiftUI
+import CoreData
 
 struct TaskRowView: View {
-    let taskData: TaskData
+    @Environment(\.managedObjectContext) var managedObjectContext
+    
+    @ObservedObject var taskData: TaskData
     
     var body: some View {
-        // NavigationLink(destination: TaskDetailView(taskData: self.taskData)) {
+        NavigationLink(destination: TaskDetailView(taskData: self.taskData)) {
             HStack{
-                Text(self.taskData.name!)
+                Text(self.taskData.name)
                 Spacer()
                 Text(self.taskData.duration.stringMS())
             }
-        // }
+        }
+    }
+}
+
+struct TaskRowView_Previewer: View {
+    var taskData: TaskData
+    var body: some View {
+        TaskRowView(taskData: self.taskData)
+    }
+}
+struct TaskRowView_Previews: PreviewProvider {
+    
+    static let moc = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
+    static var previews: some View {
+        let taskData = TaskData(context: moc)
+        taskData.id = UUID()
+        taskData.name = "Get out of bed."
+        return TaskRowView_Previewer(taskData: taskData)
     }
 }

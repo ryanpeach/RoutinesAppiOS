@@ -10,14 +10,8 @@ import SwiftUI
 
 struct AlarmCreator: View {
     @Environment(\.managedObjectContext) var managedObjectContext
-    @FetchRequest(
-        entity: AlarmData.entity(),
-        sortDescriptors: [
-            NSSortDescriptor(
-                keyPath: \AlarmData.time_,
-                ascending: true
-            )
-    ]) var alarmDataList: FetchedResults<AlarmData>
+    
+    @Binding var createMode: Bool
     
     @State private var name: String = ""
     @State private var time: Date = Date()
@@ -50,10 +44,25 @@ struct AlarmCreator: View {
                 alarm.time_ = TimeInterval(
                     minutes * 60 + hour * 60 * 60
                 )
+                
+                // Bring me back
+                self.createMode = false
             }) {
                 Text("Save")
             }
             Spacer()
         }
+        .navigationBarBackButtonHidden(true) // not needed, but just in case
+        .navigationBarItems(leading: MyBackButton(label: "Cancel") {
+            self.createMode = false
+        })
     }
 }
+
+/*
+struct AlarmCreator_Previews: PreviewProvider {
+    static var previews: some View {
+        AlarmCreator()
+    }
+}
+*/

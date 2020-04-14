@@ -9,6 +9,7 @@
 import UIKit
 import CoreData
 
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
@@ -37,8 +38,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let container = NSPersistentContainer(name: "Routines")
         container.loadPersistentStores { description, error in
             if let error = error {
-                // Add your error UI here
+                fatalError("Unable to load persistent stores: \(error)")
             }
+            // NSInferMappingModelAutomaticallyOption = 1;
+            // NSMigratePersistentStoresAutomaticallyOption = 1;
         }
         return container
     }()

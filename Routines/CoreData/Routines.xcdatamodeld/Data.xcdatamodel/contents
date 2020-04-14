@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="16119" systemVersion="19D76" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <entity name="AlarmData" representedClassName="AlarmData" syncable="YES">
+    <entity name="AlarmData" representedClassName=".AlarmData" syncable="YES">
         <attribute name="daysOfWeek_" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="name" attributeType="String"/>
         <attribute name="time_" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <relationship name="taskData" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="TaskData" inverseName="alarmData" inverseEntity="TaskData"/>
     </entity>
-    <entity name="SubTaskData" representedClassName="SubTaskData" syncable="YES">
+    <entity name="SubTaskData" representedClassName=".SubTaskData" syncable="YES">
         <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="name" attributeType="String"/>
         <attribute name="order" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
-        <relationship name="taskData" optional="YES" maxCount="1" deletionRule="Nullify" ordered="YES" destinationEntity="TaskData" inverseName="subTaskData" inverseEntity="TaskData"/>
+        <relationship name="taskData" maxCount="1" deletionRule="Nullify" ordered="YES" destinationEntity="TaskData" inverseName="subTaskData" inverseEntity="TaskData"/>
     </entity>
-    <entity name="TaskData" representedClassName="TaskData" syncable="YES">
+    <entity name="TaskData" representedClassName=".TaskData" syncable="YES">
         <attribute name="duration_" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="name" attributeType="String"/>
         <attribute name="order" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
-        <relationship name="alarmData" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="AlarmData" inverseName="taskData" inverseEntity="AlarmData"/>
+        <relationship name="alarmData" maxCount="1" deletionRule="Nullify" destinationEntity="AlarmData" inverseName="taskData" inverseEntity="AlarmData"/>
         <relationship name="subTaskData" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="SubTaskData" inverseName="taskData" inverseEntity="SubTaskData"/>
     </entity>
     <elements>

@@ -2,7 +2,7 @@
 //  TaskData+CoreDataProperties.swift
 //  Routines
 //
-//  Created by PEACH,RYAN (K-Atlanta,ex1) on 4/13/20.
+//  Created by PEACH,RYAN (K-Atlanta,ex1) on 4/14/20.
 //  Copyright © 2020 Peach. All rights reserved.
 //
 //
@@ -18,10 +18,10 @@ extension TaskData {
     }
 
     @NSManaged public var duration_: Double
+    @NSManaged public var id: UUID
+    @NSManaged public var name: String
     @NSManaged public var order: Int16
-    @NSManaged public var name: String?
-    @NSManaged public var id: UUID?
-    @NSManaged public var alarmData: AlarmData?
+    @NSManaged public var alarmData: AlarmData
     @NSManaged public var subTaskData: NSOrderedSet?
 
 }

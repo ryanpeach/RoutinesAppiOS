@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import CoreData
 
 
 struct DaysOfWeekView: View {
@@ -44,7 +45,7 @@ struct DaysOfWeekView: View {
 }
 
 struct AlarmsRow: View {
-    let alarmData: AlarmData
+    @ObservedObject var alarmData: AlarmData
     
     var body: some View {
         NavigationLink(destination: TaskListView(
@@ -53,7 +54,7 @@ struct AlarmsRow: View {
             VStack() {
                 HStack() {
                     Spacer()
-                    Text(self.alarmData.name!)
+                    Text(self.alarmData.name)
                     Spacer()
                     VStack {
                         HStack{
@@ -64,7 +65,7 @@ struct AlarmsRow: View {
                         HStack {
                             Spacer()
                             Text("Duration: ")
-                            Text(self.alarmData.getDuration().stringHMS())
+                            Text(self.alarmData.duration.stringHMS())
                         }
                     }
                 }
@@ -75,10 +76,26 @@ struct AlarmsRow: View {
     }
 }
 
-/*
-struct AlarmsRow_Previews: PreviewProvider {
-    static var previews: some View {
-        AlarmsRow(alarmData:)
+struct AlarmsRow_Previewer: View {
+    @State var alarmData: AlarmData
+    var body: some View {
+        AlarmsRow(alarmData: alarmData)
     }
 }
-*/
+
+struct AlarmsRow_Previews: PreviewProvider {
+    static let moc = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
+    static var previews: some View {
+        let alarmData = AlarmData(context: moc)
+        alarmData.id = UUID()
+        alarmData.name = "Morning"
+        alarmData.daysOfWeek_ = daysOfWeekToInt(daysOfWeek: [
+            DayOfWeek.Monday,
+            DayOfWeek.Tuesday,
+            DayOfWeek.Wednesday,
+            DayOfWeek.Thursday,
+            DayOfWeek.Friday
+        ])
+        return AlarmsRow_Previewer(alarmData: alarmData)
+    }
+}
