@@ -12,5 +12,27 @@ import CoreData
 
 @objc(AlarmData)
 public class AlarmData: NSManagedObject {
-
+    var time: RelativeTime {
+        RelativeTime.fromSeconds(seconds: TimeInterval(self.time_))
+    }
+    
+    var daysOfWeek: [DayOfWeek] {
+        daysOfWeekFromInt(daysOfWeek: self.daysOfWeek_)
+    }
+    
+    func getDuration() -> RelativeTime {
+        var out: TimeInterval = 0.0
+        for td in self.taskData ?? [] {
+            out += (td as! TaskData).duration.timeInterval
+        }
+        return RelativeTime.fromSeconds(seconds: out)
+    }
+    
+    func getTaskDataList() -> [TaskData] {
+        var taskDataList: [TaskData] = []
+        for td in self.taskData ?? [] {
+            taskDataList.append((td as! TaskData))
+        }
+        return taskDataList
+    }
 }

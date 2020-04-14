@@ -5,23 +5,25 @@
         <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="name" attributeType="String"/>
         <attribute name="time_" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
-        <relationship name="taskData" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TaskData" inverseName="alarmData" inverseEntity="TaskData"/>
+        <relationship name="taskData" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="TaskData" inverseName="alarmData" inverseEntity="TaskData"/>
     </entity>
     <entity name="SubTaskData" representedClassName="SubTaskData" syncable="YES">
-        <attribute name="id" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="name" attributeType="String"/>
-        <relationship name="taskData" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TaskData" inverseName="subTaskData" inverseEntity="TaskData"/>
+        <attribute name="order" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="taskData" optional="YES" maxCount="1" deletionRule="Nullify" ordered="YES" destinationEntity="TaskData" inverseName="subTaskData" inverseEntity="TaskData"/>
     </entity>
     <entity name="TaskData" representedClassName="TaskData" syncable="YES">
         <attribute name="duration_" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
-        <attribute name="id" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="name" attributeType="String"/>
+        <attribute name="order" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <relationship name="alarmData" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="AlarmData" inverseName="taskData" inverseEntity="AlarmData"/>
-        <relationship name="subTaskData" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="SubTaskData" inverseName="taskData" inverseEntity="SubTaskData"/>
+        <relationship name="subTaskData" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="SubTaskData" inverseName="taskData" inverseEntity="SubTaskData"/>
     </entity>
     <elements>
         <element name="AlarmData" positionX="-61.05078125" positionY="-121.80078125" width="128" height="118"/>
-        <element name="SubTaskData" positionX="-52.41015625" positionY="214.2890625" width="128" height="88"/>
-        <element name="TaskData" positionX="-60.109375" positionY="58.3671875" width="128" height="118"/>
+        <element name="SubTaskData" positionX="-52.41015625" positionY="214.2890625" width="128" height="103"/>
+        <element name="TaskData" positionX="-60.109375" positionY="58.3671875" width="128" height="133"/>
     </elements>
 </model>

@@ -18,9 +18,45 @@ extension TaskData {
     }
 
     @NSManaged public var duration_: Double
-    @NSManaged public var id: Int16
+    @NSManaged public var order: Int16
     @NSManaged public var name: String?
+    @NSManaged public var id: UUID?
     @NSManaged public var alarmData: AlarmData?
-    @NSManaged public var subTaskData: SubTaskData?
+    @NSManaged public var subTaskData: NSOrderedSet?
+
+}
+
+// MARK: Generated accessors for subTaskData
+extension TaskData {
+
+    @objc(insertObject:inSubTaskDataAtIndex:)
+    @NSManaged public func insertIntoSubTaskData(_ value: SubTaskData, at idx: Int)
+
+    @objc(removeObjectFromSubTaskDataAtIndex:)
+    @NSManaged public func removeFromSubTaskData(at idx: Int)
+
+    @objc(insertSubTaskData:atIndexes:)
+    @NSManaged public func insertIntoSubTaskData(_ values: [SubTaskData], at indexes: NSIndexSet)
+
+    @objc(removeSubTaskDataAtIndexes:)
+    @NSManaged public func removeFromSubTaskData(at indexes: NSIndexSet)
+
+    @objc(replaceObjectInSubTaskDataAtIndex:withObject:)
+    @NSManaged public func replaceSubTaskData(at idx: Int, with value: SubTaskData)
+
+    @objc(replaceSubTaskDataAtIndexes:withSubTaskData:)
+    @NSManaged public func replaceSubTaskData(at indexes: NSIndexSet, with values: [SubTaskData])
+
+    @objc(addSubTaskDataObject:)
+    @NSManaged public func addToSubTaskData(_ value: SubTaskData)
+
+    @objc(removeSubTaskDataObject:)
+    @NSManaged public func removeFromSubTaskData(_ value: SubTaskData)
+
+    @objc(addSubTaskData:)
+    @NSManaged public func addToSubTaskData(_ values: NSOrderedSet)
+
+    @objc(removeSubTaskData:)
+    @NSManaged public func removeFromSubTaskData(_ values: NSOrderedSet)
 
 }

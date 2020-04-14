@@ -9,42 +9,31 @@
 import SwiftUI
 
 struct TaskDetailView: View {
-    let alarmId: UUID
-    let taskId: UUID
+    @Environment(\.managedObjectContext) var managedObjectContext
+    @FetchRequest(
+        entity: TaskData.entity(),
+        sortDescriptors: [
+            NSSortDescriptor(
+                keyPath: \TaskData.id,
+                ascending: true
+            )
+    ]) var taskDataList: FetchedResults<AlarmData>
     
-    @Binding private var taskData: TaskData
+    let taskData: TaskData
     
     var body: some View {
         VStack {
             Text(taskData.duration.stringMS())
-            List (taskData.subtasks) { sub_td in
+            List (taskData.subTaskData, id: \.id) { sub_td in
                 Text(sub_td.name)
             }
             .navigationBarTitle(Text(self.taskData.name))
             .navigationBarItems(
                 trailing:
-                NavigationLink(destination: TaskEditorView(taskData: $taskData)) {
+                NavigationLink(destination: TaskEditorView(taskId: taskData.id)) {
                     Text("Edit")
                 }
             )
         }
-    }
-}
-
-struct TaskDetailView_Previewer: View {
-    @State var taskData: TaskData
-    
-    var body: some View {
-        NavigationView {
-            TaskDetailView(
-                taskData: self.$taskData
-            )
-        }
-    }
-}
-
-struct TaskDetailView_Previews: PreviewProvider {
-    static var previews: some View {
-        TaskDetailView_Previewer(taskData: alarmDataList[0].taskList[1])
     }
 }

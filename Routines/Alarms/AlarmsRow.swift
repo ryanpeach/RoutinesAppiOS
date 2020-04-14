@@ -47,38 +47,31 @@ struct AlarmsRow: View {
     let alarmData: AlarmData
     
     var body: some View {
-        /*
         NavigationLink(destination: TaskListView(
-            alarmId: self.alarmId
+            alarmData: self.alarmData
         )) {
-        */
-        VStack() {
-            HStack() {
-                Spacer()
-                Text(self.alarmData.name!)
-                Spacer()
-                VStack {
-                    HStack{
-                        Spacer()
-                        Text("Time: ")
-                        Text(self.alarmData.time.stringHMS())
-                    }
-                    HStack {
-                        Spacer()
-                        Text("Duration: ")
-                        Text("00:00:00")
-                        //Text(self.alarmData.getDuration().stringHMS())
+            VStack() {
+                HStack() {
+                    Spacer()
+                    Text(self.alarmData.name!)
+                    Spacer()
+                    VStack {
+                        HStack{
+                            Spacer()
+                            Text("Time: ")
+                            Text(self.alarmData.time.stringHMS())
+                        }
+                        HStack {
+                            Spacer()
+                            Text("Duration: ")
+                            Text(self.alarmData.getDuration().stringHMS())
+                        }
                     }
                 }
+                Spacer().frame(height: 20)
+                DaysOfWeekView(daysOfWeek: Set(self.alarmData.daysOfWeek))
             }
-            Spacer().frame(height: 20)
-            DaysOfWeekView(daysOfWeek: Set(self.alarmData.daysOfWeek))
         }
-    //        .overlay(
-    //            RoundedRectangle(cornerRadius: 16)
-    //                .stroke(Color.black, lineWidth: 4)
-    //        )
-    //    }
     }
 }
 

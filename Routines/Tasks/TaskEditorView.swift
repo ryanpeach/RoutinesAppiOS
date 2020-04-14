@@ -69,22 +69,40 @@ extension View {
 }
 
 struct TaskEditorView: View {
-    let alarmId: UUID
-    let taskId: UUID
+    @Environment(\.managedObjectContext) var managedObjectContext
+    @FetchRequest(
+        entity: TaskData.entity(),
+        sortDescriptors: [
+            NSSortDescriptor(
+                keyPath: \TaskData.order,
+                ascending: true
+            )
+    ]) var taskDataList: FetchedResults<TaskData>
     
-    @Binding private var taskData: TaskData
+    let taskId: Int
+    
+    @State private var taskData: TaskData
+    @State private var newName: String
+    @State private var newDuration: RelativeTime
     @State private var isShowingAlert = false
+    
+    init() {
+        self.taskData = self.taskDataList[self.taskId]
+        self.newName = self.taskData.name
+        self.newDuration = self.taskData.duration
+    }
     
     var body: some View {
         VStack {
-            TextField(self.taskData.name, text: self.taskData.$name)
+            TextField(self.newName,
+                      text: self.$newName)
             Spacer().frame(height: 30)
-            TimePickerRelativeView(time: self.$taskData.duration)
+            TimePickerRelativeView(time: self.$newDuration)
             Spacer().frame(height: 30)
             Text("Subtasks:")
             Spacer().frame(height: 15)
             List {
-                ForEach(self.taskData.subtasks) { sub_td in
+                ForEach(self.taskData.subTaskData, id: \.id) { sub_td in
                     Text(sub_td.name)
                 }
                 .onDelete(perform: self.delete)
@@ -112,19 +130,25 @@ struct TaskEditorView: View {
     }
     
     func delete(at offsets: IndexSet) {
-        self.taskData.subtasks.remove(atOffsets: offsets)
+        for index in offsets {
+            let taskData = taskDataList[index]
+            managedObjectContext.delete(taskData)
+        }
     }
     
     func move(from source: IndexSet, to destination: Int) {
-        self.taskData.subtasks.move(fromOffsets: source, toOffset: destination)
+        for index in source {
+            let taskData = taskDataList[index]
+            taskData.order = Int16(destination)
+        }
     }
     
     func addItem(text: String) {
-        self.taskData.subtasks.append(SubTaskData(
-                id: UUID(),
-                name: text
-            )
-        )
+        let taskData = TaskData(context: self.managedObjectContext)
+        taskData.id = UUID()
+        taskData.order = taskDataList.count
+        taskData.name = self.newName
+        // TODO: Add task names
     }
 }
 

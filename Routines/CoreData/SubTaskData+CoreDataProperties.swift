@@ -17,8 +17,9 @@ extension SubTaskData {
         return NSFetchRequest<SubTaskData>(entityName: "SubTaskData")
     }
 
-    @NSManaged public var id: Int16
+    @NSManaged public var order: Int16
     @NSManaged public var name: String?
+    @NSManaged public var id: UUID?
     @NSManaged public var taskData: TaskData?
 
 }

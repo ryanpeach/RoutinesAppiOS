@@ -12,9 +12,15 @@ import CoreData
 
 @objc(TaskData)
 public class TaskData: NSManagedObject {
-    /*
     var duration: RelativeTime {
         RelativeTime.fromSeconds(seconds: TimeInterval(self.duration_))
     }
-     */
+    
+    func getSubTaskDataList() -> [SubTaskData] {
+        var subTaskDataList: [SubTaskData] = []
+        for sub_td in self.subTaskData ?? [] {
+            subTaskDataList.append((sub_td as! SubTaskData))
+        }
+        return subTaskDataList
+    }
 }

@@ -9,24 +9,27 @@
 import SwiftUI
 
 struct TaskListView: View {
-    let alarmId: UUID
-    
-    @Binding private var alarmData: alarmData
+    @Environment(\.managedObjectContext) var managedObjectContext
+    var alarmData: AlarmData
+    var taskDataList: [TaskData] {
+        self.alarmData.getTaskDataList()
+    }
     
     var body: some View {
         VStack {
             List{
-                ForEach(self.alarmData.taskList.indices) { idx in
-                    TaskRowView(taskData: self.$alarmData.taskList[idx])
+                ForEach(self.taskDataList, id: \.id) { td in
+                    TaskRowView(taskData: td)
                 }
                 .onDelete(perform: self.delete)
                 .onMove(perform: self.move)
             }
             .padding(10)
-            .navigationBarTitle(Text(self.alarmData.name))
+            .navigationBarTitle(Text(self.alarmData.name!))
             .navigationBarItems(trailing: EditButton())
             
             // Add Item Button
+            /*
             Button(
                 action: {
                     withAnimation {
@@ -46,33 +49,22 @@ struct TaskListView: View {
                     Image(systemName: "plus")
                 }
             }
+             */
         }
         
     }
     
     func delete(at offsets: IndexSet) {
-        self.alarmData.taskList.remove(atOffsets: offsets)
+        for index in offsets {
+            let taskData = taskDataList[index]
+            managedObjectContext.delete(taskData)
+        }
     }
     
     func move(from source: IndexSet, to destination: Int) {
-        self.alarmData.taskList.move(fromOffsets: source, toOffset: destination)
-    }
-}
-
-struct TaskListView_Previewer: View {
-    @State var alarmData: AlarmData
-    
-    var body: some View {
-        NavigationView {
-            TaskListView(
-                alarmData: self.$alarmData
-            )
+        for index in source {
+            let taskData = taskDataList[index]
+            taskData.order = Int16(destination)
         }
-    }
-}
-
-struct TaskListView_Previews: PreviewProvider {
-    static var previews: some View {
-        TaskListView_Previewer(alarmData: alarmDataList[0])
     }
 }
