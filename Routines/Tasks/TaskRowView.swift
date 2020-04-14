@@ -17,9 +17,15 @@ struct TaskRowView: View {
     var body: some View {
         NavigationLink(destination: TaskDetailView(taskData: self.taskData)) {
             HStack{
+                Spacer().frame(width: 5)
+                Button(action: {}) {
+                    Image(systemName: "circle")
+                }
+                Spacer().frame(width: 10)
                 Text(self.taskData.name)
                 Spacer()
                 Text(self.taskData.duration.stringMS())
+                Spacer().frame(width: 5)
             }
         }
     }

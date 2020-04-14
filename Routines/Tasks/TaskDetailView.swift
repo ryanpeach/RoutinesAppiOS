@@ -17,15 +17,46 @@ struct TaskDetailView: View {
         VStack {
             Text(taskData.duration.stringMS())
             List (taskData.subTaskDataList, id: \.id) { sub_td in
-                Text(sub_td.name)
+                HStack {
+                    Button(action: {}) {
+                        Image(systemName: "circle")
+                    }
+                    Text(sub_td.name)
+                }
             }
             .navigationBarTitle(Text(self.taskData.name))
             .navigationBarItems(
                 trailing:
-                NavigationLink(destination: TaskEditorView(taskData: taskData)) {
+                NavigationLink(destination:
+                    TaskEditorView(taskData: taskData)) {
                     Text("Edit")
                 }
             )
+            HStack {
+                Spacer()
+                Button(action: {}) {
+                    Image(systemName: "checkmark.circle")
+                        .resizable()
+                        .frame(width: 100.0, height: 100.0)
+                }
+                Spacer()
+            }
+            Spacer().frame(height: 30)
+            HStack {
+                Spacer()
+                Button(action: {}) {
+                    Image(systemName: "backward")
+                }
+                Spacer()
+                Button(action: {}) {
+                    Image(systemName: "pause")
+                }
+                Spacer()
+                Button(action: {}) {
+                    Image(systemName: "forward")
+                }
+                Spacer()
+            }
         }
     }
 }

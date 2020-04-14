@@ -45,6 +45,13 @@ struct AlarmCreator: View {
                     minutes * 60 + hour * 60 * 60
                 )
                 
+                // Save
+                do {
+                    try self.managedObjectContext.save()
+                } catch let error {
+                    print("Could not save. \(error)")
+                }
+                
                 // Bring me back
                 self.createMode = false
             }) {

@@ -13,17 +13,38 @@ struct TaskEditorView: View {
     @Environment(\.managedObjectContext) var managedObjectContext
     
     @ObservedObject var taskData: TaskData
+    
+    @State private var newSubTask: String = ""
     @State private var newName: String = ""
     @State private var newDuration: RelativeTime = RelativeTime.fromSeconds(seconds: 0)
-    
-    
+
     var body: some View {
         VStack {
             TextField(self.taskData.name,
-                      text: self.$newName)
+                      text: self.$newName).frame(width: 100)
             Spacer().frame(height: 30)
             TimePickerRelativeView(time: self.$newDuration)
             Spacer().frame(height: 30)
+            HStack {
+                Spacer().frame(width: 30)
+                TextField("Subtask Name", text: self.$newSubTask)
+                Button(action: {
+                    self.addSubTask()
+                }) {
+                    Image(systemName: "plus")
+                }
+                Spacer().frame(width: 30)
+            }
+            Spacer().frame(height: 30)
+            Text("Subtasks:")
+            Spacer().frame(height: 15)
+            List {
+                ForEach(self.taskData.subTaskDataList, id: \.id) { sub_td in
+                    Text(sub_td.name)
+                }
+                .onDelete(perform: self.delete)
+                .onMove(perform: self.move)
+            }
             Button(action: {
                 withAnimation {
                     if self.newName != "" {
@@ -34,50 +55,41 @@ struct TaskEditorView: View {
             }) {
                 Text("Save")
             }
-            Spacer().frame(height: 30)
-            Text("Subtasks:")
-            Spacer().frame(height: 15)
-            List {
-                ForEach(self.taskData.subTaskDataList, id: \.id) { sub_td in
-                    Text(sub_td.name)
-                }
-                //.onDelete(perform: self.delete)
-                //.onMove(perform: self.move)
-            }
-            .navigationBarItems(
-                trailing: EditButton()
-            )
-            Button(action: {}) {
-                HStack {
-                    Text("This is where a text field goes.")
-                    Image(systemName: "plus")
-                }
-            }
+            
         }
+        .navigationBarItems(
+            trailing: EditButton()
+        )
     }
-    /*
+    
     func delete(at offsets: IndexSet) {
         for index in offsets {
-            let taskData = taskDataList[index]
+            let taskData = self.taskData.subTaskDataList[index]
             managedObjectContext.delete(taskData)
         }
     }
     
     func move(from source: IndexSet, to destination: Int) {
         for index in source {
-            let taskData = taskDataList[index]
+            let taskData = self.taskData.subTaskDataList[index]
             taskData.order = Int16(destination)
         }
     }
     
-    func addItem(text: String) {
-        let taskData = TaskData(context: self.managedObjectContext)
-        taskData.id = UUID()
-        taskData.order = taskDataList.count
-        taskData.name = self.newName
+    func addSubTask() {
+        let subTaskData = SubTaskData(context: self.managedObjectContext)
+        subTaskData.id = UUID()
+        subTaskData.order = Int16(self.taskData.subTaskDataList.count)
+        subTaskData.name = self.newSubTask
+        self.taskData.addToSubTaskData(subTaskData)
+        
         // TODO: Add task names
+        do {
+            try self.managedObjectContext.save()
+        } catch let error {
+            print("Could not save. \(error)")
+        }
     }
-     */
 }
 
 struct TaskEditorView_Previews: PreviewProvider {
