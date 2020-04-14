@@ -12,7 +12,9 @@ import CoreData
 
 @objc(TaskData)
 public class TaskData: NSManagedObject {
+    /*
     var duration: RelativeTime {
         RelativeTime.fromSeconds(seconds: TimeInterval(self.duration_))
     }
+     */
 }

@@ -12,11 +12,5 @@ import CoreData
 
 @objc(AlarmData)
 public class AlarmData: NSManagedObject {
-    var time: RelativeTime {
-        RelativeTime.fromSeconds(seconds: TimeInterval(self.time_))
-    }
-    
-    var daysOfWeek: [DayOfWeek] {
-        daysOfWeekFromInt(daysOfWeek: self.daysOfWeek_)
-    }
+
 }

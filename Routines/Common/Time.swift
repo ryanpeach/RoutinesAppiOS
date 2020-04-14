@@ -12,7 +12,7 @@ import SwiftUI
 
 struct TimePickerAbsolute: View {
     
-    @State private var currentDate = Date()
+    @Binding var currentDate: Date
     
     var body: some View {
         VStack {

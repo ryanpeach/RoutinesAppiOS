@@ -15,37 +15,41 @@ struct AlarmsView: View {
         entity: AlarmData.entity(),
         sortDescriptors: [
             NSSortDescriptor(
-                keyPath: \AlarmData.time,
+                keyPath: \AlarmData.time_,
                 ascending: true
             )
     ]) var alarmDataList: FetchedResults<AlarmData>
     
     var body: some View {
         NavigationView {
-            List{
-                ForEach(self.alarmDataList) { al in
-                    AlarmsRow(alarmId: al.id)
+            VStack {
+                List{
+                    ForEach(self.alarmDataList, id: \.id) { al in
+                        AlarmsRow(alarmData: al)
+                    }
+                    .onDelete(perform: self.delete)
                 }
-                .onDelete(perform: self.delete)
-                .onMove(perform: self.move)
+                .padding(10)
+                .navigationBarTitle(Text("Alarms"))
+                .navigationBarItems(trailing: EditButton())
+                
+                // Add Item Button
+                NavigationLink(
+                    destination: AlarmCreator()
+                ) {
+                    HStack {
+                        Text("Add Item")
+                        Image(systemName: "plus")
+                    }
+                }
             }
-            .padding(10)
-            .navigationBarTitle(Text("Alarms"))
-            .navigationBarItems(trailing: EditButton())
         }
     }
     
     func delete(at offsets: IndexSet) {
-        self.alarmDataList.remove(atOffsets: offsets)
-    }
-    
-    func move(from source: IndexSet, to destination: Int) {
-        self.alarmDataList.move(fromOffsets: source, toOffset: destination)
-    }
-}
-
-struct AlarmsView_Previews: PreviewProvider {
-    static var previews: some View {
-        AlarmsView(alarmDataList: alarmDataList)
+        for index in offsets {
+            let alarmData = alarmDataList[index]
+            managedObjectContext.delete(alarmData)
+        }
     }
 }

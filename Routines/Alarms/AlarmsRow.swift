@@ -9,7 +9,6 @@
 import SwiftUI
 
 
-
 struct DaysOfWeekView: View {
     var daysOfWeek: Set<DayOfWeek>
     
@@ -34,7 +33,7 @@ struct DaysOfWeekView: View {
             if (self.daysOfWeek.contains(DayOfWeek.Friday)) {
                 Text("Fri")
             }
-            if (self.daysOfWeek.contains(DayOfWeek.Satuday)) {
+            if (self.daysOfWeek.contains(DayOfWeek.Saturday)) {
                 Text("Sat")
             }
             if (self.daysOfWeek.contains(DayOfWeek.Sunday)) {
@@ -45,46 +44,48 @@ struct DaysOfWeekView: View {
 }
 
 struct AlarmsRow: View {
-    let alarmId: UUID
-    
-    @Binding private var alarmData: AlarmData
+    let alarmData: AlarmData
     
     var body: some View {
+        /*
         NavigationLink(destination: TaskListView(
             alarmId: self.alarmId
         )) {
-            VStack() {
-                HStack() {
-                    Spacer()
-                    Text(self.alarm.name)
-                    Spacer()
-                    VStack {
-                        HStack{
-                            Spacer()
-                            Text("Time: ")
-                            Text(self.alarm.time.stringHMS())
-                        }
-                        HStack {
-                            Spacer()
-                            Text("Duration: ")
-                            Text(self.alarm.getDuration().stringHMS())
-                        }
+        */
+        VStack() {
+            HStack() {
+                Spacer()
+                Text(self.alarmData.name!)
+                Spacer()
+                VStack {
+                    HStack{
+                        Spacer()
+                        Text("Time: ")
+                        Text(self.alarmData.time.stringHMS())
+                    }
+                    HStack {
+                        Spacer()
+                        Text("Duration: ")
+                        Text("00:00:00")
+                        //Text(self.alarmData.getDuration().stringHMS())
                     }
                 }
-                Spacer().frame(height: 20)
-                DaysOfWeekView(daysOfWeek: self.alarm.daysOfWeek)
             }
+            Spacer().frame(height: 20)
+            DaysOfWeekView(daysOfWeek: Set(self.alarmData.daysOfWeek))
+        }
     //        .overlay(
     //            RoundedRectangle(cornerRadius: 16)
     //                .stroke(Color.black, lineWidth: 4)
     //        )
-        }
+    //    }
     }
 }
 
-
+/*
 struct AlarmsRow_Previews: PreviewProvider {
     static var previews: some View {
-        AlarmsRow(alarmData: alarmDataList[0].id)
+        AlarmsRow(alarmData:)
     }
 }
+*/

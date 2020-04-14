@@ -24,3 +24,14 @@ extension AlarmData {
     @NSManaged public var taskData: TaskData?
 
 }
+
+extension AlarmData {
+    var time: RelativeTime {
+        RelativeTime.fromSeconds(seconds: TimeInterval(self.time_))
+    }
+    
+    var daysOfWeek: [DayOfWeek] {
+        daysOfWeekFromInt(daysOfWeek: self.daysOfWeek_)
+    }
+}
+
