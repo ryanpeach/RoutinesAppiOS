@@ -11,21 +11,31 @@ import SwiftUI
 struct TaskPlayerView: View {
     @Environment(\.managedObjectContext) var managedObjectContext
     
-    @ObservedObject var taskData: TaskData
+    @ObservedObject var alarmData: AlarmData
+    
+    @State private var taskIndex: Int = 0
+   
+    var taskData: TaskData? {
+        if self.taskIndex >= self.alarmData.taskDataList.count {
+            return nil
+        } else {
+            return self.alarmData.taskDataList[self.taskIndex]
+        }
+    }
     
     var body: some View {
-        VStack {
-            Text(taskData.duration.stringMS()).font(Font.title)
-            List (taskData.subTaskDataList, id: \.id) { sub_td in
+        return VStack {
+            Text((taskData?.duration ?? RelativeTime.fromSeconds(seconds: 0)).stringMS()).font(Font.title)
+            List (taskData?.subTaskDataList ?? [], id: \.id) { sub_td in
                 HStack {
                     Checkbox(action: {})
                     Text(sub_td.name)
                 }
             }
-            .navigationBarTitle(Text(self.taskData.name))
+            .navigationBarTitle(Text(taskData?.name ?? "Done!"))
             HStack {
                 Spacer()
-                Button(action: {}) {
+                Button(action: {self.next()}) {
                     Image(systemName: "checkmark.circle")
                         .resizable()
                         .frame(width: 100.0, height: 100.0)
@@ -35,18 +45,26 @@ struct TaskPlayerView: View {
             Spacer().frame(height: 30)
             HStack {
                 Spacer()
-                Button(action: {}) {
+                Button(action: {self.previous()}) {
                     Image(systemName: "backward")
                 }
                 Spacer()
                 PlayPause()
                 Spacer()
-                Button(action: {}) {
+                Button(action: {self.next()}) {
                     Image(systemName: "forward")
                 }
                 Spacer()
             }
         }
+    }
+    
+    func previous() {
+        self.taskIndex -= 1
+    }
+    
+    func next() {
+        self.taskIndex += 1
     }
 }
 
@@ -60,6 +78,6 @@ struct TaskDetailView_Previews: PreviewProvider {
         taskData.id = UUID()
         taskData.name = "Get out of bed."
         alarmData.addToTaskData(taskData)
-        return TaskPlayerView(taskData: taskData)
+        return TaskPlayerView(alarmData: alarmData)
     }
 }

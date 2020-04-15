@@ -84,8 +84,8 @@ struct AlarmsRow_Previewer: View {
 }
 
 struct AlarmsRow_Previews: PreviewProvider {
-    static let moc = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
     static var previews: some View {
+        let moc = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         let alarmData = AlarmData(context: moc)
         alarmData.id = UUID()
         alarmData.name = "Morning"

@@ -31,6 +31,8 @@ struct AlarmCreator: View {
             TextField("Edit Name", text: self.$name).frame(width: 100)
             Spacer().frame(height: 30)
             TimePickerAbsolute(currentDate: $time)
+            DaysOfWeekPicker(daysOfWeek: $daysOfWeek)
+            Spacer().frame(height: 15)
             Button(action: {
                 let alarm = AlarmData(context: self.managedObjectContext)
                 alarm.daysOfWeek_ = daysOfWeekToInt(daysOfWeek: self.daysOfWeek)
@@ -66,10 +68,17 @@ struct AlarmCreator: View {
     }
 }
 
-/*
-struct AlarmCreator_Previews: PreviewProvider {
-    static var previews: some View {
-        AlarmCreator()
+struct AlarmCreator_Previewer: View {
+    @State var createMode = false
+    var body: some View {
+        AlarmCreator(createMode: $createMode)
     }
 }
-*/
+
+
+struct AlarmCreator_Previews: PreviewProvider {
+    static var previews: some View {
+        AlarmCreator_Previewer()
+    }
+}
+

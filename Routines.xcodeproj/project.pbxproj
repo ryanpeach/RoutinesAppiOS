@@ -7,14 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6D12A81F2446962600D806ED /* Checkbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D12A81E2446962600D806ED /* Checkbox.swift */; };
 		6D2169972445FE4500D46258 /* SubTaskData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2169912445FE4500D46258 /* SubTaskData+CoreDataClass.swift */; };
 		6D2169982445FE4500D46258 /* SubTaskData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2169922445FE4500D46258 /* SubTaskData+CoreDataProperties.swift */; };
 		6D2169992445FE4500D46258 /* TaskData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2169932445FE4500D46258 /* TaskData+CoreDataClass.swift */; };
 		6D21699A2445FE4500D46258 /* TaskData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2169942445FE4500D46258 /* TaskData+CoreDataProperties.swift */; };
 		6D21699B2445FE4500D46258 /* AlarmData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2169952445FE4500D46258 /* AlarmData+CoreDataClass.swift */; };
 		6D21699C2445FE4500D46258 /* AlarmData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2169962445FE4500D46258 /* AlarmData+CoreDataProperties.swift */; };
-		6D21699E2446065400D46258 /* TaskDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D21699D2446065400D46258 /* TaskDetailView.swift */; };
+		6D21699E2446065400D46258 /* TaskPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D21699D2446065400D46258 /* TaskPlayerView.swift */; };
 		6D2169A02446070A00D46258 /* TaskEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D21699F2446070A00D46258 /* TaskEditorView.swift */; };
+		6D323D6324469A83003FDF51 /* PlayPause.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D323D6224469A83003FDF51 /* PlayPause.swift */; };
 		6D5CC22D2443D4B300D5F01D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D5CC22C2443D4B300D5F01D /* AppDelegate.swift */; };
 		6D5CC22F2443D4B300D5F01D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D5CC22E2443D4B300D5F01D /* SceneDelegate.swift */; };
 		6D5CC2312443D4B300D5F01D /* AlarmsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D5CC2302443D4B300D5F01D /* AlarmsView.swift */; };
@@ -54,14 +56,16 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		6D12A81E2446962600D806ED /* Checkbox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Checkbox.swift; sourceTree = "<group>"; };
 		6D2169912445FE4500D46258 /* SubTaskData+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SubTaskData+CoreDataClass.swift"; sourceTree = "<group>"; };
 		6D2169922445FE4500D46258 /* SubTaskData+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SubTaskData+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		6D2169932445FE4500D46258 /* TaskData+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TaskData+CoreDataClass.swift"; sourceTree = "<group>"; };
 		6D2169942445FE4500D46258 /* TaskData+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TaskData+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		6D2169952445FE4500D46258 /* AlarmData+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AlarmData+CoreDataClass.swift"; sourceTree = "<group>"; };
 		6D2169962445FE4500D46258 /* AlarmData+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AlarmData+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		6D21699D2446065400D46258 /* TaskDetailView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskDetailView.swift; sourceTree = "<group>"; };
+		6D21699D2446065400D46258 /* TaskPlayerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskPlayerView.swift; sourceTree = "<group>"; };
 		6D21699F2446070A00D46258 /* TaskEditorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskEditorView.swift; sourceTree = "<group>"; };
+		6D323D6224469A83003FDF51 /* PlayPause.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayPause.swift; sourceTree = "<group>"; };
 		6D5CC2292443D4B300D5F01D /* Routines.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Routines.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6D5CC22C2443D4B300D5F01D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6D5CC22E2443D4B300D5F01D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -194,6 +198,8 @@
 				6D5CC2632443EC5A00D5F01D /* DayOfWeek.swift */,
 				6DDC439F2444E00A00501AF1 /* Time.swift */,
 				6DDC43A124450CE800501AF1 /* UserData.swift */,
+				6D12A81E2446962600D806ED /* Checkbox.swift */,
+				6D323D6224469A83003FDF51 /* PlayPause.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -202,7 +208,7 @@
 			isa = PBXGroup;
 			children = (
 				6D21699F2446070A00D46258 /* TaskEditorView.swift */,
-				6D21699D2446065400D46258 /* TaskDetailView.swift */,
+				6D21699D2446065400D46258 /* TaskPlayerView.swift */,
 				6D65CCB4244554AA0089F535 /* TaskListView.swift */,
 				6D65CCB8244554AA0089F535 /* TaskRowView.swift */,
 			);
@@ -360,7 +366,8 @@
 				6DDC43A02444E00A00501AF1 /* Time.swift in Sources */,
 				6D5CC2642443EC5A00D5F01D /* DayOfWeek.swift in Sources */,
 				6D21699C2445FE4500D46258 /* AlarmData+CoreDataProperties.swift in Sources */,
-				6D21699E2446065400D46258 /* TaskDetailView.swift in Sources */,
+				6D12A81F2446962600D806ED /* Checkbox.swift in Sources */,
+				6D21699E2446065400D46258 /* TaskPlayerView.swift in Sources */,
 				6DDC43A224450CE800501AF1 /* UserData.swift in Sources */,
 				6D65CCBD244554AA0089F535 /* TaskRowView.swift in Sources */,
 				6D2169A02446070A00D46258 /* TaskEditorView.swift in Sources */,
@@ -377,6 +384,7 @@
 				6D65CCCC24455F470089F535 /* TaskData.swift in Sources */,
 				6D65CCAB24453F350089F535 /* AlarmCreator.swift in Sources */,
 				6D2169982445FE4500D46258 /* SubTaskData+CoreDataProperties.swift in Sources */,
+				6D323D6324469A83003FDF51 /* PlayPause.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

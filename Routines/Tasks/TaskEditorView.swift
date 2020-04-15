@@ -32,6 +32,7 @@ struct TaskEditorView: View {
                     self.addSubTask()
                 }) {
                     Image(systemName: "plus")
+                        .frame(width: 30, height: 30)
                 }
                 Spacer().frame(width: 30)
             }

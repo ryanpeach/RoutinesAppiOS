@@ -11,14 +11,30 @@ import CoreData
 
 struct TaskListView: View {
     @Environment(\.managedObjectContext) var managedObjectContext
+    @Environment(\.editMode) var editMode
     
     @ObservedObject var alarmData: AlarmData
     
     var body: some View {
-        return VStack {
+        VStack {
+            // Add Item Button
+            NavigationLink(
+                destination: TaskPlayerView(alarmData: alarmData)
+                )
+                {
+                HStack {
+                    Text("Begin")
+                    Image(systemName: "play")
+                }
+            }
+            
             List{
                 ForEach(self.alarmData.taskDataList) { td in
-                    TaskRowView(taskData: td)
+                    NavigationLink(
+                        destination: TaskEditorView(taskData: td)
+                    ) {
+                        TaskRowView(taskData: td)
+                    }
                 }
                 .onDelete(perform: self.delete)
                 .onMove(perform: self.move)
@@ -43,6 +59,10 @@ struct TaskListView: View {
                 }
             }
         }
+        
+    }
+    
+    func begin() {
         
     }
     
