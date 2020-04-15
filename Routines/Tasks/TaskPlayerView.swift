@@ -60,11 +60,15 @@ struct TaskPlayerView: View {
     }
     
     func previous() {
-        self.taskIndex -= 1
+        if self.taskIndex > 0 {
+            self.taskIndex -= 1
+        }
     }
     
     func next() {
-        self.taskIndex += 1
+        if self.taskIndex < self.alarmData.taskDataList.count {
+            self.taskIndex += 1
+        }
     }
 }
 

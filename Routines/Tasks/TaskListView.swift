@@ -62,9 +62,6 @@ struct TaskListView: View {
         
     }
     
-    func begin() {
-        
-    }
     
     func delete(at offsets: IndexSet) {
         for index in offsets {
@@ -74,11 +71,17 @@ struct TaskListView: View {
     }
     
     func move(from source: IndexSet, to destination: Int) {
-        for index in source {
-            let taskData = self.alarmData.taskDataList[index]
-            taskData.order = Int16(destination)
+        var arr = self.alarmData.taskDataList
+        let element = arr.remove(at: source.first!)
+        arr.insert(element, at: destination)
+        
+        var count = 0
+        for td in arr {
+            td.order = Int16(count)
+            count += 1
         }
     }
+    
 }
 
 struct TaskListView_Previewer: View {

@@ -20,7 +20,7 @@ extension TaskData {
         for sub_td in self.subTaskData ?? [] {
             subTaskDataList.append((sub_td as! SubTaskData))
         }
-        return subTaskDataList
+        return subTaskDataList.sorted(by: { $0.order < $1.order })
     }
 }
 

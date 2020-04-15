@@ -33,6 +33,6 @@ extension AlarmData {
         for td in self.taskData ?? [] {
             taskDataList.append((td as! TaskData))
         }
-        return taskDataList
+        return taskDataList.sorted(by: { $0.order < $1.order })
     }
 }

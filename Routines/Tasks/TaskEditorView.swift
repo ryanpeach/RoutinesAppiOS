@@ -71,9 +71,14 @@ struct TaskEditorView: View {
     }
     
     func move(from source: IndexSet, to destination: Int) {
-        for index in source {
-            let taskData = self.taskData.subTaskDataList[index]
-            taskData.order = Int16(destination)
+        var arr = self.taskData.subTaskDataList
+        let element = arr.remove(at: source.first!)
+        arr.insert(element, at: destination)
+        
+        var count = 0
+        for sub_td in arr {
+            sub_td.order = Int16(count)
+            count += 1
         }
     }
     

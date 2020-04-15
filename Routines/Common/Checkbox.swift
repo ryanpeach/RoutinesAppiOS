@@ -18,7 +18,7 @@ struct Checkbox: View {
             self.isChecked.toggle()
             self.action()
         }) {
-            Image(systemName: self.isChecked ? "circle" : "circle.fill")
+            Image(systemName: self.isChecked ? "circle.fill" : "circle")
                 .frame(width: 30, height: 30)
         }
     }
