@@ -19,6 +19,7 @@ struct TaskListView: View {
     
     var body: some View {
         VStack {
+            Spacer().frame(height: 15)
             // Add Item Button
             NavigationLink(
                 destination: TaskPlayerView(alarmData: alarmData)
@@ -28,10 +29,11 @@ struct TaskListView: View {
                     Text("Begin")
                     Image(systemName: "play")
                 }
+                
             }
-            
+            Spacer().frame(height: 15)
             List{
-                ForEach(self.alarmData.taskDataList) { td in
+                ForEach(self.alarmData.taskDataList, id: \.id) { td in
                     NavigationLink(
                         destination: TaskEditorView(taskData: td)
                     ) {
@@ -41,7 +43,6 @@ struct TaskListView: View {
                 .onDelete(perform: self.delete)
                 .onMove(perform: self.move)
             }
-            .padding(10)
             .navigationBarTitle(Text(self.alarmData.name))
             .navigationBarItems(trailing: EditButton())
             
@@ -105,6 +106,8 @@ struct TaskListView: View {
         } catch let error {
             print("Could not save. \(error)")
         }
+        
+        self.alarmData.objectWillChange.send()
     }
     
 }

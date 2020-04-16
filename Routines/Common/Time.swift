@@ -89,53 +89,56 @@ struct TimePickerRelativeView: View  {
     @Binding var time: RelativeTime
     
     var body: some View {
-        GeometryReader { geometry in
-            HStack{
-                VStack{
-                    Text("Hours")
-                    Picker(
-                        selection: self.$time._hours,
-                        label: Text("Hours")
-                    ) {
-                        ForEach(0..<24) { i in
-                            Text(String(i)).tag(i)
+        VStack {
+            Spacer().frame(height: 15)
+            GeometryReader { geometry in
+                HStack{
+                    VStack{
+                        Text("Hours")
+                        Picker(
+                            selection: self.$time._hours,
+                            label: Text("Hours")
+                        ) {
+                            ForEach(0..<24) { i in
+                                Text(String(i)).tag(i)
+                            }
                         }
+                        .pickerStyle(WheelPickerStyle())
+                        .frame(width: geometry.size.width / CGFloat(3), height: geometry.size.height)
+                        .clipped()
                     }
-                    .pickerStyle(WheelPickerStyle())
-                    .frame(width: geometry.size.width / CGFloat(3), height: geometry.size.height)
-                    .clipped()
-                }
-                VStack{
-                    Text("Minutes")
-                    Picker(
-                        selection: self.$time._minutes,
-                        label: Text("Minutes")
-                    ) {
-                        ForEach(0..<60) { i in
-                            Text(String(i)).tag(i)
+                    VStack{
+                        Text("Minutes")
+                        Picker(
+                            selection: self.$time._minutes,
+                            label: Text("Minutes")
+                        ) {
+                            ForEach(0..<60) { i in
+                                Text(String(i)).tag(i)
+                            }
                         }
+                        .pickerStyle(WheelPickerStyle())
+                        .frame(width: geometry.size.width / CGFloat(3), height: geometry.size.height)
+                        .clipped()
                     }
-                    .pickerStyle(WheelPickerStyle())
-                    .frame(width: geometry.size.width / CGFloat(3), height: geometry.size.height)
-                    .clipped()
-                }
-                VStack{
-                    Text("Seconds")
-                    Picker(
-                        selection: self.$time._seconds,
-                        label: Text("Seconds")
-                    ) {
-                        ForEach(0..<60) { i in
-                            Text(String(i)).tag(i)
+                    VStack{
+                        Text("Seconds")
+                        Picker(
+                            selection: self.$time._seconds,
+                            label: Text("Seconds")
+                        ) {
+                            ForEach(0..<60) { i in
+                                Text(String(i)).tag(i)
+                            }
                         }
+                        .pickerStyle(WheelPickerStyle())
+                        .frame(width: geometry.size.width / CGFloat(3), height: geometry.size.height)
+                        .clipped()
                     }
-                    .pickerStyle(WheelPickerStyle())
-                    .frame(width: geometry.size.width / CGFloat(3), height: geometry.size.height)
-                    .clipped()
                 }
-            }
+            }.frame(height: 150)
+            Spacer().frame(height: 15)
         }
-        .frame(height: 150)
     }
 }
 

@@ -18,11 +18,11 @@ struct TaskEditorView: View {
     var body: some View {
         VStack {
             TitleTextField(text: self.$taskData.name)
-            Spacer().frame(height: 30)
+            Spacer().frame(height: 15)
             TimePickerRelativeView(time: self.$taskData.duration)
-            Spacer().frame(height: 30)
+            Spacer().frame(height: 15)
             HStack {
-                Spacer().frame(width: 30)
+                Spacer().frame(width: 30, height: 15)
                 ReturnTextField(
                     label: "New Subtask",
                     text: self.$newSubTask,
@@ -34,9 +34,9 @@ struct TaskEditorView: View {
                     Image(systemName: "plus")
                         .frame(width: 30, height: 30)
                 }
-                Spacer().frame(width: 30)
+                Spacer().frame(width: 15)
             }
-            Spacer().frame(height: 30)
+            Spacer().frame(height: 15)
             Text("Subtasks:")
             Spacer().frame(height: 15)
             List {
@@ -64,6 +64,7 @@ struct TaskEditorView: View {
         let element = arr.remove(at: source.first!)
         arr.insert(element, at: destination)
         
+        // Reindex
         var count = 0
         for sub_td in arr {
             sub_td.order = Int16(count)
@@ -76,6 +77,8 @@ struct TaskEditorView: View {
         } catch let error {
             print("Could not save. \(error)")
         }
+        
+        self.taskData.objectWillChange.send()
     }
     
     func addSubTask() {
@@ -100,8 +103,25 @@ struct TaskEditorView: View {
     
 }
 
-struct TaskEditorView_Previews: PreviewProvider {
+struct TaskEditorView_Previewer: View {
+    @ObservedObject var taskData: TaskData
+    var body: some View {
+        TaskEditorView(
+            taskData: self.taskData
+        )
+    }
+}
+
+struct TaskDataView_Previews: PreviewProvider {
     static var previews: some View {
-        /*@START_MENU_TOKEN@*/Text("Hello, World!")/*@END_MENU_TOKEN@*/
+        let moc = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+        let alarmData = AlarmData(context: moc)
+        alarmData.id = UUID()
+        alarmData.name = "Morning"
+        let taskData = TaskData(context: moc)
+        taskData.id = UUID()
+        taskData.name = "Get out of bed."
+        alarmData.addToTaskData(taskData)
+        return TaskEditorView_Previewer(taskData: taskData)
     }
 }
