@@ -15,6 +15,8 @@ struct TaskListView: View {
     
     @ObservedObject var alarmData: AlarmData
     
+    @State var createMode = false
+    
     var body: some View {
         VStack {
             // Add Item Button
@@ -45,13 +47,21 @@ struct TaskListView: View {
             
             // Add Item Button
             Button(action: {
-                self.createNewTask()
+                self.createMode = true
             }) {
                 HStack {
                     Text("Add Item")
                     Image(systemName: "plus")
                 }
             }
+            NavigationLink(
+                destination: TaskCreatorView(
+                    alarmData: self.alarmData,
+                    createMode: $createMode,
+                    order: self.alarmData.taskDataList.count
+                ),
+                isActive: $createMode
+            ) { EmptyView() }
         }
     }
     

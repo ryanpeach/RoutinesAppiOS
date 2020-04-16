@@ -12,7 +12,10 @@ import SwiftUI
 struct TaskCreatorView: View {
     @Environment(\.managedObjectContext) var managedObjectContext
     
+    @ObservedObject var alarmData: AlarmData
+    
     @Binding var createMode: Bool
+    let order: Int
     
     @State private var name: String = "New Task"
     @State private var duration: RelativeTime = RelativeTime.fromSeconds(seconds: 0)
@@ -60,6 +63,10 @@ struct TaskCreatorView: View {
         .navigationBarItems(
             trailing: EditButton()
         )
+        .navigationBarBackButtonHidden(true) // not needed, but just in case
+        .navigationBarItems(leading: MyBackButton(label: "Cancel") {
+            self.createMode = false
+        })
     }
     
     func delete(at offsets: IndexSet) {
@@ -85,7 +92,9 @@ struct TaskCreatorView: View {
         let task = TaskData(context: self.managedObjectContext)
         task.id = UUID()
         task.name = self.name
+        task.order = Int16(self.order)
         task.duration = self.duration
+        self.alarmData.addToTaskData(task)
         
         var order = 0
         for sub_task_name in self.subTaskDataList {
@@ -111,14 +120,30 @@ struct TaskCreatorView: View {
 
 
 struct TaskCreatorView_Previewer: View {
+    @ObservedObject var alarmData: AlarmData
     @State var createMode = true
     var body: some View {
-        TaskCreatorView(createMode: self.$createMode)
+        TaskCreatorView(
+            alarmData: self.alarmData,
+            createMode: self.$createMode,
+            order: 1
+        )
     }
 }
 
 struct TaskCreatorView_Previews: PreviewProvider {
     static var previews: some View {
-        TaskCreatorView_Previewer()
+        let moc = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+        let alarmData = AlarmData(context: moc)
+        alarmData.id = UUID()
+        alarmData.name = "Morning"
+        alarmData.daysOfWeek_ = daysOfWeekToInt(daysOfWeek: [
+            DayOfWeek.Monday,
+            DayOfWeek.Tuesday,
+            DayOfWeek.Wednesday,
+            DayOfWeek.Thursday,
+            DayOfWeek.Friday
+        ])
+        return TaskCreatorView_Previewer(alarmData: alarmData)
     }
 }
