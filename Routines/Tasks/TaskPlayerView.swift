@@ -29,26 +29,32 @@ struct TaskPlayerView: View {
     
     var body: some View {
         VStack {
-            Text((taskData?.duration ?? RelativeTime.fromSeconds(seconds: 0)).stringMS()).font(Font.title)
-            List {
-                ForEach(subTaskList) { sub_td in
-                    HStack {
-                        SubTaskCheckbox(
-                            subTaskData: sub_td,
-                            threshold: self.alarmData.today
-                        )
-                        Text(sub_td.name)
+            if taskData != nil {
+                Text(taskData!.duration.stringMS()).font(Font.title)
+                List {
+                    ForEach(subTaskList) { sub_td in
+                        HStack {
+                            SubTaskCheckbox(
+                                subTaskData: sub_td,
+                                threshold: self.alarmData.today
+                            )
+                            Text(sub_td.name)
+                        }
                     }
                 }
-            }
-            .navigationBarTitle(Text(taskData?.name ?? "Done!"))
-            HStack {
-                Spacer()
-                Button(action: {self.next()}) {
-                    Image(systemName: "checkmark.circle")
-                        .resizable()
-                        .frame(width: 100.0, height: 100.0)
+                .navigationBarTitle(Text(taskData!.name))
+                HStack {
+                    Spacer()
+                    Button(action: {self.next()}) {
+                        Image(systemName: "checkmark.circle")
+                            .resizable()
+                            .frame(width: 100.0, height: 100.0)
+                    }
+                    Spacer()
                 }
+            } else {
+                Spacer()
+                Text("Done!").font(Font.largeTitle)
                 Spacer()
             }
             Spacer().frame(height: 30)
@@ -58,12 +64,14 @@ struct TaskPlayerView: View {
                     Image(systemName: "backward")
                 }
                 Spacer()
-                PlayPause()
-                Spacer()
-                Button(action: {self.next()}) {
-                    Image(systemName: "forward")
+                if taskData != nil {
+                    PlayPause()
+                    Spacer()
+                    Button(action: {self.next()}) {
+                        Image(systemName: "forward")
+                    }
+                    Spacer()
                 }
-                Spacer()
             }
         }
     }
