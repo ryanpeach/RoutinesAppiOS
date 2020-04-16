@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6D0B81B52448284900F6135F /* TaskCreatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D0B81B42448284900F6135F /* TaskCreatorView.swift */; };
+		6D0B81B72448301C00F6135F /* AlarmEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D0B81B62448301C00F6135F /* AlarmEditor.swift */; };
 		6D12A81F2446962600D806ED /* Checkbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D12A81E2446962600D806ED /* Checkbox.swift */; };
 		6D21699E2446065400D46258 /* TaskPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D21699D2446065400D46258 /* TaskPlayerView.swift */; };
 		6D2169A02446070A00D46258 /* TaskEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D21699F2446070A00D46258 /* TaskEditorView.swift */; };
@@ -57,6 +59,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		6D0B81B42448284900F6135F /* TaskCreatorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskCreatorView.swift; sourceTree = "<group>"; };
+		6D0B81B62448301C00F6135F /* AlarmEditor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlarmEditor.swift; sourceTree = "<group>"; };
 		6D12A81E2446962600D806ED /* Checkbox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Checkbox.swift; sourceTree = "<group>"; };
 		6D21699D2446065400D46258 /* TaskPlayerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskPlayerView.swift; sourceTree = "<group>"; };
 		6D21699F2446070A00D46258 /* TaskEditorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskEditorView.swift; sourceTree = "<group>"; };
@@ -190,6 +194,7 @@
 				6D5CC2302443D4B300D5F01D /* AlarmsView.swift */,
 				6D5CC25F2443D7BF00D5F01D /* AlarmsRow.swift */,
 				6D65CCAA24453F350089F535 /* AlarmCreator.swift */,
+				6D0B81B62448301C00F6135F /* AlarmEditor.swift */,
 			);
 			path = Alarms;
 			sourceTree = "<group>";
@@ -211,6 +216,7 @@
 			isa = PBXGroup;
 			children = (
 				6D21699F2446070A00D46258 /* TaskEditorView.swift */,
+				6D0B81B42448284900F6135F /* TaskCreatorView.swift */,
 				6D21699D2446065400D46258 /* TaskPlayerView.swift */,
 				6D65CCB4244554AA0089F535 /* TaskListView.swift */,
 				6D65CCB8244554AA0089F535 /* TaskRowView.swift */,
@@ -375,6 +381,7 @@
 				6D861FBA2447D3610041AD2B /* AlarmData+CoreDataClass.swift in Sources */,
 				6D65CCBD244554AA0089F535 /* TaskRowView.swift in Sources */,
 				6D2169A02446070A00D46258 /* TaskEditorView.swift in Sources */,
+				6D0B81B72448301C00F6135F /* AlarmEditor.swift in Sources */,
 				6D861FB72447D3610041AD2B /* SubTaskData+CoreDataProperties.swift in Sources */,
 				6D861FBB2447D3610041AD2B /* AlarmData+CoreDataProperties.swift in Sources */,
 				6D65CCCE24455F470089F535 /* AlarmData.swift in Sources */,
@@ -383,6 +390,7 @@
 				6D65CC5E244528420089F535 /* Routines.xcdatamodeld in Sources */,
 				6D5CC2602443D7BF00D5F01D /* AlarmsRow.swift in Sources */,
 				6D5CC2312443D4B300D5F01D /* AlarmsView.swift in Sources */,
+				6D0B81B52448284900F6135F /* TaskCreatorView.swift in Sources */,
 				6D65CCCC24455F470089F535 /* TaskData.swift in Sources */,
 				6D65CCAB24453F350089F535 /* AlarmCreator.swift in Sources */,
 				6D323D6324469A83003FDF51 /* PlayPause.swift in Sources */,

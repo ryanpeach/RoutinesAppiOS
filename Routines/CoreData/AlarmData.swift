@@ -17,7 +17,12 @@ extension AlarmData {
     }
     
     var daysOfWeek: [DayOfWeek] {
-        daysOfWeekFromInt(daysOfWeek: self.daysOfWeek_)
+        get {
+            daysOfWeekFromInt(daysOfWeek: self.daysOfWeek_)
+        }
+        set {
+            self.daysOfWeek_ = daysOfWeekToInt(daysOfWeek: newValue)
+        }
     }
     
     var duration: RelativeTime {

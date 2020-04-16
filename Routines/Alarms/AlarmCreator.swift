@@ -36,28 +36,7 @@ struct AlarmCreator: View {
             DaysOfWeekPicker(daysOfWeek: $daysOfWeek)
             Spacer().frame(height: 15)
             Button(action: {
-                let alarm = AlarmData(context: self.managedObjectContext)
-                alarm.daysOfWeek_ = daysOfWeekToInt(daysOfWeek: self.daysOfWeek)
-                alarm.id = UUID()
-                alarm.name = self.name
-                
-                // Get the amount of time in the date, but not the actual date itself.
-                let calendar = Calendar.current
-                let hour = calendar.component(.hour, from: self.time)
-                let minutes = calendar.component(.minute, from: self.time)
-                alarm.time_ = TimeInterval(
-                    minutes * 60 + hour * 60 * 60
-                )
-                
-                // Save
-                do {
-                    try self.managedObjectContext.save()
-                } catch let error {
-                    print("Could not save. \(error)")
-                }
-                
-                // Bring me back
-                self.createMode = false
+                self.done()
             }) {
                 Text("Save")
             }
@@ -67,6 +46,31 @@ struct AlarmCreator: View {
         .navigationBarItems(leading: MyBackButton(label: "Cancel") {
             self.createMode = false
         })
+    }
+    
+    func done() {
+        let alarm = AlarmData(context: self.managedObjectContext)
+        alarm.daysOfWeek_ = daysOfWeekToInt(daysOfWeek: self.daysOfWeek)
+        alarm.id = UUID()
+        alarm.name = self.name
+        
+        // Get the amount of time in the date, but not the actual date itself.
+        let calendar = Calendar.current
+        let hour = calendar.component(.hour, from: self.time)
+        let minutes = calendar.component(.minute, from: self.time)
+        alarm.time_ = TimeInterval(
+            minutes * 60 + hour * 60 * 60
+        )
+        
+        // Save
+        do {
+            try self.managedObjectContext.save()
+        } catch let error {
+            print("Could not save. \(error)")
+        }
+        
+        // Bring me back
+        self.createMode = false
     }
 }
 

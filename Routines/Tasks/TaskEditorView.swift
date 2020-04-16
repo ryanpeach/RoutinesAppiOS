@@ -97,6 +97,7 @@ struct TaskEditorView: View {
             self.newSubTask = ""
         }
     }
+    
 }
 
 struct TaskEditorView_Previews: PreviewProvider {
