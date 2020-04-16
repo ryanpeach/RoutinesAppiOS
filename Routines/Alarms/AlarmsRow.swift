@@ -10,40 +10,6 @@ import SwiftUI
 import CoreData
 
 
-struct DaysOfWeekView: View {
-    var daysOfWeek: Set<DayOfWeek>
-    
-    var body: some View {
-        HStack {
-            // I did it this way so you can apply style
-            // changes to each of the days of the week
-            // And to preserver proper ordering and string
-            // conversion
-            if (self.daysOfWeek.contains(DayOfWeek.Monday)) {
-                Text("Mon")
-            }
-            if (self.daysOfWeek.contains(DayOfWeek.Tuesday)) {
-                Text("Tue")
-            }
-            if (self.daysOfWeek.contains(DayOfWeek.Wednesday)) {
-                Text("Wed")
-            }
-            if (self.daysOfWeek.contains(DayOfWeek.Thursday)) {
-                Text("Thu")
-            }
-            if (self.daysOfWeek.contains(DayOfWeek.Friday)) {
-                Text("Fri")
-            }
-            if (self.daysOfWeek.contains(DayOfWeek.Saturday)) {
-                Text("Sat")
-            }
-            if (self.daysOfWeek.contains(DayOfWeek.Sunday)) {
-                Text("Sun")
-            }
-        }
-    }
-}
-
 struct AlarmsRow: View {
     @ObservedObject var alarmData: AlarmData
     
@@ -54,7 +20,7 @@ struct AlarmsRow: View {
             VStack() {
                 HStack() {
                     Spacer()
-                    Text(self.alarmData.name)
+                    Text(self.alarmData.name).font(Font.title)
                     Spacer()
                     VStack {
                         HStack{
@@ -94,7 +60,9 @@ struct AlarmsRow_Previews: PreviewProvider {
             DayOfWeek.Tuesday,
             DayOfWeek.Wednesday,
             DayOfWeek.Thursday,
-            DayOfWeek.Friday
+            DayOfWeek.Friday,
+            DayOfWeek.Saturday,
+            DayOfWeek.Sunday
         ])
         return AlarmsRow_Previewer(alarmData: alarmData)
     }

@@ -35,4 +35,9 @@ extension AlarmData {
         }
         return taskDataList.sorted(by: { $0.order < $1.order })
     }
+    
+    var today: Date {
+        let todayComponents = Calendar.current.dateComponents([.year, .month, .day], from: Date())
+        return Calendar.current.date(from: todayComponents)! + self.duration.timeInterval
+    }
 }

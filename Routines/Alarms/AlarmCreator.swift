@@ -13,7 +13,7 @@ struct AlarmCreator: View {
     
     @Binding var createMode: Bool
     
-    @State private var name: String = ""
+    @State private var name: String = "New Alarm"
     @State private var time: Date = Date()
     
     // TODO: Make this selectable
@@ -22,13 +22,15 @@ struct AlarmCreator: View {
         DayOfWeek.Tuesday,
         DayOfWeek.Wednesday,
         DayOfWeek.Thursday,
-        DayOfWeek.Friday
+        DayOfWeek.Friday,
+        DayOfWeek.Saturday,
+        DayOfWeek.Sunday
     ]
     
     var body: some View {
         VStack {
             Spacer()
-            TextField("Edit Name", text: self.$name).frame(width: 100)
+            TitleTextField(text: self.$name)
             Spacer().frame(height: 30)
             TimePickerAbsolute(currentDate: $time)
             DaysOfWeekPicker(daysOfWeek: $daysOfWeek)

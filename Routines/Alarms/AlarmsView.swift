@@ -47,7 +47,7 @@ struct AlarmsView: View {
                     .onDelete(perform: self.delete)
                 }
                 .padding(10)
-                .navigationBarTitle(Text("Alarms"))
+                .navigationBarTitle(Text("Routines"))
                 .navigationBarItems(trailing: EditButton())
                 
                 

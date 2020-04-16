@@ -12,7 +12,12 @@ import CoreData
 
 extension TaskData {
     var duration: RelativeTime {
-        RelativeTime.fromSeconds(seconds: TimeInterval(self.duration_))
+        get {
+            RelativeTime.fromSeconds(seconds: TimeInterval(self.duration_))
+        }
+        set {
+            self.duration_ = newValue.timeInterval
+        }
     }
     
     var subTaskDataList: [SubTaskData] {

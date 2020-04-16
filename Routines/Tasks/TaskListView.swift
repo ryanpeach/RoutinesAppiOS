@@ -44,24 +44,32 @@ struct TaskListView: View {
             .navigationBarItems(trailing: EditButton())
             
             // Add Item Button
-            Button(
-                action: {
-                    let taskData = TaskData(context: self.managedObjectContext)
-                    taskData.id = UUID()
-                    taskData.name = "New Task"
-                    taskData.duration_ = 0
-                    self.alarmData.addToTaskData(taskData)
-                }
-            ) {
+            Button(action: {
+                self.createNewTask()
+            }) {
                 HStack {
                     Text("Add Item")
                     Image(systemName: "plus")
                 }
             }
         }
-        
     }
     
+    func createNewTask() {
+        let taskData = TaskData(context: self.managedObjectContext)
+        taskData.id = UUID()
+        taskData.name = "New Task"
+        taskData.duration_ = 0
+        taskData.order = Int16(self.alarmData.taskDataList.count)
+        self.alarmData.addToTaskData(taskData)
+        
+        // Save
+        do {
+            try self.managedObjectContext.save()
+        } catch let error {
+            print("Could not save. \(error)")
+        }
+    }
     
     func delete(at offsets: IndexSet) {
         for index in offsets {
@@ -79,6 +87,13 @@ struct TaskListView: View {
         for td in arr {
             td.order = Int16(count)
             count += 1
+        }
+        
+        // Save
+        do {
+            try self.managedObjectContext.save()
+        } catch let error {
+            print("Could not save. \(error)")
         }
     }
     

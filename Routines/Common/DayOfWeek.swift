@@ -73,6 +73,11 @@ struct DaysOfWeekPicker: View {
     var body: some View {
         HStack {
             DayOfWeekButton(
+                text: "Sun",
+                action: getDaysOfWeek,
+                isActive: self.$hasSunday
+            )
+            DayOfWeekButton(
                 text: "Mon",
                 action: getDaysOfWeek,
                 isActive: self.$hasMonday
@@ -102,11 +107,6 @@ struct DaysOfWeekPicker: View {
                 action: getDaysOfWeek,
                 isActive: self.$hasSaturday
             )
-            DayOfWeekButton(
-                text: "Sun",
-                action: getDaysOfWeek,
-                isActive: self.$hasSunday
-            )
         }
     }
     
@@ -123,10 +123,56 @@ struct DaysOfWeekPicker: View {
     }
 }
 
+struct DaysOfWeekView: View {
+    var daysOfWeek: Set<DayOfWeek>
+    
+    var body: some View {
+        HStack {
+            // I did it this way so you can apply style
+            // changes to each of the days of the week
+            // And to preserver proper ordering and string
+            // conversion
+            if (self.daysOfWeek.contains(DayOfWeek.Sunday)) {
+                Text("Sun")
+            }
+            if (self.daysOfWeek.contains(DayOfWeek.Monday)) {
+                Text("Mon")
+            }
+            if (self.daysOfWeek.contains(DayOfWeek.Tuesday)) {
+                Text("Tue")
+            }
+            if (self.daysOfWeek.contains(DayOfWeek.Wednesday)) {
+                Text("Wed")
+            }
+            if (self.daysOfWeek.contains(DayOfWeek.Thursday)) {
+                Text("Thu")
+            }
+            if (self.daysOfWeek.contains(DayOfWeek.Friday)) {
+                Text("Fri")
+            }
+            if (self.daysOfWeek.contains(DayOfWeek.Saturday)) {
+                Text("Sat")
+            }
+        }
+    }
+}
+
+
 struct DayOfWeek_Previewer: View {
     @State var daysOfWeek: [DayOfWeek] = []
     var body: some View {
-        DaysOfWeekPicker(daysOfWeek: $daysOfWeek)
+        VStack {
+            DaysOfWeekPicker(daysOfWeek: $daysOfWeek)
+            DaysOfWeekView(daysOfWeek: [
+                DayOfWeek.Sunday,
+                DayOfWeek.Monday,
+                DayOfWeek.Tuesday,
+                DayOfWeek.Wednesday,
+                DayOfWeek.Thursday,
+                DayOfWeek.Friday,
+                DayOfWeek.Saturday
+            ])
+        }
     }
 }
 

@@ -23,13 +23,21 @@ struct TaskPlayerView: View {
         }
     }
     
+    var subTaskList: [SubTaskData] {
+        return self.taskData?.subTaskDataList ?? []
+    }
+    
     var body: some View {
-        return VStack {
+        VStack {
             Text((taskData?.duration ?? RelativeTime.fromSeconds(seconds: 0)).stringMS()).font(Font.title)
-            List (taskData?.subTaskDataList ?? [], id: \.id) { sub_td in
-                HStack {
-                    Checkbox(action: {})
-                    Text(sub_td.name)
+            List {
+                ForEach(subTaskList) { sub_td in
+                    HStack {
+                        Checkbox(
+                            action: {}
+                        )
+                        Text(sub_td.name)
+                    }
                 }
             }
             .navigationBarTitle(Text(taskData?.name ?? "Done!"))
