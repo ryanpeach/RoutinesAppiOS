@@ -71,7 +71,7 @@ struct TaskListView: View {
         taskData.id = UUID()
         taskData.name = "New Task"
         taskData.duration_ = 0
-        taskData.order = Int16(self.alarmData.taskDataList.count)
+        taskData.order = Int64(self.alarmData.taskDataList.count)
         self.alarmData.addToTaskData(taskData)
         
         // Save
@@ -96,7 +96,7 @@ struct TaskListView: View {
         
         var count = 0
         for td in arr {
-            td.order = Int16(count)
+            td.order = Int64(count)
             count += 1
         }
         

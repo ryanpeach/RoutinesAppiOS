@@ -33,8 +33,9 @@ struct TaskPlayerView: View {
             List {
                 ForEach(subTaskList) { sub_td in
                     HStack {
-                        Checkbox(
-                            action: {}
+                        SubTaskCheckbox(
+                            subTaskData: sub_td,
+                            threshold: self.alarmData.today
                         )
                         Text(sub_td.name)
                     }

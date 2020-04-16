@@ -65,9 +65,10 @@ struct TaskEditorView: View {
         arr.insert(element, at: destination)
         
         // Reindex
+        // TODO: Better reindexing
         var count = 0
         for sub_td in arr {
-            sub_td.order = Int16(count)
+            sub_td.order = Int64(count)
             count += 1
         }
         
@@ -85,7 +86,7 @@ struct TaskEditorView: View {
         if self.newSubTask != "" {
             let subTaskData = SubTaskData(context: self.managedObjectContext)
             subTaskData.id = UUID()
-            subTaskData.order = Int16(self.taskData.subTaskDataList.count)
+            subTaskData.order = Int64(self.taskData.subTaskDataList.count)
             subTaskData.name = self.newSubTask
             self.taskData.addToSubTaskData(subTaskData)
             

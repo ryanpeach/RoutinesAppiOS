@@ -8,36 +8,39 @@
 
 import SwiftUI
 
-struct Checkbox: View {
+let MIN_RESET_SECONDS: TimeInterval = 3*60*60  // 3 hours
+
+struct SubTaskCheckbox: View {
     var action: () -> () = {}
     
-    @State var done: Bool = false
+    @ObservedObject private var subTaskData_: SubTaskData
+    
+    init(subTaskData: SubTaskData, threshold: Date) {
+        subTaskData_ = subTaskData
+        if subTaskData_.lastEdited == nil {
+            subTaskData_.done = false
+        } else if (subTaskData_.lastEdited! < threshold) && (subTaskData_.lastEdited!.timeIntervalSinceNow > MIN_RESET_SECONDS) {
+            subTaskData_.done = false
+        }
+    }
     
     var body: some View {
         Button(action: {
-            /*
-            if self.lastEdited==nil {
-                self.done = false
-                self.lastEdited = Date()
-            } else if self.lastEdited! < self.threshold {
-                self.done = false
-            } else {
-                self.done.toggle()
-                self.action()
-            }
-             */
+            self.subTaskData_.done.toggle()
+            self.subTaskData_.lastEdited = Date()
         }) {
-            Image(systemName: self.done ? "circle.fill" : "circle")
+            Image(systemName: self.subTaskData_.done ? "circle.fill" : "circle")
                 .frame(width: 30, height: 30)
         }
     }
 }
 
+/*
 struct Checkbox_Previewer: View {
     @State var done: Bool = false
     @State var lastEdited: Date?
     var body: some View {
-        Checkbox(
+        SubTaskCheckbox(
             action: {}
         )
     }
@@ -48,3 +51,4 @@ struct Checkbox_Previews: PreviewProvider {
         Checkbox_Previewer()
     }
 }
+*/

@@ -19,7 +19,7 @@ extension SubTaskData {
 
     @NSManaged public var id: UUID
     @NSManaged public var name: String
-    @NSManaged public var order: Int16
+    @NSManaged public var order: Int64
     @NSManaged public var done: Bool
     @NSManaged public var lastEdited: Date?
     @NSManaged public var taskData: TaskData

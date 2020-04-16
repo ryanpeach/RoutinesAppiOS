@@ -92,7 +92,7 @@ struct TaskCreatorView: View {
         let task = TaskData(context: self.managedObjectContext)
         task.id = UUID()
         task.name = self.name
-        task.order = Int16(self.order)
+        task.order = Int64(self.order)
         task.duration = self.duration
         self.alarmData.addToTaskData(task)
         
@@ -101,7 +101,7 @@ struct TaskCreatorView: View {
             let sub_task = SubTaskData(context: self.managedObjectContext)
             sub_task.id = UUID()
             sub_task.name = sub_task_name
-            sub_task.order = Int16(order)
+            sub_task.order = Int64(order)
             task.addToSubTaskData(sub_task)
             order += 1
         }
