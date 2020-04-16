@@ -30,19 +30,21 @@ struct TaskPlayerView: View {
     var body: some View {
         VStack {
             if taskData != nil {
-                Text(taskData!.duration.stringMS()).font(Font.title)
+                Spacer().frame(height: DEFAULT_HEIGHT_SPACING)
+                Text(taskData!.duration.stringMS()).font(Font.largeTitle)
+                Spacer().frame(height: DEFAULT_HEIGHT_SPACING)
                 List {
                     ForEach(subTaskList) { sub_td in
                         HStack {
                             SubTaskCheckbox(
-                                subTaskData: sub_td,
-                                threshold: self.alarmData.today
+                                subTaskData: sub_td
                             )
                             Text(sub_td.name)
                         }
                     }
                 }
                 .navigationBarTitle(Text(taskData!.name))
+                Spacer().frame(height: DEFAULT_HEIGHT_SPACING)
                 HStack {
                     Spacer()
                     Button(action: {self.next()}) {
@@ -57,7 +59,7 @@ struct TaskPlayerView: View {
                 Text("Done!").font(Font.largeTitle)
                 Spacer()
             }
-            Spacer().frame(height: 30)
+            Spacer().frame(height: DEFAULT_HEIGHT_SPACING)
             HStack {
                 Spacer()
                 Button(action: {self.previous()}) {

@@ -30,7 +30,7 @@ struct TaskCreatorView: View {
             TimePickerRelativeView(time: self.$duration)
             Spacer().frame(height: 30)
             HStack {
-                Spacer().frame(width: 30)
+                Spacer().frame(width: DEFAULT_LEFT_ALIGN_SPACE)
                 ReturnTextField(
                     label: "New Subtask",
                     text: self.$newSubTask,
@@ -40,13 +40,13 @@ struct TaskCreatorView: View {
                     self.addSubTask()
                 }) {
                     Image(systemName: "plus")
-                        .frame(width: 30, height: 30)
+                        .frame(width: DEFAULT_LEFT_ALIGN_SPACE, height: 30)
                 }
-                Spacer().frame(width: 30)
+                Spacer().frame(width: DEFAULT_LEFT_ALIGN_SPACE)
             }
             Spacer().frame(height: 30)
             Text("Subtasks:")
-            Spacer().frame(height: 15)
+            Spacer().frame(height: DEFAULT_HEIGHT_SPACING)
             List {
                 ForEach(self.subTaskDataList, id: \.self) { sub_td in
                     Text(sub_td)

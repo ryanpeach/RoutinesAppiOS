@@ -19,7 +19,7 @@ struct PlayPause: View {
             self.action()
         }) {
             Image(systemName: self.isPlay ? "play" : "pause")
-                .frame(width: 30, height: 30)
+                .frame(width: DEFAULT_LEFT_ALIGN_SPACE, height: 30)
         }
     }
 }

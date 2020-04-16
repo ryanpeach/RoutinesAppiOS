@@ -34,7 +34,7 @@ struct AlarmCreator: View {
             Spacer().frame(height: 30)
             TimePickerAbsolute(currentDate: $time)
             DaysOfWeekPicker(daysOfWeek: $daysOfWeek)
-            Spacer().frame(height: 15)
+            Spacer().frame(height: DEFAULT_HEIGHT_SPACING)
             Button(action: {
                 self.done()
             }) {

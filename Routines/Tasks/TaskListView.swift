@@ -19,7 +19,7 @@ struct TaskListView: View {
     
     var body: some View {
         VStack {
-            Spacer().frame(height: 15)
+            Spacer().frame(height: DEFAULT_HEIGHT_SPACING)
             // Add Item Button
             NavigationLink(
                 destination: TaskPlayerView(alarmData: alarmData)
@@ -31,7 +31,7 @@ struct TaskListView: View {
                 }
                 
             }
-            Spacer().frame(height: 15)
+            Spacer().frame(height: DEFAULT_HEIGHT_SPACING)
             List{
                 ForEach(self.alarmData.taskDataList, id: \.id) { td in
                     NavigationLink(

@@ -16,11 +16,12 @@ struct TaskRowView: View {
     
     var body: some View {
         HStack {
-            /*
             Spacer().frame(width: 5)
-            Checkbox(action: {})
+            TaskCheckbox(
+                taskData: self.taskData,
+                threshold: self.taskData.alarmData.today
+            )
             Spacer().frame(width: 10)
-             */
             Text(self.taskData.name)
             Spacer()
             Text(self.taskData.duration.stringMS())

@@ -13,7 +13,7 @@ struct TitleTextField: View {
     let onCommit: () -> () = {}
     var body: some View {
         HStack {
-            Spacer().frame(width: 30)
+            Spacer().frame(width: DEFAULT_LEFT_ALIGN_SPACE)
             TextField(
                 self.text,
                 text: self.$text,

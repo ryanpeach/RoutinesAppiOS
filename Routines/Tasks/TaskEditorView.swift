@@ -18,11 +18,11 @@ struct TaskEditorView: View {
     var body: some View {
         VStack {
             TitleTextField(text: self.$taskData.name)
-            Spacer().frame(height: 15)
-            TimePickerRelativeView(time: self.$taskData.duration)
-            Spacer().frame(height: 15)
+            Spacer().frame(height: DEFAULT_HEIGHT_SPACING)
+            TimePickerRelativeView(time: self.$taskData.duration).frame(width: 250)
+            Spacer().frame(height: DEFAULT_HEIGHT_SPACING)
             HStack {
-                Spacer().frame(width: 30, height: 15)
+                Spacer().frame(width: DEFAULT_LEFT_ALIGN_SPACE, height: DEFAULT_HEIGHT_SPACING)
                 ReturnTextField(
                     label: "New Subtask",
                     text: self.$newSubTask,
@@ -32,13 +32,13 @@ struct TaskEditorView: View {
                     self.addSubTask()
                 }) {
                     Image(systemName: "plus")
-                        .frame(width: 30, height: 30)
+                        .frame(width: DEFAULT_LEFT_ALIGN_SPACE, height: 30)
                 }
-                Spacer().frame(width: 15)
+                Spacer().frame(width: DEFAULT_HEIGHT_SPACING)
             }
-            Spacer().frame(height: 15)
+            Spacer().frame(height: DEFAULT_HEIGHT_SPACING)
             Text("Subtasks:")
-            Spacer().frame(height: 15)
+            Spacer().frame(height: DEFAULT_HEIGHT_SPACING)
             List {
                 ForEach(self.taskData.subTaskDataList, id: \.id) { sub_td in
                     Text(sub_td.name)
@@ -80,6 +80,7 @@ struct TaskEditorView: View {
         }
         
         self.taskData.objectWillChange.send()
+        self.taskData.alarmData.objectWillChange.send()
     }
     
     func addSubTask() {

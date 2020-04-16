@@ -90,7 +90,7 @@ struct TimePickerRelativeView: View  {
     
     var body: some View {
         VStack {
-            Spacer().frame(height: 15)
+            Spacer().frame(height: DEFAULT_HEIGHT_SPACING)
             GeometryReader { geometry in
                 HStack{
                     VStack{
@@ -137,7 +137,7 @@ struct TimePickerRelativeView: View  {
                     }
                 }
             }.frame(height: 150)
-            Spacer().frame(height: 15)
+            Spacer().frame(height: DEFAULT_HEIGHT_SPACING)
         }
     }
 }
