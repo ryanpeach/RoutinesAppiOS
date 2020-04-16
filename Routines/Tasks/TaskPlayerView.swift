@@ -75,8 +75,10 @@ struct TaskPlayerView: View {
     }
     
     func next() {
-        if self.taskIndex < self.alarmData.taskDataList.count {
-            self.taskIndex += 1
+        if self.taskData?.subTaskDataList.allSatisfy({$0.done}) ?? true {
+            if self.taskIndex < self.alarmData.taskDataList.count {
+                self.taskIndex += 1
+            }
         }
     }
 }
