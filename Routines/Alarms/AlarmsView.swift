@@ -36,20 +36,18 @@ struct AlarmsView: View {
     ]) var alarmDataList: FetchedResults<AlarmData>
     
     @State var createMode = false
+    @State var editMode = false
+    @State var taskListMode = false
     
     var body: some View {
         NavigationView {
             VStack {
-                List{
-                    ForEach(self.alarmDataList, id: \.id) { al in
-                        AlarmsRow(alarmData: al)
-                    }
-                    .onDelete(perform: self.delete)
+                ForEach(self.alarmDataList, id: \.id) { al in
+                    AlarmsRow(alarmData: al)
                 }
-                .padding(10)
-                .navigationBarTitle(Text("Routines"))
-                .navigationBarItems(trailing: EditButton())
+                .onDelete(perform: self.delete)
                 
+                Spacer()
                 
                 // Add Item Button
                 Button(action: {
@@ -60,8 +58,12 @@ struct AlarmsView: View {
                         Image(systemName: "plus")
                     }
                 }
-                NavigationLink(destination: AlarmCreator(createMode: $createMode), isActive: $createMode) { EmptyView() }
+                NavigationLink(
+                    destination: AlarmCreator(createMode: self.$createMode),
+                    isActive: $createMode
+                ) { EmptyView() }
             }
+            .navigationBarTitle(Text("Routines"))
         }
     }
     
