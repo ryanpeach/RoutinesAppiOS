@@ -38,12 +38,21 @@ struct AlarmsView: View {
     @State var createMode = false
     @State var editMode = false
     @State var taskListMode = false
+    @State var tag: AlarmData?
     
     var body: some View {
         NavigationView {
             VStack {
                 ForEach(self.alarmDataList, id: \.id) { al in
-                    AlarmsRow(alarmData: al)
+                    VStack {
+                        AlarmsRow(
+                            tag: self.$tag,
+                            alarmData: al
+                        )
+                        NavigationLink(destination: TaskListView(alarmData: al), tag: al, selection: self.$tag) {
+                            EmptyView()
+                        }
+                    }
                 }
                 .onDelete(perform: self.delete)
                 

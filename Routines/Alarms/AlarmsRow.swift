@@ -12,16 +12,17 @@ import CoreData
 let DRAG_LIMIT: CGFloat = 90
 
 struct AlarmsRow: View {
-    @Environment(\.managedObjectContext) var managedObjectContext
-    @Environment (\.colorScheme) var colorScheme:ColorScheme
+    @Environment(\.managedObjectContext) private var managedObjectContext
+    @Environment (\.colorScheme) private var colorScheme:ColorScheme
+    
     @GestureState private var dragOffset = CGSize.zero
     @State private var position = CGSize.zero
     @State private var optionBackgroundColor = Color.white
     
+    @Binding var tag: AlarmData?
     @ObservedObject var alarmData: AlarmData
     
-    @State var inEditing: Bool = false
-    @State var inViewing: Bool = false
+    @State private var inEditing: Bool = false
     
     var swipeReveal: some Gesture {
         DragGesture()
@@ -45,7 +46,7 @@ struct AlarmsRow: View {
     var tapGuesture: some Gesture {
         TapGesture(count: 1)
         .onEnded { _ in
-            self.inViewing = true
+            self.tag = self.alarmData
         }
     }
     
@@ -142,21 +143,18 @@ struct AlarmsRow: View {
                 ),
                 isActive: self.$inEditing
             ) { EmptyView() }
-            NavigationLink(
-                destination: TaskListView(
-                    inViewing: self.$inViewing,
-                    alarmData: self.alarmData
-                ),
-                isActive: self.$inViewing
-            ) { EmptyView() }
         }.frame(height:100)
     }
 }
 
 struct AlarmsRow_Previewer: View {
     @State var alarmData: AlarmData
+    @State var tag: AlarmData?
     var body: some View {
-        AlarmsRow(alarmData: alarmData)
+        AlarmsRow(
+            tag: $tag,
+            alarmData: alarmData
+        )
     }
 }
 

@@ -13,8 +13,6 @@ struct TaskListView: View {
     @Environment(\.managedObjectContext) var managedObjectContext
     @Environment(\.editMode) var editMode
     
-    @Binding var inViewing: Bool
-    
     @ObservedObject var alarmData: AlarmData
 
     @State var createMode = false
@@ -66,10 +64,6 @@ struct TaskListView: View {
                 isActive: $createMode
             ) { EmptyView() }
         }
-        .navigationBarBackButtonHidden(true) // not needed, but just in case
-        .navigationBarItems(leading: MyBackButton(label: "Routines") {
-            self.inViewing = false
-        })
     }
     
     func createNewTask() {
@@ -120,10 +114,8 @@ struct TaskListView: View {
 
 struct TaskListView_Previewer: View {
     @ObservedObject var alarmData: AlarmData
-    @State var inViewing: Bool = false
     var body: some View {
         TaskListView(
-            inViewing: self.$inViewing,
             alarmData: self.alarmData
         )
     }
