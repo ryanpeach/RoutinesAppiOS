@@ -67,19 +67,19 @@ struct RelativeTime: Hashable {
     
     // Strings
     func stringMS() -> String {
-        String(format: "%02d", self._minutes+self._hours*60) + ":" +
-            String(format: "%02d", Int(self._seconds))
+        String(format: "%02d", abs(self._minutes)+abs(self._hours)*60) + ":" +
+            String(format: "%02d", Int(abs(self._seconds)))
     }
     
     func stringHM() -> String {
-        String(format: "%02d", self._hours) + ":" +
-            String(format: "%02d", self._minutes)
+        String(format: "%02d", abs(self._hours)) + ":" +
+            String(format: "%02d", abs(self._minutes))
     }
     
     func stringHMS() -> String {
-        String(format: "%02d", self._hours) + ":" +
-            String(format: "%02d", self._minutes) + ":" +
-            String(format: "%02d", Int(self._seconds))
+        String(format: "%02d", abs(self._hours)) + ":" +
+            String(format: "%02d", abs(self._minutes)) + ":" +
+            String(format: "%02d", Int(abs(self._seconds)))
     }
     
     var today: Date {

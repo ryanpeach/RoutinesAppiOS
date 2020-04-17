@@ -11,6 +11,15 @@ import Foundation
 import CoreData
 
 extension TaskData {
+    var lastDuration: RelativeTime {
+        get {
+            RelativeTime.fromSeconds(seconds: TimeInterval(self.lastDuration_))
+        }
+        set {
+            self.lastDuration_ = newValue.timeInterval
+        }
+    }
+    
     var duration: RelativeTime {
         get {
             RelativeTime.fromSeconds(seconds: TimeInterval(self.duration_))

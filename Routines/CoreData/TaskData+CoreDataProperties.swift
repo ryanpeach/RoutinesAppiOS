@@ -17,6 +17,7 @@ extension TaskData {
         return NSFetchRequest<TaskData>(entityName: "TaskData")
     }
 
+    @NSManaged public var lastDuration_: Double
     @NSManaged public var duration_: Double
     @NSManaged public var id: UUID
     @NSManaged public var name: String

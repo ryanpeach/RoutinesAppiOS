@@ -9,6 +9,28 @@
 import SwiftUI
 import CoreData
 
+struct DurationView: View {
+    @ObservedObject var taskData: TaskData
+    
+    var diff: RelativeTime {
+        return RelativeTime.fromSeconds(seconds: self.taskData.duration_ - self.taskData.lastDuration_)
+    }
+    
+    var body: some View {
+        HStack {
+            if self.taskData.lastDuration_ > 0 {
+                if diff.timeInterval <= 0 {
+                    Text("+"+diff.stringMS()).foregroundColor(Color.red)
+                } else {
+                    Text("-"+diff.stringMS()).foregroundColor(Color.green)
+                }
+            } else {
+                Text("")
+            }
+        }
+    }
+}
+
 struct TaskRowView: View {
     @Environment(\.managedObjectContext) var managedObjectContext
     
@@ -25,6 +47,8 @@ struct TaskRowView: View {
             Text(self.taskData.name)
             Spacer()
             Text(self.taskData.duration.stringMS())
+            Spacer().frame(width: 5)
+            DurationView(taskData: self.taskData)
             Spacer().frame(width: 5)
         }
     }
@@ -43,6 +67,7 @@ struct TaskRowView_Previews: PreviewProvider {
         let taskData = TaskData(context: moc)
         taskData.id = UUID()
         taskData.name = "Get out of bed."
+        taskData.lastDuration_ = 1
         return TaskRowView_Previewer(taskData: taskData)
     }
 }

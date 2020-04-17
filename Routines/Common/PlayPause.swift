@@ -11,7 +11,7 @@ import SwiftUI
 struct PlayPause: View {
     var action: () -> () = {}
     
-    @State var isPlay: Bool = false
+    @Binding var isPlay: Bool
     
     var body: some View {
         Button(action: {
@@ -24,8 +24,16 @@ struct PlayPause: View {
     }
 }
 
+
+struct PlayPause_Previewer: View {
+    @State var isPlay: Bool = false
+    var body: some View {
+        PlayPause(isPlay: self.$isPlay)
+    }
+}
+
 struct PlayPause_Previews: PreviewProvider {
     static var previews: some View {
-        PlayPause()
+        PlayPause_Previewer()
     }
 }

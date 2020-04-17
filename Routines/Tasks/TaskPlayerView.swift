@@ -8,13 +8,33 @@
 
 import SwiftUI
 
+struct CountdownTimer: View {
+    @ObservedObject var taskData: TaskData
+    @Binding var durationSoFar: TimeInterval
+    
+    var body: some View {
+        let this = RelativeTime.fromSeconds(seconds: (taskData.duration.timeInterval-durationSoFar))
+        if this.timeInterval < 0 {
+            return Text("-"+this.stringMS()).foregroundColor(Color.red)
+        } else {
+            return Text(this.stringMS())
+        }
+    }
+}
+
+
 struct TaskPlayerView: View {
     @Environment(\.managedObjectContext) var managedObjectContext
     
     @ObservedObject var alarmData: AlarmData
     
-    @State private var taskIndex: Int = 0
-   
+    @State var taskIndex: Int = 0
+    
+    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    
+    @State var isPlay: Bool = true
+    @State var durationSoFar: TimeInterval = 0
+
     var taskData: TaskData? {
         if self.taskIndex >= self.alarmData.taskDataList.count {
             return nil
@@ -31,7 +51,10 @@ struct TaskPlayerView: View {
         VStack {
             if taskData != nil {
                 Spacer().frame(height: DEFAULT_HEIGHT_SPACING)
-                Text(taskData!.duration.stringMS()).font(Font.largeTitle)
+                CountdownTimer(
+                    taskData: self.taskData!,
+                    durationSoFar: self.$durationSoFar
+                ).font(Font.largeTitle)
                 Spacer().frame(height: DEFAULT_HEIGHT_SPACING)
                 List {
                     ForEach(subTaskList) { sub_td in
@@ -47,7 +70,10 @@ struct TaskPlayerView: View {
                 Spacer().frame(height: DEFAULT_HEIGHT_SPACING)
                 HStack {
                     Spacer()
-                    Button(action: {self.next()}) {
+                    Button(action: {
+                        self.taskData!.lastDuration_ = self.durationSoFar
+                        self.next()
+                    }) {
                         Image(systemName: "checkmark.circle")
                             .resizable()
                             .frame(width: 100.0, height: 100.0)
@@ -67,7 +93,7 @@ struct TaskPlayerView: View {
                 }
                 Spacer()
                 if taskData != nil {
-                    PlayPause()
+                    PlayPause(isPlay: self.$isPlay)
                     Spacer()
                     Button(action: {self.next()}) {
                         Image(systemName: "forward")
@@ -76,11 +102,15 @@ struct TaskPlayerView: View {
                 }
             }
         }
+        .onReceive(timer) { input in
+            self.durationSoFar += 1
+        }
     }
     
     func previous() {
         if self.taskIndex > 0 {
             self.taskIndex -= 1
+            self.durationSoFar = 0
         }
     }
     
@@ -88,6 +118,7 @@ struct TaskPlayerView: View {
         if self.taskData?.subTaskDataList.allSatisfy({$0.done}) ?? true {
             if self.taskIndex < self.alarmData.taskDataList.count {
                 self.taskIndex += 1
+                self.durationSoFar = 0
             }
         }
     }
