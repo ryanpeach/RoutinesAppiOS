@@ -34,6 +34,8 @@ struct AlarmsRow: View {
                 self.alarmData.objectWillChange.send()
             } else if value.translation.width <= -DRAG_LIMIT {
                 self.position.width = -DRAG_LIMIT
+            } else if value.translation.width >= DRAG_LIMIT {
+                self.inEditing = true
             } else {
                 self.position.width = 0
             }
@@ -86,7 +88,10 @@ struct AlarmsRow: View {
                     }
                     Spacer()
                 }
-            }.background((self.position.width + self.dragOffset.width) <= 0 ? Color.red : Color.blue)
+            }.background(
+                (self.position.width + self.dragOffset.width <= 0) ?
+                    Color.red : Color.blue
+            )
             
             // Our foreground
             HStack {
@@ -126,10 +131,25 @@ struct AlarmsRow: View {
             }
             .background(self.backgroundColor)
             .offset(x: self.position.width + dragOffset.width)
-            .animation(.easeInOut)
+            // .animation(.easeInOut) // TODO: This doesn't work, make your own animation that incorporates changing background color!
             .gesture(tapGuesture)
             .gesture(swipeReveal)
-        }
+            
+            NavigationLink(
+                destination: AlarmEditor(
+                    inEditing: self.$inEditing,
+                    alarmData: self.alarmData
+                ),
+                isActive: self.$inEditing
+            ) { EmptyView() }
+            NavigationLink(
+                destination: TaskListView(
+                    inViewing: self.$inViewing,
+                    alarmData: self.alarmData
+                ),
+                isActive: self.$inViewing
+            ) { EmptyView() }
+        }.frame(height:100)
     }
 }
 

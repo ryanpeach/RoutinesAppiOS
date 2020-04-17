@@ -15,7 +15,12 @@ import Combine
 extension AlarmData {
     
     var time: RelativeTime {
-        RelativeTime.fromSeconds(seconds: TimeInterval(self.time_))
+        get {
+            RelativeTime.fromSeconds(seconds: TimeInterval(self.time_))
+        }
+        set {
+            self.time_ = newValue.timeInterval
+        }
     }
     
     var daysOfWeek: [DayOfWeek] {
@@ -41,10 +46,5 @@ extension AlarmData {
             taskDataList.append((td as! TaskData))
         }
         return taskDataList.sorted(by: { $0.order < $1.order })
-    }
-    
-    var today: Date {
-        let todayComponents = Calendar.current.dateComponents([.year, .month, .day], from: Date())
-        return Calendar.current.date(from: todayComponents)! + self.duration.timeInterval
     }
 }

@@ -81,6 +81,19 @@ struct RelativeTime: Hashable {
             String(format: "%02d", self._minutes) + ":" +
             String(format: "%02d", Int(self._seconds))
     }
+    
+    var today: Date {
+        get {
+            let todayComponents = Calendar.current.dateComponents([.year, .month, .day], from: Date())
+            return Calendar.current.date(from: todayComponents)! + self.timeInterval
+        }
+        set {
+            let todayComponents = Calendar.current.dateComponents([.hour, .minute, .second], from: newValue)
+            self._hours = todayComponents.hour!
+            self._minutes = todayComponents.minute!
+            self._seconds = TimeInterval(todayComponents.second!)
+        }
+    }
 }
 
 

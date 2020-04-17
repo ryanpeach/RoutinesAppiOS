@@ -11,17 +11,33 @@ import SwiftUI
 struct AlarmEditor: View {
     @Environment(\.managedObjectContext) var managedObjectContext
     
+    @Binding var inEditing: Bool
     @ObservedObject var alarmData: AlarmData
     
     var body: some View {
         VStack {
             Spacer()
-            //TitleTextField(text: self.$alarmData.name)
-            //Spacer().frame(height: 30)
-            //TimePickerAbsolute(currentDate: self.$alarmData.time)
+            TitleTextField(text: self.$alarmData.name)
+            Spacer().frame(height: 30)
+            TimePickerAbsolute(currentDate: self.$alarmData.time.today)
             DaysOfWeekPicker(daysOfWeek: self.$alarmData.daysOfWeek)
             Spacer()
         }
+        .navigationBarBackButtonHidden(true) // not needed, but just in case
+        .navigationBarItems(leading: MyBackButton(label: "Back") {
+            self.inEditing = false
+        })
+    }
+}
+
+struct AlarmEditor_Previewer: View {
+    @State var inEditing: Bool = false
+    @ObservedObject var alarmData: AlarmData
+    var body: some View {
+        AlarmEditor(
+            inEditing: self.$inEditing,
+            alarmData: alarmData
+        )
     }
 }
 
@@ -40,6 +56,8 @@ struct AlarmsEditor_Previews: PreviewProvider {
             DayOfWeek.Saturday,
             DayOfWeek.Sunday
         ])
-        return AlarmEditor(alarmData: alarmData)
+        return AlarmEditor_Previewer(
+            alarmData: alarmData
+        )
     }
 }
