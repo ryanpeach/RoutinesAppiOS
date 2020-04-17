@@ -33,6 +33,10 @@ struct TaskPlayerView: View {
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
     @State var isPlay: Bool = true
+    @State var startTime: Date?
+    @State var lastTime: Date = Date()
+    @State var durationBeforePause: TimeInterval = 0
+    
     @State var durationSoFar: TimeInterval = 0
 
     var taskData: TaskData? {
@@ -71,8 +75,10 @@ struct TaskPlayerView: View {
                 HStack {
                     Spacer()
                     Button(action: {
-                        self.taskData!.lastDuration_ = self.durationSoFar
-                        self.next()
+                        if self.taskData?.subTaskDataList.allSatisfy({$0.done}) ?? true {
+                            self.taskData!.lastDuration_ = self.durationSoFar
+                            self.next()
+                        }
                     }) {
                         Image(systemName: "checkmark.circle")
                             .resizable()
@@ -93,7 +99,18 @@ struct TaskPlayerView: View {
                 }
                 Spacer()
                 if taskData != nil {
-                    PlayPause(isPlay: self.$isPlay)
+                    PlayPause(
+                        isPlay: self.$isPlay,
+                        afterAction: {
+                            if !self.isPlay {
+                                self.durationBeforePause = self.durationSoFar
+                                self.deleteNotification()
+                            } else {
+                                self.startTime = Date()
+                                self.scheduleNotification()
+                            }
+                        }
+                    )
                     Spacer()
                     Button(action: {self.next()}) {
                         Image(systemName: "forward")
@@ -103,23 +120,63 @@ struct TaskPlayerView: View {
             }
         }
         .onReceive(timer) { input in
-            self.durationSoFar += 1
+            if self.isPlay {
+                self.lastTime = Date()
+                if self.startTime == nil {
+                    self.startTime = Date()
+                }
+                self.durationSoFar = min(
+                    60*60+(self.taskData?.duration_ ?? 0),
+                    self.startTime!.distance(to: self.lastTime) + self.durationBeforePause
+                )
+            }
+        }
+    }
+    
+    func deleteNotification() {
+        if taskData != nil {
+            if self.taskData!.notificationId != nil {
+                LocalNotificationManager.deleteNotification(
+                    id: self.taskData!.notificationId!
+                )
+            }
+        }
+    }
+    
+    func scheduleNotification() {
+        LocalNotificationManager.requestPermission()
+        if taskData != nil {
+            self.deleteNotification()
+            let time = (self.taskData!.duration.timeInterval-self.durationSoFar)
+            if time > 0 {
+                self.taskData!.notificationId = LocalNotificationManager.scheduleNotificationTimeInterval(
+                    time: time,
+                    title: "Timer Done: \(self.taskData!.name)",
+                    body: "Get on with your day!"
+                )
+            }
         }
     }
     
     func previous() {
         if self.taskIndex > 0 {
+            self.deleteNotification()
             self.taskIndex -= 1
             self.durationSoFar = 0
+            self.startTime = Date()
+            self.lastTime = Date()
+            self.scheduleNotification()
         }
     }
     
     func next() {
-        if self.taskData?.subTaskDataList.allSatisfy({$0.done}) ?? true {
-            if self.taskIndex < self.alarmData.taskDataList.count {
-                self.taskIndex += 1
-                self.durationSoFar = 0
-            }
+        if self.taskIndex < self.alarmData.taskDataList.count {
+            self.deleteNotification()
+            self.taskIndex += 1
+            self.durationSoFar = 0
+            self.startTime = Date()
+            self.lastTime = Date()
+            self.scheduleNotification()
         }
     }
 }

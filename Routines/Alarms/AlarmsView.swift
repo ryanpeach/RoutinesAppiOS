@@ -43,19 +43,20 @@ struct AlarmsView: View {
     var body: some View {
         NavigationView {
             VStack {
-                ForEach(self.alarmDataList, id: \.id) { al in
-                    VStack {
-                        AlarmsRow(
-                            tag: self.$tag,
-                            alarmData: al
-                        )
-                        NavigationLink(destination: TaskListView(alarmData: al), tag: al, selection: self.$tag) {
-                            EmptyView()
+                ScrollView {
+                    ForEach(self.alarmDataList, id: \.id) { al in
+                        VStack {
+                            AlarmsRow(
+                                tag: self.$tag,
+                                alarmData: al
+                            )
+                            NavigationLink(destination: TaskListView(alarmData: al), tag: al, selection: self.$tag) {
+                                EmptyView()
+                            }
                         }
                     }
+                    .onDelete(perform: self.delete)
                 }
-                .onDelete(perform: self.delete)
-                
                 Spacer()
                 
                 // Add Item Button

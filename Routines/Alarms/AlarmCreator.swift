@@ -57,10 +57,27 @@ struct AlarmCreator: View {
         // Get the amount of time in the date, but not the actual date itself.
         let calendar = Calendar.current
         let hour = calendar.component(.hour, from: self.time)
-        let minutes = calendar.component(.minute, from: self.time)
+        let minute = calendar.component(.minute, from: self.time)
         alarm.time_ = TimeInterval(
-            minutes * 60 + hour * 60 * 60
+            minute * 60 + hour * 60 * 60
         )
+        
+        // Set notifications
+        LocalNotificationManager.requestPermission()
+        var notificationIds: [String] = []
+        for dayOfWeek in self.daysOfWeek {
+            var nextDateComponent = calendar.dateComponents([.year, .month, .day], from: Date.today().next(.monday))
+            nextDateComponent.hour = hour
+            nextDateComponent.minute = minute
+            let id = LocalNotificationManager.scheduleNotificationWeekly(
+                time: RelativeTime.fromSeconds(seconds: alarm.time_),
+                weekday: dayOfWeek,
+                title: "Routine: \(self.name)",
+                body: "Let's Begin!"
+            )
+            notificationIds.append(id)
+        }
+        alarm.notificationIds = notificationIds
         
         // Save
         do {

@@ -19,7 +19,7 @@ struct TaskEditorView: View {
         VStack {
             TitleTextField(text: self.$taskData.name)
             Spacer().frame(height: DEFAULT_HEIGHT_SPACING)
-            TimePickerRelativeView(time: self.$taskData.duration).frame(width: 250)
+            TimePickerRelativeView(time: self.$taskData.duration)
             Spacer().frame(height: DEFAULT_HEIGHT_SPACING)
             HStack {
                 Spacer().frame(width: DEFAULT_LEFT_ALIGN_SPACE, height: DEFAULT_HEIGHT_SPACING)

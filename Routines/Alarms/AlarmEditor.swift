@@ -26,7 +26,38 @@ struct AlarmEditor: View {
         .navigationBarBackButtonHidden(true) // not needed, but just in case
         .navigationBarItems(leading: MyBackButton(label: "Back") {
             self.inEditing = false
+            self.setNotifications()
         })
+    }
+    
+    func setNotifications() {
+        // Delete Old Notifications
+        if self.alarmData.notificationIds_ != nil {
+            for id in self.alarmData.notificationIds {
+                // TODO: Check if this is safe if id has already executed
+                LocalNotificationManager.deleteNotification(id: id)
+            }
+        }
+        
+        // Set notifications
+        let calendar = Calendar.current
+        let hour = calendar.component(.hour, from: self.alarmData.time.today)
+        let minute = calendar.component(.minute, from: self.alarmData.time.today)
+        LocalNotificationManager.requestPermission()
+        var notificationIds: [String] = []
+        for dayOfWeek in self.alarmData.daysOfWeek {
+            var nextDateComponent = calendar.dateComponents([.year, .month, .day], from: Date.today().next(.monday))
+            nextDateComponent.hour = hour
+            nextDateComponent.minute = minute
+            let id = LocalNotificationManager.scheduleNotificationWeekly(
+                time: RelativeTime.fromSeconds(seconds: self.alarmData.time_),
+                weekday: dayOfWeek,
+                title: "Routine: \(self.alarmData.name)",
+                body: "Let's Begin!"
+            )
+            notificationIds.append(id)
+        }
+        self.alarmData.notificationIds = notificationIds
     }
 }
 

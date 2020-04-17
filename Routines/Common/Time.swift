@@ -149,8 +149,10 @@ struct TimePickerRelativeView: View  {
                         .clipped()
                     }
                 }
-            }.frame(height: 150)
-            Spacer().frame(height: DEFAULT_HEIGHT_SPACING)
+            }.frame(width: 250, height: 150)
+            Spacer().frame(
+                height: DEFAULT_HEIGHT_SPACING
+            )
         }
     }
 }

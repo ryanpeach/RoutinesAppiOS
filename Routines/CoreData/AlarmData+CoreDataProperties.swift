@@ -20,6 +20,7 @@ extension AlarmData {
     @NSManaged public var daysOfWeek_: Int16
     @NSManaged public var id: UUID
     @NSManaged public var name: String
+    @NSManaged public var notificationIds_: String?
     @NSManaged public var time_: Double
     @NSManaged public var done: Bool
     @NSManaged public var lastEdited: Date?

@@ -47,4 +47,13 @@ extension AlarmData {
         }
         return taskDataList.sorted(by: { $0.order < $1.order })
     }
+    
+    var notificationIds: [String] {
+        get {
+            return self.notificationIds_?.components(separatedBy: ",") ?? []
+        }
+        set {
+            self.notificationIds_ = newValue.joined(separator: ",")
+        }
+    }
 }

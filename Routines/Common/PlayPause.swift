@@ -9,16 +9,16 @@
 import SwiftUI
 
 struct PlayPause: View {
-    var action: () -> () = {}
     
     @Binding var isPlay: Bool
+    var afterAction: () -> () = {}
     
     var body: some View {
         Button(action: {
             self.isPlay.toggle()
-            self.action()
+            self.afterAction()
         }) {
-            Image(systemName: self.isPlay ? "play" : "pause")
+            Image(systemName: self.isPlay ? "pause" : "play")
                 .frame(width: DEFAULT_LEFT_ALIGN_SPACE, height: 30)
         }
     }
