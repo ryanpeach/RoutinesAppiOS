@@ -70,6 +70,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             }
         }
     }
+    
+    // Settings Bundle
+    func applicationDidBecomeActive(_ application: UIApplication) {
+        SettingsBundleHelper.setVersionAndBuildNumber()
+    }
 
 }
 

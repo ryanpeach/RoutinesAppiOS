@@ -60,13 +60,13 @@ struct TaskCreatorView: View {
                 Text("Save")
             }
         }
+        .navigationBarBackButtonHidden(true) // not needed, but just in case
         .navigationBarItems(
+            leading: MyBackButton(label: "Cancel") {
+                self.createMode = false
+            },
             trailing: EditButton()
         )
-        .navigationBarBackButtonHidden(true) // not needed, but just in case
-        .navigationBarItems(leading: MyBackButton(label: "Cancel") {
-            self.createMode = false
-        })
     }
     
     func delete(at offsets: IndexSet) {

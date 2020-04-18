@@ -11,9 +11,87 @@ import CoreData
 
 let DRAG_LIMIT: CGFloat = 90
 
+
+struct RowBackground: View {
+    var body: some View {
+        // Our Background
+        HStack {
+            // Our leftside button
+            VStack{
+                Spacer()
+                HStack{
+                    Spacer().frame(width: DEFAULT_LEFT_ALIGN_SPACE)
+                    Image(systemName: "square.and.pencil")
+                        .resizable()
+                        .frame(width: 30, height: 30)
+                    Spacer().frame(width: DEFAULT_LEFT_ALIGN_SPACE)
+                    Spacer()
+                }
+                Spacer()
+            }
+                
+            // Our rightside button
+            VStack {
+                Spacer()
+                HStack {
+                    Spacer()
+                    Spacer().frame(width: DEFAULT_LEFT_ALIGN_SPACE)
+                    Image(systemName: "xmark")
+                        .resizable()
+                        .frame(width: 30, height: 30)
+                    Spacer().frame(width: DEFAULT_LEFT_ALIGN_SPACE)
+                }
+                Spacer()
+            }
+        }
+    }
+}
+
+struct AlarmRowForeground: View {
+    @ObservedObject var alarmData: AlarmData
+    var body: some View {
+        // Our foreground
+        HStack {
+            VStack {
+                Spacer()
+                HStack {
+                    Spacer().frame(width: DEFAULT_LEFT_ALIGN_SPACE)
+                    VStack {
+                        Text(self.alarmData.name).font(Font.title)
+                    }
+                    VStack {
+                        HStack{
+                            Spacer()
+                            HStack{
+                                Text("Time: ")
+                                Text(self.alarmData.time.stringHMS())
+                            }
+                            Spacer().frame(width: DEFAULT_LEFT_ALIGN_SPACE)
+                        }
+                        HStack {
+                            Spacer()
+                            HStack {
+                                Text("Duration: ")
+                                Text(self.alarmData.duration.stringHMS())
+                            }
+                            Spacer().frame(width: DEFAULT_LEFT_ALIGN_SPACE)
+                        }
+                    }
+                }
+                Spacer().frame(height: 20)
+                HStack {
+                    DaysOfWeekView(daysOfWeek: Set(self.alarmData.daysOfWeek))
+                    Spacer().frame(width: DEFAULT_LEFT_ALIGN_SPACE)
+                }
+                Spacer()
+            }
+        }
+    }
+}
+
+
 struct AlarmsRow: View {
     @Environment(\.managedObjectContext) private var managedObjectContext
-    @Environment (\.colorScheme) private var colorScheme:ColorScheme
     
     @GestureState private var dragOffset = CGSize.zero
     @State private var position = CGSize.zero
@@ -23,6 +101,15 @@ struct AlarmsRow: View {
     @ObservedObject var alarmData: AlarmData
     
     @State private var inEditing: Bool = false
+    
+    @Environment (\.colorScheme) private var colorScheme:ColorScheme
+    var backgroundColor: Color {
+        if self.colorScheme == .dark {
+            return Color.black
+        } else {
+            return Color.white
+        }
+    }
     
     var swipeReveal: some Gesture {
         DragGesture()
@@ -50,91 +137,19 @@ struct AlarmsRow: View {
         }
     }
     
-    var backgroundColor: Color {
-        if self.colorScheme == .dark {
-            return Color.black
-        } else {
-            return Color.white
-        }
-    }
-    
     var body: some View {
         ZStack {
-            // Our Background
-            HStack {
-                // Our leftside button
-                VStack{
-                    Spacer()
-                    HStack{
-                        Spacer().frame(width: DEFAULT_LEFT_ALIGN_SPACE)
-                        Image(systemName: "square.and.pencil")
-                            .resizable()
-                            .frame(width: 30, height: 30)
-                        Spacer().frame(width: DEFAULT_LEFT_ALIGN_SPACE)
-                        Spacer()
-                    }
-                    Spacer()
-                }
-                    
-                // Our rightside button
-                VStack {
-                    Spacer()
-                    HStack {
-                        Spacer()
-                        Spacer().frame(width: DEFAULT_LEFT_ALIGN_SPACE)
-                        Image(systemName: "xmark")
-                            .resizable()
-                            .frame(width: 30, height: 30)
-                        Spacer().frame(width: DEFAULT_LEFT_ALIGN_SPACE)
-                    }
-                    Spacer()
-                }
-            }.background(
+            RowBackground().background(
                 (self.position.width + self.dragOffset.width <= 0) ?
                     Color.red : Color.blue
             )
-            
-            // Our foreground
-            HStack {
-                VStack {
-                    Spacer()
-                    HStack {
-                        Spacer().frame(width: DEFAULT_LEFT_ALIGN_SPACE)
-                        VStack {
-                            Text(self.alarmData.name).font(Font.title)
-                        }
-                        VStack {
-                            HStack{
-                                Spacer()
-                                HStack{
-                                    Text("Time: ")
-                                    Text(self.alarmData.time.stringHMS())
-                                }
-                                Spacer().frame(width: DEFAULT_LEFT_ALIGN_SPACE)
-                            }
-                            HStack {
-                                Spacer()
-                                HStack {
-                                    Text("Duration: ")
-                                    Text(self.alarmData.duration.stringHMS())
-                                }
-                                Spacer().frame(width: DEFAULT_LEFT_ALIGN_SPACE)
-                            }
-                        }
-                    }
-                    Spacer().frame(height: 20)
-                    HStack {
-                        DaysOfWeekView(daysOfWeek: Set(self.alarmData.daysOfWeek))
-                        Spacer().frame(width: DEFAULT_LEFT_ALIGN_SPACE)
-                    }
-                    Spacer()
-                }
-            }
-            .background(self.backgroundColor)
-            .offset(x: self.position.width + dragOffset.width)
-            // .animation(.easeInOut) // TODO: This doesn't work, make your own animation that incorporates changing background color!
-            .gesture(tapGuesture)
-            .gesture(swipeReveal)
+                
+            AlarmRowForeground(alarmData: self.alarmData)
+                .background(self.backgroundColor)
+                .offset(x: self.position.width + dragOffset.width)
+                .animation(.easeInOut) // TODO: This doesn't work, make your own animation that incorporates changing background color!
+                .gesture(tapGuesture)
+                .gesture(swipeReveal)
             
             NavigationLink(
                 destination: AlarmEditor(

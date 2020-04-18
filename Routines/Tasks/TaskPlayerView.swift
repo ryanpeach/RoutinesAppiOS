@@ -77,6 +77,8 @@ struct TaskPlayerView: View {
                     Button(action: {
                         if self.taskData?.subTaskDataList.allSatisfy({$0.done}) ?? true {
                             self.taskData!.lastDuration_ = self.durationSoFar
+                            self.taskData!.done = true
+                            self.taskData!.lastEdited = Date()
                             self.next()
                         }
                     }) {

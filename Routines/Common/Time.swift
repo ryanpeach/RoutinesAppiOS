@@ -85,7 +85,14 @@ struct RelativeTime: Hashable {
     var today: Date {
         get {
             let todayComponents = Calendar.current.dateComponents([.year, .month, .day], from: Date())
-            return Calendar.current.date(from: todayComponents)! + self.timeInterval
+            let year = todayComponents.year
+            let month = todayComponents.month
+            let day = todayComponents.day
+            let hr = self._hours
+            let min = self._minutes
+            let sec = self._seconds
+            let components = DateComponents(year: year, month: month, day: day, hour: hr, minute: min, second: Int(sec))
+            return Calendar.current.date(from: components)!
         }
         set {
             let todayComponents = Calendar.current.dateComponents([.hour, .minute, .second], from: newValue)

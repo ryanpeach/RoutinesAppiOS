@@ -42,35 +42,12 @@ struct SubTaskCheckbox: View {
 
 struct TaskCheckbox: View {
     
-    @ObservedObject private var taskData_: TaskData
-    
-    init(taskData: TaskData, threshold: Date) {
-        let moc = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-        // Reset all sub task data
-        taskData_ = taskData
-        for subTaskData in taskData.subTaskDataList {
-            if subTaskData.lastEdited == nil {
-                subTaskData.done = false
-            } else if (subTaskData.lastEdited! < threshold) && (subTaskData.lastEdited!.timeIntervalSinceNow > MIN_RESET_SECONDS) {
-                subTaskData.done = false
-            }
-            subTaskData.objectWillChange.send()
-        }
-        
-        // Save
-        do {
-            try moc.save()
-        } catch let error {
-            print("Could not save. \(error)")
-        }
-        
-        // taskData.objectWillChange.send()
-    }
+    @ObservedObject var taskData: TaskData
     
     var done: DoneEnum {
-        if self.taskData_.subTaskDataList.allSatisfy({$0.done}) {
+        if self.taskData.done {
             return DoneEnum.Done
-        } else if self.taskData_.subTaskDataList.contains(where: {$0.done}) {
+        } else if self.taskData.subTaskDataList.contains(where: {$0.done}) {
             return DoneEnum.Some
         } else {
             return DoneEnum.None

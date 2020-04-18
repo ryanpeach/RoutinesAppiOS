@@ -13,16 +13,21 @@ struct TaskListView: View {
     @Environment(\.managedObjectContext) var managedObjectContext
     @Environment(\.editMode) var editMode
     
-    @ObservedObject var alarmData: AlarmData
+    @ObservedObject var alarmData_: AlarmData
 
     @State var createMode = false
+    
+    init(alarmData: AlarmData) {
+        alarmData_ = alarmData
+        resetCheckboxes()
+    }
     
     var body: some View {
         VStack {
             Spacer().frame(height: DEFAULT_HEIGHT_SPACING)
             // Add Item Button
             NavigationLink(
-                destination: TaskPlayerView(alarmData: alarmData)
+                destination: TaskPlayerView(alarmData: alarmData_)
                 )
                 {
                 HStack {
@@ -33,7 +38,7 @@ struct TaskListView: View {
             }
             Spacer().frame(height: DEFAULT_HEIGHT_SPACING)
             List{
-                ForEach(self.alarmData.taskDataList, id: \.id) { td in
+                ForEach(self.alarmData_.taskDataList, id: \.id) { td in
                     NavigationLink(
                         destination: TaskEditorView(taskData: td)
                     ) {
@@ -43,7 +48,7 @@ struct TaskListView: View {
                 .onDelete(perform: self.delete)
                 .onMove(perform: self.move)
             }
-            .navigationBarTitle(Text(self.alarmData.name))
+            .navigationBarTitle(Text(self.alarmData_.name))
             .navigationBarItems(trailing: EditButton())
             
             // Add Item Button
@@ -57,9 +62,9 @@ struct TaskListView: View {
             }
             NavigationLink(
                 destination: TaskCreatorView(
-                    alarmData: self.alarmData,
+                    alarmData: self.alarmData_,
                     createMode: $createMode,
-                    order: self.alarmData.taskDataList.count
+                    order: self.alarmData_.taskDataList.count
                 ),
                 isActive: $createMode
             ) { EmptyView() }
@@ -71,8 +76,8 @@ struct TaskListView: View {
         taskData.id = UUID()
         taskData.name = "New Task"
         taskData.duration_ = 0
-        taskData.order = Int64(self.alarmData.taskDataList.count)
-        self.alarmData.addToTaskData(taskData)
+        taskData.order = Int64(self.alarmData_.taskDataList.count)
+        self.alarmData_.addToTaskData(taskData)
         
         // Save
         do {
@@ -82,15 +87,30 @@ struct TaskListView: View {
         }
     }
     
+    func resetCheckboxes() {
+        let moc = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+        for taskData in alarmData_.taskDataList {
+            taskData.resetDone()
+        }
+        
+        // Save
+        do {
+            try moc.save()
+        } catch let error {
+            print("Could not save. \(error)")
+        }
+    }
+    
+    
     func delete(at offsets: IndexSet) {
         for index in offsets {
-            let taskData = self.alarmData.taskDataList[index]
+            let taskData = self.alarmData_.taskDataList[index]
             managedObjectContext.delete(taskData)
         }
     }
     
     func move(from source: IndexSet, to destination: Int) {
-        var arr = self.alarmData.taskDataList
+        var arr = self.alarmData_.taskDataList
         let element = arr.remove(at: source.first!)
         arr.insert(element, at: destination)
         
@@ -107,7 +127,7 @@ struct TaskListView: View {
             print("Could not save. \(error)")
         }
         
-        self.alarmData.objectWillChange.send()
+        self.alarmData_.objectWillChange.send()
     }
     
 }

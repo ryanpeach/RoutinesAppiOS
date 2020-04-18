@@ -40,8 +40,7 @@ struct TaskRowView: View {
         HStack {
             Spacer().frame(width: 5)
             TaskCheckbox(
-                taskData: self.taskData,
-                threshold: self.taskData.alarmData.time.today
+                taskData: self.taskData
             )
             Spacer().frame(width: 10)
             Text(self.taskData.name)
