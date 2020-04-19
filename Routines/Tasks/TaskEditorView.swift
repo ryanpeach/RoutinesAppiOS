@@ -51,7 +51,7 @@ struct TaskEditorView: View {
         .navigationBarBackButtonHidden(true) // not needed, but just in case
         .navigationBarItems(
             leading: MyBackButton(label: "Back") {
-                self.inEditing = false
+                self.inEditing.toggle()
             },
             trailing: EditButton()
         )

@@ -35,13 +35,13 @@
 		6D65CCCC24455F470089F535 /* TaskData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D65CCC624455F470089F535 /* TaskData.swift */; };
 		6D65CCCE24455F470089F535 /* AlarmData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D65CCC824455F470089F535 /* AlarmData.swift */; };
 		6D861FAF2447C8FD0041AD2B /* TextFields.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D861FAE2447C8FD0041AD2B /* TextFields.swift */; };
-		6D861FB62447D3610041AD2B /* SubTaskData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D861FB02447D3610041AD2B /* SubTaskData+CoreDataClass.swift */; };
-		6D861FB72447D3610041AD2B /* SubTaskData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D861FB12447D3610041AD2B /* SubTaskData+CoreDataProperties.swift */; };
-		6D861FB82447D3610041AD2B /* TaskData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D861FB22447D3610041AD2B /* TaskData+CoreDataClass.swift */; };
-		6D861FB92447D3610041AD2B /* TaskData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D861FB32447D3610041AD2B /* TaskData+CoreDataProperties.swift */; };
-		6D861FBA2447D3610041AD2B /* AlarmData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D861FB42447D3610041AD2B /* AlarmData+CoreDataClass.swift */; };
-		6D861FBB2447D3610041AD2B /* AlarmData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D861FB52447D3610041AD2B /* AlarmData+CoreDataProperties.swift */; };
 		6D94AAFA244A02AD00872102 /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D94AAF9244A02AD00872102 /* Notifications.swift */; };
+		6DCDDB9B244C1E7C00D47C51 /* AlarmData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DCDDB95244C1E7C00D47C51 /* AlarmData+CoreDataClass.swift */; };
+		6DCDDB9C244C1E7C00D47C51 /* AlarmData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DCDDB96244C1E7C00D47C51 /* AlarmData+CoreDataProperties.swift */; };
+		6DCDDB9D244C1E7C00D47C51 /* SubTaskData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DCDDB97244C1E7C00D47C51 /* SubTaskData+CoreDataClass.swift */; };
+		6DCDDB9E244C1E7C00D47C51 /* SubTaskData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DCDDB98244C1E7C00D47C51 /* SubTaskData+CoreDataProperties.swift */; };
+		6DCDDB9F244C1E7C00D47C51 /* TaskData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DCDDB99244C1E7C00D47C51 /* TaskData+CoreDataClass.swift */; };
+		6DCDDBA0244C1E7C00D47C51 /* TaskData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DCDDB9A244C1E7C00D47C51 /* TaskData+CoreDataProperties.swift */; };
 		6DDC43A02444E00A00501AF1 /* Time.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DDC439F2444E00A00501AF1 /* Time.swift */; };
 		6DDC43A224450CE800501AF1 /* UserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DDC43A124450CE800501AF1 /* UserData.swift */; };
 		6DDC43A72445196B00501AF1 /* DataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DDC43A62445196B00501AF1 /* DataTests.swift */; };
@@ -99,13 +99,13 @@
 		6D65CCC624455F470089F535 /* TaskData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskData.swift; sourceTree = "<group>"; };
 		6D65CCC824455F470089F535 /* AlarmData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmData.swift; sourceTree = "<group>"; };
 		6D861FAE2447C8FD0041AD2B /* TextFields.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFields.swift; sourceTree = "<group>"; };
-		6D861FB02447D3610041AD2B /* SubTaskData+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SubTaskData+CoreDataClass.swift"; sourceTree = "<group>"; };
-		6D861FB12447D3610041AD2B /* SubTaskData+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SubTaskData+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		6D861FB22447D3610041AD2B /* TaskData+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TaskData+CoreDataClass.swift"; sourceTree = "<group>"; };
-		6D861FB32447D3610041AD2B /* TaskData+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TaskData+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		6D861FB42447D3610041AD2B /* AlarmData+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AlarmData+CoreDataClass.swift"; sourceTree = "<group>"; };
-		6D861FB52447D3610041AD2B /* AlarmData+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AlarmData+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		6D94AAF9244A02AD00872102 /* Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
+		6DCDDB95244C1E7C00D47C51 /* AlarmData+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "AlarmData+CoreDataClass.swift"; path = "../../AlarmData+CoreDataClass.swift"; sourceTree = "<group>"; };
+		6DCDDB96244C1E7C00D47C51 /* AlarmData+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "AlarmData+CoreDataProperties.swift"; path = "../../AlarmData+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		6DCDDB97244C1E7C00D47C51 /* SubTaskData+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "SubTaskData+CoreDataClass.swift"; path = "../../SubTaskData+CoreDataClass.swift"; sourceTree = "<group>"; };
+		6DCDDB98244C1E7C00D47C51 /* SubTaskData+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "SubTaskData+CoreDataProperties.swift"; path = "../../SubTaskData+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		6DCDDB99244C1E7C00D47C51 /* TaskData+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "TaskData+CoreDataClass.swift"; path = "../../TaskData+CoreDataClass.swift"; sourceTree = "<group>"; };
+		6DCDDB9A244C1E7C00D47C51 /* TaskData+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "TaskData+CoreDataProperties.swift"; path = "../../TaskData+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		6DDC439F2444E00A00501AF1 /* Time.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Time.swift; sourceTree = "<group>"; };
 		6DDC43A124450CE800501AF1 /* UserData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserData.swift; sourceTree = "<group>"; };
 		6DDC43A62445196B00501AF1 /* DataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataTests.swift; sourceTree = "<group>"; };
@@ -252,12 +252,12 @@
 		6DDC43B42445230200501AF1 /* CoreData */ = {
 			isa = PBXGroup;
 			children = (
-				6D861FB02447D3610041AD2B /* SubTaskData+CoreDataClass.swift */,
-				6D861FB12447D3610041AD2B /* SubTaskData+CoreDataProperties.swift */,
-				6D861FB22447D3610041AD2B /* TaskData+CoreDataClass.swift */,
-				6D861FB32447D3610041AD2B /* TaskData+CoreDataProperties.swift */,
-				6D861FB42447D3610041AD2B /* AlarmData+CoreDataClass.swift */,
-				6D861FB52447D3610041AD2B /* AlarmData+CoreDataProperties.swift */,
+				6DCDDB95244C1E7C00D47C51 /* AlarmData+CoreDataClass.swift */,
+				6DCDDB96244C1E7C00D47C51 /* AlarmData+CoreDataProperties.swift */,
+				6DCDDB97244C1E7C00D47C51 /* SubTaskData+CoreDataClass.swift */,
+				6DCDDB98244C1E7C00D47C51 /* SubTaskData+CoreDataProperties.swift */,
+				6DCDDB99244C1E7C00D47C51 /* TaskData+CoreDataClass.swift */,
+				6DCDDB9A244C1E7C00D47C51 /* TaskData+CoreDataProperties.swift */,
 				6D65CCC624455F470089F535 /* TaskData.swift */,
 				6D65CCC824455F470089F535 /* AlarmData.swift */,
 				6D65CC5C244528420089F535 /* Routines.xcdatamodeld */,
@@ -398,21 +398,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6D861FB62447D3610041AD2B /* SubTaskData+CoreDataClass.swift in Sources */,
 				6D5CC22D2443D4B300D5F01D /* AppDelegate.swift in Sources */,
 				6DDC43A02444E00A00501AF1 /* Time.swift in Sources */,
 				6D5CC2642443EC5A00D5F01D /* DayOfWeek.swift in Sources */,
+				6DCDDB9E244C1E7C00D47C51 /* SubTaskData+CoreDataProperties.swift in Sources */,
 				6D12A81F2446962600D806ED /* Checkbox.swift in Sources */,
 				6D21699E2446065400D46258 /* TaskPlayerView.swift in Sources */,
+				6DCDDB9D244C1E7C00D47C51 /* SubTaskData+CoreDataClass.swift in Sources */,
 				6DDC43A224450CE800501AF1 /* UserData.swift in Sources */,
 				6D10084F244B97DD00C4F206 /* SettingsBundleHelper.swift in Sources */,
-				6D861FBA2447D3610041AD2B /* AlarmData+CoreDataClass.swift in Sources */,
 				6D94AAFA244A02AD00872102 /* Notifications.swift in Sources */,
+				6DCDDB9F244C1E7C00D47C51 /* TaskData+CoreDataClass.swift in Sources */,
 				6D65CCBD244554AA0089F535 /* TaskRowView.swift in Sources */,
 				6D2169A02446070A00D46258 /* TaskEditorView.swift in Sources */,
 				6D0B81B72448301C00F6135F /* AlarmEditorView.swift in Sources */,
-				6D861FB72447D3610041AD2B /* SubTaskData+CoreDataProperties.swift in Sources */,
-				6D861FBB2447D3610041AD2B /* AlarmData+CoreDataProperties.swift in Sources */,
 				6D65CCCE24455F470089F535 /* AlarmData.swift in Sources */,
 				6D65CCB9244554AA0089F535 /* TaskListView.swift in Sources */,
 				6D100851244B9D4800C4F206 /* SubTaskData.swift in Sources */,
@@ -421,12 +420,13 @@
 				6D5CC2602443D7BF00D5F01D /* AlarmsRowView.swift in Sources */,
 				6D5CC2312443D4B300D5F01D /* AlarmsView.swift in Sources */,
 				6D0B81B52448284900F6135F /* TaskCreatorView.swift in Sources */,
+				6DCDDB9B244C1E7C00D47C51 /* AlarmData+CoreDataClass.swift in Sources */,
 				6D65CCCC24455F470089F535 /* TaskData.swift in Sources */,
 				6D65CCAB24453F350089F535 /* AlarmCreatorView.swift in Sources */,
+				6DCDDBA0244C1E7C00D47C51 /* TaskData+CoreDataProperties.swift in Sources */,
 				6D100853244BC98F00C4F206 /* RowMods.swift in Sources */,
+				6DCDDB9C244C1E7C00D47C51 /* AlarmData+CoreDataProperties.swift in Sources */,
 				6D323D6324469A83003FDF51 /* PlayPause.swift in Sources */,
-				6D861FB82447D3610041AD2B /* TaskData+CoreDataClass.swift in Sources */,
-				6D861FB92447D3610041AD2B /* TaskData+CoreDataProperties.swift in Sources */,
 				6D861FAF2447C8FD0041AD2B /* TextFields.swift in Sources */,
 				6D0B81B92448E1A400F6135F /* Constants.swift in Sources */,
 			);

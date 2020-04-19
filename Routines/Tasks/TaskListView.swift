@@ -16,7 +16,10 @@ struct TaskListView: View {
     @ObservedObject var alarmData_: AlarmData
 
     @State var createMode = false
-    @State var tag: TaskData?
+    
+    // WARNING You can't do this
+    // When it deletes it will crash the app
+    @State var tag: UUID?
     
     init(alarmData: AlarmData) {
         alarmData_ = alarmData
@@ -43,6 +46,7 @@ struct TaskListView: View {
                             tag: self.$tag,
                             taskData: td
                         )
+                        /*
                         NavigationLink(destination: TaskPlayerView(
                             alarmData: self.alarmData_,
                             taskIndex: self.alarmData_.taskDataList.firstIndex(of: td) ?? 0
@@ -50,6 +54,7 @@ struct TaskListView: View {
                            selection: self.$tag) {
                             EmptyView()
                         }
+                        */
                     }
                 }
                 .onDelete(perform: self.delete)
@@ -109,6 +114,7 @@ struct TaskListView: View {
     
     
     func delete(at offsets: IndexSet) {
+        self.tag = nil
         for index in offsets {
             let taskData = self.alarmData_.taskDataList[index]
             taskData.delete(moc: self.managedObjectContext)

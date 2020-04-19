@@ -38,7 +38,7 @@ struct AlarmsView: View {
     @State var createMode = false
     @State var editMode = false
     @State var taskListMode = false
-    @State var tag: AlarmData?
+    @State var tag: UUID?
     
     var body: some View {
         NavigationView {
@@ -50,7 +50,7 @@ struct AlarmsView: View {
                                 tag: self.$tag,
                                 alarmData: al
                             )
-                            NavigationLink(destination: TaskListView(alarmData: al), tag: al, selection: self.$tag) {
+                            NavigationLink(destination: TaskListView(alarmData: al), tag: al.id, selection: self.$tag) {
                                 EmptyView()
                             }
                         }
@@ -76,6 +76,7 @@ struct AlarmsView: View {
     }
     
     func delete(at offsets: IndexSet) {
+        self.tag = nil
         for index in offsets {
             let alarmData = alarmDataList[index]
             self.managedObjectContext.delete(alarmData)

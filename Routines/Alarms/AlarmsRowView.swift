@@ -56,7 +56,7 @@ struct AlarmRowForeground: View {
 struct AlarmsRowView: View {
     @Environment(\.managedObjectContext) private var managedObjectContext
 
-    @Binding var tag: AlarmData?
+    @Binding var tag: UUID?
     @ObservedObject var alarmData: AlarmData
     
     @State private var inEditing: Bool = false
@@ -65,10 +65,12 @@ struct AlarmsRowView: View {
         ZStack {
             AlarmRowForeground(alarmData: self.alarmData)
                 .onTapGesture(count: 1) {
-                    self.tag = self.alarmData
+                    self.tag = self.alarmData.id
                 }
                 .contextMenu {
-                    Button(action: {self.tag = self.alarmData}) {
+                    Button(action: {
+                        self.tag = self.alarmData.id
+                    }) {
                         HStack {
                             Text("List")
                             Image(systemName: "list.bullet")
@@ -82,7 +84,6 @@ struct AlarmsRowView: View {
                             Image(systemName: "square.and.pencil")
                         }
                     }
-                    /*
                     Button(action: {
                         self.managedObjectContext.delete(self.alarmData)
                     }, label: {
@@ -91,7 +92,6 @@ struct AlarmsRowView: View {
                             Image(systemName: "trash")
                         }.foregroundColor(Color.red)
                     })
-                    */
             }
             
             // This Navigation Link uses the "isActive" method of creating a link to AlarmEditor,
@@ -110,7 +110,7 @@ struct AlarmsRowView: View {
 
 struct AlarmsRow_Previewer: View {
     @State var alarmData: AlarmData
-    @State var tag: AlarmData?
+    @State var tag: UUID?
     var body: some View {
         AlarmsRowView(
             tag: $tag,

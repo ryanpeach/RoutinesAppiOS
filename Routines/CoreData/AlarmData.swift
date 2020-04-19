@@ -60,6 +60,7 @@ extension AlarmData {
     func delete(moc: NSManagedObjectContext) {
         for td in self.taskDataList {
             td.delete(moc: moc)
+            td.objectWillChange.send()
         }
         moc.delete(self)
     }

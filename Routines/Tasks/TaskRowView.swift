@@ -56,7 +56,7 @@ struct TaskRowForeground: View {
 struct TaskRowView: View {
     @Environment(\.managedObjectContext) private var managedObjectContext
 
-    @Binding var tag: TaskData?
+    @Binding var tag: UUID?
     @ObservedObject var taskData: TaskData
     
     @State private var inEditing: Bool = false
@@ -65,11 +65,11 @@ struct TaskRowView: View {
         ZStack {
             TaskRowForeground(taskData: self.taskData)
                 .onTapGesture(count: 1) {
-                    self.tag = self.taskData
+                    self.tag = self.taskData.id
                 }
                 .contextMenu {
                     Button(action: {
-                        self.tag = self.taskData
+                        self.tag = self.taskData.id
                     }, label: {
                         HStack {
                             Text("Start From Here")
@@ -84,7 +84,6 @@ struct TaskRowView: View {
                             Image(systemName: "square.and.pencil")
                         }
                     })
-                    /*
                     Button(action: {
                         self.managedObjectContext.delete(self.taskData)
                     }, label: {
@@ -93,7 +92,6 @@ struct TaskRowView: View {
                             Image(systemName: "trash")
                         }.foregroundColor(Color.red)
                     })
-                    */
                 }
             
             // This Navigation Link uses the "isActive" method of creating a link to TaskEditor,
@@ -112,7 +110,7 @@ struct TaskRowView: View {
 
 struct TaskRowView_Previewer: View {
     @ObservedObject var taskData: TaskData
-    @State var tag: TaskData?
+    @State var tag: UUID?
     var body: some View {
         TaskRowView(
             tag: self.$tag,
@@ -130,7 +128,7 @@ struct TaskRowView_Previews: PreviewProvider {
         taskData.lastDuration_ = 1
         return TaskRowView_Previewer(
             taskData: taskData,
-            tag: taskData
+            tag: taskData.id
         )
     }
 }
