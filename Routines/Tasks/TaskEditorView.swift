@@ -60,7 +60,7 @@ struct TaskEditorView: View {
     func delete(at offsets: IndexSet) {
         for index in offsets {
             let taskData = self.taskData.subTaskDataList[index]
-            managedObjectContext.delete(taskData)
+            taskData.delete(moc: self.managedObjectContext)
         }
     }
     

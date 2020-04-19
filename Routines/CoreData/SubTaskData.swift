@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CoreData
 
 extension SubTaskData {
     func resetDone() {
@@ -35,5 +36,9 @@ extension SubTaskData {
                 self.done = false
             }
         }
+    }
+    
+    func delete(moc: NSManagedObjectContext) {
+        moc.delete(self)
     }
 }

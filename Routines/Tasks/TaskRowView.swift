@@ -64,6 +64,9 @@ struct TaskRowView: View {
     var body: some View {
         ZStack {
             TaskRowForeground(taskData: self.taskData)
+                .onTapGesture(count: 1) {
+                    self.tag = self.taskData
+                }
                 .contextMenu {
                     Button(action: {
                         self.tag = self.taskData

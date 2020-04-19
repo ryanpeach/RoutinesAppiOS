@@ -73,5 +73,12 @@ extension TaskData {
             self.objectWillChange.send()
         }
     }
+    
+    func delete(moc: NSManagedObjectContext) {
+        for sub_td in self.subTaskDataList {
+            sub_td.delete(moc: moc)
+        }
+        moc.delete(self)
+    }
 }
 

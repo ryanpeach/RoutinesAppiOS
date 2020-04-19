@@ -64,6 +64,9 @@ struct AlarmsRowView: View {
     var body: some View {
         ZStack {
             AlarmRowForeground(alarmData: self.alarmData)
+                .onTapGesture(count: 1) {
+                    self.tag = self.alarmData
+                }
                 .contextMenu {
                     Button(action: {self.tag = self.alarmData}) {
                         HStack {
