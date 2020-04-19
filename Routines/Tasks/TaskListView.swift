@@ -37,16 +37,16 @@ struct TaskListView: View {
             }
             Spacer().frame(height: DEFAULT_HEIGHT_SPACING)
             List{
-                ForEach(self.alarmData_.taskDataList.indices) { idx in
+                ForEach(self.alarmData_.taskDataList) { td in
                     VStack {
                         TaskRowView(
                             tag: self.$tag,
-                            taskData: self.alarmData_.taskDataList[idx]
+                            taskData: td
                         )
                         NavigationLink(destination: TaskPlayerView(
                             alarmData: self.alarmData_,
-                            taskIndex: idx
-                        ), tag: self.alarmData_.taskDataList[idx],
+                            taskIndex: self.alarmData_.taskDataList.firstIndex(of: td) ?? 0
+                        ), tag: td,
                            selection: self.$tag) {
                             EmptyView()
                         }
