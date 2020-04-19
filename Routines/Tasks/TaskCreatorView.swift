@@ -35,7 +35,6 @@ struct TaskCreatorView: View {
     var moc: NSManagedObjectContext
     
     @ObservedObject var alarmData: AlarmData
-    
     @Binding var createMode: Bool
     let order: Int
     
@@ -101,6 +100,7 @@ struct TaskCreatorView: View {
         task.duration = self.duration
         self.alarmData.addToTaskData(task)
         
+        // Reindex
         var order = 0
         for sub_task_name in self.subTaskDataList {
             let sub_task = SubTaskData(context: self.moc)

@@ -12,7 +12,6 @@ import SwiftUI
 struct TaskEditorView: View {
     @Environment(\.managedObjectContext) var managedObjectContext
     
-    @Binding var inEditing: Bool
     @ObservedObject var taskData: TaskData
     @State var newSubTask: String = ""
 
@@ -48,13 +47,7 @@ struct TaskEditorView: View {
                 .onMove(perform: self.move)
             }
         }
-        .navigationBarBackButtonHidden(true) // not needed, but just in case
-        .navigationBarItems(
-            leading: MyBackButton(label: "Back") {
-                self.inEditing.toggle()
-            },
-            trailing: EditButton()
-        )
+        .navigationBarItems(trailing: EditButton())
     }
     
     func delete(at offsets: IndexSet) {
@@ -115,7 +108,6 @@ struct TaskEditorView_Previewer: View {
     @ObservedObject var taskData: TaskData
     var body: some View {
         TaskEditorView(
-            inEditing: self.$inEditing,
             taskData: self.taskData
         )
     }

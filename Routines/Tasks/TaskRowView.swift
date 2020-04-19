@@ -56,18 +56,17 @@ struct TaskRowForeground: View {
 struct TaskRowView: View {
     @Environment(\.managedObjectContext) private var managedObjectContext
 
-    @Binding var tag: UUID?
     @ObservedObject var taskData: TaskData
+    @Binding var inEditing: Bool
+    @Binding var taskEditUUID: UUID?
     @Binding var taskPlayerIdx: Int
-    
-    @State private var inEditing: Bool = false
     
     var body: some View {
         ZStack {
             TaskRowForeground(taskData: self.taskData)
                 .contextMenu {
                     Button(action: {
-                        self.taskPlayerIdx = self.taskData.alarmData.taskDataList.firstIndex(of: self.taskData) ?? 0
+                        self.taskPlayerIdx = Int(self.taskData.order)  // TODO: If you change order to not reindex every time, this will change
                     }, label: {
                         HStack {
                             Text("Start From Here")
@@ -76,6 +75,7 @@ struct TaskRowView: View {
                     })
                     Button(action: {
                         self.inEditing = true
+                        self.taskEditUUID = self.taskData.id
                     }, label: {
                         HStack {
                             Text("Edit")
@@ -91,28 +91,17 @@ struct TaskRowView: View {
                         }.foregroundColor(Color.red)
                     })
                 }
-            
-            // This Navigation Link uses the "isActive" method of creating a link to TaskEditor,
-            // Based on the Edit button in the above context menu.
-            // Since it comes right back to this view, this works well.
-            NavigationLink(
-                destination: TaskEditorView(
-                    inEditing: self.$inEditing,
-                    taskData: self.taskData
-                ),
-                isActive: self.$inEditing
-            ) { EmptyView() }
         }
     }
 }
 
+/*
 struct TaskRowView_Previewer: View {
     @ObservedObject var taskData: TaskData
     @State var tag: UUID?
     @State var taskPlayerIdx: Int = 0
     var body: some View {
         TaskRowView(
-            tag: self.$tag,
             taskData: self.taskData,
             taskPlayerIdx: self.$taskPlayerIdx
         )
@@ -132,3 +121,4 @@ struct TaskRowView_Previews: PreviewProvider {
         )
     }
 }
+*/

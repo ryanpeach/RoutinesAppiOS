@@ -8,7 +8,7 @@
         <attribute name="name" attributeType="String"/>
         <attribute name="notificationIds_" optional="YES" attributeType="String"/>
         <attribute name="time_" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
-        <relationship name="taskData" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="TaskData" inverseName="alarmData" inverseEntity="TaskData"/>
+        <relationship name="taskData" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="TaskData" inverseName="alarmData" inverseEntity="TaskData"/>
     </entity>
     <entity name="SubTaskData" representedClassName=".SubTaskData" syncable="YES">
         <attribute name="done" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
@@ -28,7 +28,7 @@
         <attribute name="notificationId" optional="YES" attributeType="String"/>
         <attribute name="order" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <relationship name="alarmData" maxCount="1" deletionRule="Nullify" destinationEntity="AlarmData" inverseName="taskData" inverseEntity="AlarmData"/>
-        <relationship name="subTaskData" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="SubTaskData" inverseName="taskData" inverseEntity="SubTaskData"/>
+        <relationship name="subTaskData" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="SubTaskData" inverseName="taskData" inverseEntity="SubTaskData"/>
     </entity>
     <elements>
         <element name="AlarmData" positionX="-61.05078125" positionY="-121.80078125" width="128" height="163"/>

@@ -12,15 +12,32 @@ import CoreData
 struct TaskListView: View {
     @Environment(\.managedObjectContext) var managedObjectContext
     @Environment(\.editMode) var editMode
-    
-    @ObservedObject var alarmData_: AlarmData
+    @FetchRequest(
+        entity: TaskData.entity(),
+        sortDescriptors: [
+            NSSortDescriptor(
+                keyPath: \TaskData.order,
+                ascending: true
+            )
+    ]) var taskDataListUnfiltered: FetchedResults<TaskData>
 
-    @State var createMode = false
-    @State var taskPlayerIdx: Int = 0
+    @ObservedObject var alarmData_: AlarmData
     
-    // WARNING You can't do this
-    // When it deletes it will crash the app
-    @State var tag: UUID?
+    @State var createMode = false
+    @State var inEditing = false
+    @State var taskPlayerIdx: Int = 0
+    @State var taskEditUUID: UUID?
+    
+    var taskDataList: [TaskData] {
+        var out: [TaskData] = []
+        for td in taskDataListUnfiltered {
+            if td.alarmData.id == self.alarmData_.id {
+                out.append(td)
+            }
+        }
+        return out
+    }
+    
     
     init(alarmData: AlarmData) {
         alarmData_ = alarmData
@@ -29,41 +46,39 @@ struct TaskListView: View {
     
     var body: some View {
         VStack {
-            Spacer().frame(height: DEFAULT_HEIGHT_SPACING)
+            // Spacer().frame(height: DEFAULT_HEIGHT_SPACING)
             // Add Item Button
             NavigationLink(
                 destination: TaskPlayerView(
-                    alarmData: alarmData_,
-                    taskIndex: self.$taskPlayerIdx
+                    alarmData: self.alarmData_,
+                    taskIdx: self.$taskPlayerIdx
                 )
             ){
                 HStack {
                     if self.taskPlayerIdx == 0 {
                         Text("Begin")
                     } else {
-                        Text("Starting From: \(self.alarmData_.taskDataList[self.taskPlayerIdx].name)")
+                        Text("Starting From: \(self.taskDataList[self.taskPlayerIdx].name)")
                     }
                     Image(systemName: "play")
                 }
             }
             Spacer().frame(height: DEFAULT_HEIGHT_SPACING)
             List{
-                ForEach(self.alarmData_.taskDataList, id: \.id) { td in
-                    VStack {
+                ForEach(self.taskDataList, id: \.order) { td in
+                    ZStack {
                         TaskRowView(
-                            tag: self.$tag,
                             taskData: td,
+                            inEditing: self.$inEditing,
+                            taskEditUUID: self.$taskEditUUID,
                             taskPlayerIdx: self.$taskPlayerIdx
                         )
-                        /*
-                        NavigationLink(destination: TaskPlayerView(
-                            alarmData: self.alarmData_,
-                            taskIndex: self.alarmData_.taskDataList.firstIndex(of: td) ?? 0
-                        ), tag: td,
-                           selection: self.$tag) {
+                    
+                        NavigationLink(destination: TaskEditorView(
+                                taskData: td
+                        ), tag: td.id, selection: self.$taskEditUUID) {
                             EmptyView()
                         }
-                        */
                     }
                 }
                 .onDelete(perform: self.delete)
@@ -129,21 +144,29 @@ struct TaskListView: View {
         }
         
         // Save
+        /*
         do {
             try self.managedObjectContext.save()
         } catch let error {
             print("Could not save. \(error)")
         }
+        */
     }
     
     func move(from source: IndexSet, to destination: Int) {
-        var arr = self.alarmData_.taskDataList
-        let element = arr.remove(at: source.first!)
-        arr.insert(element, at: destination)
+        var range: [Int] = []
+        var idx: Int = 0
+        for _ in self.taskDataList {
+            range.append(idx)
+            idx += 1
+        }
         
-        var count = 0
-        for td in arr {
-            td.order = Int64(count)
+        let element = range.remove(at: source.first!)
+        range.insert(element, at: destination)
+        
+        var count: Int = 0
+        for idx in range {
+            self.taskDataList[idx].order = Int64(count)
             count += 1
         }
         

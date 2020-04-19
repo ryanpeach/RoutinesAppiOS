@@ -25,30 +25,46 @@ struct CountdownTimer: View {
 
 struct TaskPlayerView: View {
     @Environment(\.managedObjectContext) var managedObjectContext
+    var fetchRequest: FetchRequest<TaskData>
+    var taskDataList: FetchedResults<TaskData> {
+        fetchRequest.wrappedValue
+    }
     
-    @ObservedObject var alarmData: AlarmData
+    @Binding var taskIdx: Int
     
-    @Binding var taskIndex: Int
-    
+    // For the timer
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
-    
     @State var isPlay: Bool = true
     @State var startTime: Date?
     @State var lastTime: Date = Date()
     @State var durationBeforePause: TimeInterval = 0
-    
     @State var durationSoFar: TimeInterval = 0
 
     var taskData: TaskData? {
-        if self.taskIndex >= self.alarmData.taskDataList.count {
+        if taskDataList.count == 0 {
             return nil
         } else {
-            return self.alarmData.taskDataList[self.taskIndex]
+            return self.taskDataList[self.taskIdx]
         }
     }
     
     var subTaskList: [SubTaskData] {
         return self.taskData?.subTaskDataList ?? []
+    }
+    
+    init(alarmData: AlarmData, taskIdx: Binding<Int>) {
+        self._taskIdx = taskIdx
+        fetchRequest = FetchRequest<TaskData>(
+            entity: TaskData.entity(),
+            sortDescriptors: [
+                NSSortDescriptor(
+                    keyPath: \TaskData.order,
+                    ascending: true
+                )
+            ],
+            predicate: NSPredicate(
+                format: "alarmData.id == %@", alarmData.id.uuidString
+        ))
     }
     
     var body: some View {
@@ -161,9 +177,9 @@ struct TaskPlayerView: View {
     }
     
     func previous() {
-        if self.taskIndex > 0 {
+        if self.taskIdx > 0 {
             self.deleteNotification()
-            self.taskIndex -= 1
+            self.taskIdx -= 1
             self.durationSoFar = 0
             self.startTime = Date()
             self.lastTime = Date()
@@ -172,9 +188,9 @@ struct TaskPlayerView: View {
     }
     
     func next() {
-        if self.taskIndex < self.alarmData.taskDataList.count {
+        if self.taskIdx < self.taskDataList.count {
             self.deleteNotification()
-            self.taskIndex += 1
+            self.taskIdx += 1
             self.durationSoFar = 0
             self.startTime = Date()
             self.lastTime = Date()
@@ -189,7 +205,7 @@ struct TaskDetailView_Previewer: View {
     var body: some View {
         TaskPlayerView(
             alarmData: self.alarmData,
-            taskIndex: self.$taskPlayerIdx
+            taskIdx: self.$taskPlayerIdx
         )
     }
 }

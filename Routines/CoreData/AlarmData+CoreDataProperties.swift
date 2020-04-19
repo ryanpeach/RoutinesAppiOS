@@ -2,7 +2,7 @@
 //  AlarmData+CoreDataProperties.swift
 //  Routines
 //
-//  Created by PEACH,RYAN (K-Atlanta,ex1) on 4/15/20.
+//  Created by PEACH,RYAN (K-Atlanta,ex1) on 4/19/20.
 //  Copyright © 2020 Peach. All rights reserved.
 //
 //
@@ -18,12 +18,12 @@ extension AlarmData {
     }
 
     @NSManaged public var daysOfWeek_: Int16
+    @NSManaged public var done: Bool
     @NSManaged public var id: UUID
+    @NSManaged public var lastEdited: Date?
     @NSManaged public var name: String
     @NSManaged public var notificationIds_: String?
     @NSManaged public var time_: Double
-    @NSManaged public var done: Bool
-    @NSManaged public var lastEdited: Date?
     @NSManaged public var taskData: NSOrderedSet?
 
 }
