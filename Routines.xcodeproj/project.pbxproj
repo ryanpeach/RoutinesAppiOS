@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		6D0B81B52448284900F6135F /* TaskCreatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D0B81B42448284900F6135F /* TaskCreatorView.swift */; };
-		6D0B81B72448301C00F6135F /* AlarmEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D0B81B62448301C00F6135F /* AlarmEditor.swift */; };
+		6D0B81B72448301C00F6135F /* AlarmEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D0B81B62448301C00F6135F /* AlarmEditorView.swift */; };
 		6D0B81B92448E1A400F6135F /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D0B81B82448E1A400F6135F /* Constants.swift */; };
 		6D10084C244B8F2000C4F206 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 6D10084B244B8F2000C4F206 /* Settings.bundle */; };
 		6D10084F244B97DD00C4F206 /* SettingsBundleHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D10084E244B97DD00C4F206 /* SettingsBundleHelper.swift */; };
@@ -26,10 +26,10 @@
 		6D5CC2442443D4B500D5F01D /* RoutinesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D5CC2432443D4B500D5F01D /* RoutinesTests.swift */; };
 		6D5CC24F2443D4B500D5F01D /* RoutinesUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D5CC24E2443D4B500D5F01D /* RoutinesUITests.swift */; };
 		6D5CC25D2443D51800D5F01D /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6D5CC25C2443D51800D5F01D /* Launch Screen.storyboard */; };
-		6D5CC2602443D7BF00D5F01D /* AlarmsRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D5CC25F2443D7BF00D5F01D /* AlarmsRow.swift */; };
+		6D5CC2602443D7BF00D5F01D /* AlarmsRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D5CC25F2443D7BF00D5F01D /* AlarmsRowView.swift */; };
 		6D5CC2642443EC5A00D5F01D /* DayOfWeek.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D5CC2632443EC5A00D5F01D /* DayOfWeek.swift */; };
 		6D65CC5E244528420089F535 /* Routines.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 6D65CC5C244528420089F535 /* Routines.xcdatamodeld */; };
-		6D65CCAB24453F350089F535 /* AlarmCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D65CCAA24453F350089F535 /* AlarmCreator.swift */; };
+		6D65CCAB24453F350089F535 /* AlarmCreatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D65CCAA24453F350089F535 /* AlarmCreatorView.swift */; };
 		6D65CCB9244554AA0089F535 /* TaskListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D65CCB4244554AA0089F535 /* TaskListView.swift */; };
 		6D65CCBD244554AA0089F535 /* TaskRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D65CCB8244554AA0089F535 /* TaskRowView.swift */; };
 		6D65CCCC24455F470089F535 /* TaskData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D65CCC624455F470089F535 /* TaskData.swift */; };
@@ -66,7 +66,7 @@
 
 /* Begin PBXFileReference section */
 		6D0B81B42448284900F6135F /* TaskCreatorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskCreatorView.swift; sourceTree = "<group>"; };
-		6D0B81B62448301C00F6135F /* AlarmEditor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlarmEditor.swift; sourceTree = "<group>"; };
+		6D0B81B62448301C00F6135F /* AlarmEditorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlarmEditorView.swift; sourceTree = "<group>"; };
 		6D0B81B82448E1A400F6135F /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		6D10084B244B8F2000C4F206 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		6D10084E244B97DD00C4F206 /* SettingsBundleHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsBundleHelper.swift; sourceTree = "<group>"; };
@@ -90,10 +90,10 @@
 		6D5CC24E2443D4B500D5F01D /* RoutinesUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutinesUITests.swift; sourceTree = "<group>"; };
 		6D5CC2502443D4B500D5F01D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6D5CC25C2443D51800D5F01D /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
-		6D5CC25F2443D7BF00D5F01D /* AlarmsRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmsRow.swift; sourceTree = "<group>"; };
+		6D5CC25F2443D7BF00D5F01D /* AlarmsRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmsRowView.swift; sourceTree = "<group>"; };
 		6D5CC2632443EC5A00D5F01D /* DayOfWeek.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayOfWeek.swift; sourceTree = "<group>"; };
 		6D65CC5D244528420089F535 /* Data.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Data.xcdatamodel; sourceTree = "<group>"; };
-		6D65CCAA24453F350089F535 /* AlarmCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmCreator.swift; sourceTree = "<group>"; };
+		6D65CCAA24453F350089F535 /* AlarmCreatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmCreatorView.swift; sourceTree = "<group>"; };
 		6D65CCB4244554AA0089F535 /* TaskListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TaskListView.swift; path = Routines/Tasks/TaskListView.swift; sourceTree = SOURCE_ROOT; };
 		6D65CCB8244554AA0089F535 /* TaskRowView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TaskRowView.swift; path = Routines/Tasks/TaskRowView.swift; sourceTree = SOURCE_ROOT; };
 		6D65CCC624455F470089F535 /* TaskData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskData.swift; sourceTree = "<group>"; };
@@ -214,9 +214,9 @@
 			isa = PBXGroup;
 			children = (
 				6D5CC2302443D4B300D5F01D /* AlarmsView.swift */,
-				6D5CC25F2443D7BF00D5F01D /* AlarmsRow.swift */,
-				6D65CCAA24453F350089F535 /* AlarmCreator.swift */,
-				6D0B81B62448301C00F6135F /* AlarmEditor.swift */,
+				6D5CC25F2443D7BF00D5F01D /* AlarmsRowView.swift */,
+				6D65CCAA24453F350089F535 /* AlarmCreatorView.swift */,
+				6D0B81B62448301C00F6135F /* AlarmEditorView.swift */,
 			);
 			path = Alarms;
 			sourceTree = "<group>";
@@ -410,7 +410,7 @@
 				6D94AAFA244A02AD00872102 /* Notifications.swift in Sources */,
 				6D65CCBD244554AA0089F535 /* TaskRowView.swift in Sources */,
 				6D2169A02446070A00D46258 /* TaskEditorView.swift in Sources */,
-				6D0B81B72448301C00F6135F /* AlarmEditor.swift in Sources */,
+				6D0B81B72448301C00F6135F /* AlarmEditorView.swift in Sources */,
 				6D861FB72447D3610041AD2B /* SubTaskData+CoreDataProperties.swift in Sources */,
 				6D861FBB2447D3610041AD2B /* AlarmData+CoreDataProperties.swift in Sources */,
 				6D65CCCE24455F470089F535 /* AlarmData.swift in Sources */,
@@ -418,11 +418,11 @@
 				6D100851244B9D4800C4F206 /* SubTaskData.swift in Sources */,
 				6D5CC22F2443D4B300D5F01D /* SceneDelegate.swift in Sources */,
 				6D65CC5E244528420089F535 /* Routines.xcdatamodeld in Sources */,
-				6D5CC2602443D7BF00D5F01D /* AlarmsRow.swift in Sources */,
+				6D5CC2602443D7BF00D5F01D /* AlarmsRowView.swift in Sources */,
 				6D5CC2312443D4B300D5F01D /* AlarmsView.swift in Sources */,
 				6D0B81B52448284900F6135F /* TaskCreatorView.swift in Sources */,
 				6D65CCCC24455F470089F535 /* TaskData.swift in Sources */,
-				6D65CCAB24453F350089F535 /* AlarmCreator.swift in Sources */,
+				6D65CCAB24453F350089F535 /* AlarmCreatorView.swift in Sources */,
 				6D100853244BC98F00C4F206 /* RowMods.swift in Sources */,
 				6D323D6324469A83003FDF51 /* PlayPause.swift in Sources */,
 				6D861FB82447D3610041AD2B /* TaskData+CoreDataClass.swift in Sources */,

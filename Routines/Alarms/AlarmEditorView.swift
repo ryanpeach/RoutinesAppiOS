@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct AlarmEditor: View {
+struct AlarmEditorView: View {
     @Environment(\.managedObjectContext) var managedObjectContext
     
     @Binding var inEditing: Bool
@@ -65,7 +65,7 @@ struct AlarmEditor_Previewer: View {
     @State var inEditing: Bool = false
     @ObservedObject var alarmData: AlarmData
     var body: some View {
-        AlarmEditor(
+        AlarmEditorView(
             inEditing: self.$inEditing,
             alarmData: alarmData
         )

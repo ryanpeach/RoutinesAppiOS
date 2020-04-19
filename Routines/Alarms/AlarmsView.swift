@@ -43,10 +43,10 @@ struct AlarmsView: View {
     var body: some View {
         NavigationView {
             VStack {
-                ScrollView {
+                List {
                     ForEach(self.alarmDataList, id: \.id) { al in
                         VStack {
-                            AlarmsRow(
+                            AlarmsRowView(
                                 tag: self.$tag,
                                 alarmData: al
                             )
@@ -69,7 +69,7 @@ struct AlarmsView: View {
                     }
                 }
                 NavigationLink(
-                    destination: AlarmCreator(createMode: self.$createMode),
+                    destination: AlarmCreatorView(createMode: self.$createMode),
                     isActive: $createMode
                 ) { EmptyView() }
             }

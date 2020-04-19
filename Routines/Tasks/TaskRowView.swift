@@ -31,7 +31,7 @@ struct DurationView: View {
     }
 }
 
-struct TaskRowView: View {
+struct TaskRowForeground: View {
     @Environment(\.managedObjectContext) var managedObjectContext
     
     @ObservedObject var taskData: TaskData
@@ -53,10 +53,68 @@ struct TaskRowView: View {
     }
 }
 
-struct TaskRowView_Previewer: View {
-    var taskData: TaskData
+struct TaskRowView: View {
+    @Environment(\.managedObjectContext) private var managedObjectContext
+
+    @Binding var tag: TaskData?
+    @ObservedObject var taskData: TaskData
+    
+    @State private var inEditing: Bool = false
+    
     var body: some View {
-        TaskRowView(taskData: self.taskData)
+        ZStack {
+            TaskRowForeground(taskData: self.taskData)
+                .contextMenu {
+                    Button(action: {
+                        self.tag = self.taskData
+                    }, label: {
+                        HStack {
+                            Text("Start From Here")
+                            Image(systemName: "play.circle")
+                        }
+                    })
+                    Button(action: {
+                        self.inEditing = true
+                    }, label: {
+                        HStack {
+                            Text("Edit")
+                            Image(systemName: "square.and.pencil")
+                        }
+                    })
+                    /*
+                    Button(action: {
+                        self.managedObjectContext.delete(self.taskData)
+                    }, label: {
+                        HStack {
+                            Text("Remove")
+                            Image(systemName: "trash")
+                        }.foregroundColor(Color.red)
+                    })
+                    */
+                }
+            
+            // This Navigation Link uses the "isActive" method of creating a link to TaskEditor,
+            // Based on the Edit button in the above context menu.
+            // Since it comes right back to this view, this works well.
+            NavigationLink(
+                destination: TaskEditorView(
+                    inEditing: self.$inEditing,
+                    taskData: self.taskData
+                ),
+                isActive: self.$inEditing
+            ) { EmptyView() }
+        }
+    }
+}
+
+struct TaskRowView_Previewer: View {
+    @ObservedObject var taskData: TaskData
+    @State var tag: TaskData?
+    var body: some View {
+        TaskRowView(
+            tag: self.$tag,
+            taskData: self.taskData
+        )
     }
 }
 struct TaskRowView_Previews: PreviewProvider {
@@ -67,6 +125,9 @@ struct TaskRowView_Previews: PreviewProvider {
         taskData.id = UUID()
         taskData.name = "Get out of bed."
         taskData.lastDuration_ = 1
-        return TaskRowView_Previewer(taskData: taskData)
+        return TaskRowView_Previewer(
+            taskData: taskData,
+            tag: taskData
+        )
     }
 }

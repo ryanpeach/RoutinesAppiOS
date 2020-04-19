@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct AlarmCreator: View {
+struct AlarmCreatorView: View {
     @Environment(\.managedObjectContext) var managedObjectContext
     
     @Binding var createMode: Bool
@@ -94,7 +94,7 @@ struct AlarmCreator: View {
 struct AlarmCreator_Previewer: View {
     @State var createMode = false
     var body: some View {
-        AlarmCreator(createMode: $createMode)
+        AlarmCreatorView(createMode: $createMode)
     }
 }
 

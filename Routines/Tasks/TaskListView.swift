@@ -16,6 +16,7 @@ struct TaskListView: View {
     @ObservedObject var alarmData_: AlarmData
 
     @State var createMode = false
+    @State var tag: TaskData?
     
     init(alarmData: AlarmData) {
         alarmData_ = alarmData
@@ -28,21 +29,27 @@ struct TaskListView: View {
             // Add Item Button
             NavigationLink(
                 destination: TaskPlayerView(alarmData: alarmData_)
-                )
-                {
+            ){
                 HStack {
                     Text("Begin")
                     Image(systemName: "play")
                 }
-                
             }
             Spacer().frame(height: DEFAULT_HEIGHT_SPACING)
             List{
-                ForEach(self.alarmData_.taskDataList, id: \.id) { td in
-                    NavigationLink(
-                        destination: TaskEditorView(taskData: td)
-                    ) {
-                        TaskRowView(taskData: td)
+                ForEach(self.alarmData_.taskDataList.indices) { idx in
+                    VStack {
+                        TaskRowView(
+                            tag: self.$tag,
+                            taskData: self.alarmData_.taskDataList[idx]
+                        )
+                        NavigationLink(destination: TaskPlayerView(
+                            alarmData: self.alarmData_,
+                            taskIndex: idx
+                        ), tag: self.alarmData_.taskDataList[idx],
+                           selection: self.$tag) {
+                            EmptyView()
+                        }
                     }
                 }
                 .onDelete(perform: self.delete)
