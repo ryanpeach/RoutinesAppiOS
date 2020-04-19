@@ -56,12 +56,4 @@ extension AlarmData {
             self.notificationIds_ = newValue.joined(separator: ",")
         }
     }
-    
-    func delete(moc: NSManagedObjectContext) {
-        for td in self.taskDataList {
-            td.delete(moc: moc)
-            td.objectWillChange.send()
-        }
-        moc.delete(self)
-    }
 }

@@ -16,6 +16,7 @@ struct TaskListView: View {
     @ObservedObject var alarmData_: AlarmData
 
     @State var createMode = false
+    @State var taskPlayerIdx: Int = 0
     
     // WARNING You can't do this
     // When it deletes it will crash the app
@@ -31,10 +32,17 @@ struct TaskListView: View {
             Spacer().frame(height: DEFAULT_HEIGHT_SPACING)
             // Add Item Button
             NavigationLink(
-                destination: TaskPlayerView(alarmData: alarmData_)
+                destination: TaskPlayerView(
+                    alarmData: alarmData_,
+                    taskIndex: self.$taskPlayerIdx
+                )
             ){
                 HStack {
-                    Text("Begin")
+                    if self.taskPlayerIdx == 0 {
+                        Text("Begin")
+                    } else {
+                        Text("Starting From: \(self.alarmData_.taskDataList[self.taskPlayerIdx].name)")
+                    }
                     Image(systemName: "play")
                 }
             }
@@ -44,7 +52,8 @@ struct TaskListView: View {
                     VStack {
                         TaskRowView(
                             tag: self.$tag,
-                            taskData: td
+                            taskData: td,
+                            taskPlayerIdx: self.$taskPlayerIdx
                         )
                         /*
                         NavigationLink(destination: TaskPlayerView(
@@ -114,10 +123,16 @@ struct TaskListView: View {
     
     
     func delete(at offsets: IndexSet) {
-        self.tag = nil
         for index in offsets {
             let taskData = self.alarmData_.taskDataList[index]
-            taskData.delete(moc: self.managedObjectContext)
+            self.managedObjectContext.delete(taskData)
+        }
+        
+        // Save
+        do {
+            try self.managedObjectContext.save()
+        } catch let error {
+            print("Could not save. \(error)")
         }
     }
     

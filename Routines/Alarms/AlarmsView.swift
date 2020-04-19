@@ -76,10 +76,16 @@ struct AlarmsView: View {
     }
     
     func delete(at offsets: IndexSet) {
-        self.tag = nil
         for index in offsets {
             let alarmData = alarmDataList[index]
             self.managedObjectContext.delete(alarmData)
+        }
+        
+        // Save
+        do {
+            try self.managedObjectContext.save()
+        } catch let error {
+            print("Could not save. \(error)")
         }
     }
 }

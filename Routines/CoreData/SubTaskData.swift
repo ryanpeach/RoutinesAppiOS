@@ -37,8 +37,4 @@ extension SubTaskData {
             }
         }
     }
-    
-    func delete(moc: NSManagedObjectContext) {
-        moc.delete(self)
-    }
 }

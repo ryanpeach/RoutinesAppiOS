@@ -58,18 +58,16 @@ struct TaskRowView: View {
 
     @Binding var tag: UUID?
     @ObservedObject var taskData: TaskData
+    @Binding var taskPlayerIdx: Int
     
     @State private var inEditing: Bool = false
     
     var body: some View {
         ZStack {
             TaskRowForeground(taskData: self.taskData)
-                .onTapGesture(count: 1) {
-                    self.tag = self.taskData.id
-                }
                 .contextMenu {
                     Button(action: {
-                        self.tag = self.taskData.id
+                        self.taskPlayerIdx = self.taskData.alarmData.taskDataList.firstIndex(of: self.taskData) ?? 0
                     }, label: {
                         HStack {
                             Text("Start From Here")
@@ -111,10 +109,12 @@ struct TaskRowView: View {
 struct TaskRowView_Previewer: View {
     @ObservedObject var taskData: TaskData
     @State var tag: UUID?
+    @State var taskPlayerIdx: Int = 0
     var body: some View {
         TaskRowView(
             tag: self.$tag,
-            taskData: self.taskData
+            taskData: self.taskData,
+            taskPlayerIdx: self.$taskPlayerIdx
         )
     }
 }

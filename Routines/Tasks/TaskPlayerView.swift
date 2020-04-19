@@ -28,7 +28,7 @@ struct TaskPlayerView: View {
     
     @ObservedObject var alarmData: AlarmData
     
-    @State var taskIndex: Int = 0
+    @Binding var taskIndex: Int
     
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
@@ -183,6 +183,17 @@ struct TaskPlayerView: View {
     }
 }
 
+struct TaskDetailView_Previewer: View {
+    @ObservedObject var alarmData: AlarmData
+    @State var taskPlayerIdx: Int = 0
+    var body: some View {
+        TaskPlayerView(
+            alarmData: self.alarmData,
+            taskIndex: self.$taskPlayerIdx
+        )
+    }
+}
+
 struct TaskDetailView_Previews: PreviewProvider {
     static var previews: some View {
         let moc = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
@@ -193,6 +204,8 @@ struct TaskDetailView_Previews: PreviewProvider {
         taskData.id = UUID()
         taskData.name = "Get out of bed."
         alarmData.addToTaskData(taskData)
-        return TaskPlayerView(alarmData: alarmData)
+        return TaskDetailView_Previewer(
+            alarmData: alarmData
+        )
     }
 }
