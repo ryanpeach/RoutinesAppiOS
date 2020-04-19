@@ -37,19 +37,21 @@ struct TaskListView: View {
             }
             Spacer().frame(height: DEFAULT_HEIGHT_SPACING)
             List{
-                ForEach(self.alarmData_.taskDataList.indices) { idx in
+                ForEach(self.alarmData_.taskDataList, id: \.id) { td in
                     VStack {
                         TaskRowView(
                             tag: self.$tag,
-                            taskData: self.alarmData_.taskDataList[idx]
+                            taskData: td
                         )
+                        /*
                         NavigationLink(destination: TaskPlayerView(
                             alarmData: self.alarmData_,
-                            taskIndex: idx
-                        ), tag: self.alarmData_.taskDataList[idx],
+                            taskIndex: self.alarmData_.taskDataList.firstIndex(of: td) ?? 0
+                        ), tag: td,
                            selection: self.$tag) {
                             EmptyView()
                         }
+                        */
                     }
                 }
                 .onDelete(perform: self.delete)
@@ -66,15 +68,14 @@ struct TaskListView: View {
                     Text("Add Item")
                     Image(systemName: "plus")
                 }
-            }
-            NavigationLink(
-                destination: TaskCreatorView(
+            }.sheet(isPresented: self.$createMode) {
+                TaskCreatorView(
+                    moc: self.managedObjectContext,
                     alarmData: self.alarmData_,
-                    createMode: $createMode,
+                    createMode: self.$createMode,
                     order: self.alarmData_.taskDataList.count
-                ),
-                isActive: $createMode
-            ) { EmptyView() }
+                )
+            }
         }
     }
     

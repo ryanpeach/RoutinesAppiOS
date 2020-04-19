@@ -67,11 +67,9 @@ struct AlarmsView: View {
                         Text("Add Item")
                         Image(systemName: "plus")
                     }
+                }.sheet(isPresented: self.$createMode) {
+                    AlarmCreatorView(moc: self.managedObjectContext, createMode: self.$createMode)
                 }
-                NavigationLink(
-                    destination: AlarmCreatorView(createMode: self.$createMode),
-                    isActive: $createMode
-                ) { EmptyView() }
             }
             .navigationBarTitle(Text("Routines"))
         }
@@ -80,7 +78,7 @@ struct AlarmsView: View {
     func delete(at offsets: IndexSet) {
         for index in offsets {
             let alarmData = alarmDataList[index]
-            managedObjectContext.delete(alarmData)
+            self.managedObjectContext.delete(alarmData)
         }
     }
 }

@@ -7,10 +7,32 @@
 //
 
 import SwiftUI
+import CoreData
 
-
+struct NewSubTaskView: View {
+    @Binding var newSubTask: String
+    var addSubTask: () -> ()
+    
+    var body: some View {
+        HStack {
+            Spacer().frame(width: DEFAULT_LEFT_ALIGN_SPACE)
+            ReturnTextField(
+                label: "New Subtask",
+                text: self.$newSubTask,
+                onCommit: self.addSubTask
+            )
+            Button(action: {
+                self.addSubTask()
+            }) {
+                Image(systemName: "plus")
+                    .frame(width: DEFAULT_LEFT_ALIGN_SPACE, height: 30)
+            }
+            Spacer().frame(width: DEFAULT_LEFT_ALIGN_SPACE)
+        }
+    }
+}
 struct TaskCreatorView: View {
-    @Environment(\.managedObjectContext) var managedObjectContext
+    var moc: NSManagedObjectContext
     
     @ObservedObject var alarmData: AlarmData
     
@@ -25,48 +47,31 @@ struct TaskCreatorView: View {
 
     var body: some View {
         VStack {
-            TitleTextField(text: self.$name)
-            Spacer().frame(height: 30)
-            TimePickerRelativeView(time: self.$duration)
-            Spacer().frame(height: 30)
-            HStack {
-                Spacer().frame(width: DEFAULT_LEFT_ALIGN_SPACE)
-                ReturnTextField(
-                    label: "New Subtask",
-                    text: self.$newSubTask,
-                    onCommit: self.addSubTask
-                )
-                Button(action: {
-                    self.addSubTask()
-                }) {
-                    Image(systemName: "plus")
-                        .frame(width: DEFAULT_LEFT_ALIGN_SPACE, height: 30)
-                }
-                Spacer().frame(width: DEFAULT_LEFT_ALIGN_SPACE)
-            }
-            Spacer().frame(height: 30)
-            Text("Subtasks:")
             Spacer().frame(height: DEFAULT_HEIGHT_SPACING)
-            List {
-                ForEach(self.subTaskDataList, id: \.self) { sub_td in
-                    Text(sub_td)
+            VStack {
+                TitleTextField(text: self.$name)
+                Spacer().frame(height: DEFAULT_HEIGHT_SPACING)
+                TimePickerRelativeView(time: self.$duration)
+                Spacer().frame(height: DEFAULT_HEIGHT_SPACING)
+                NewSubTaskView(newSubTask: self.$newSubTask, addSubTask: self.addSubTask)
+                Spacer().frame(height: DEFAULT_HEIGHT_SPACING)
+                Text("Subtasks:")
+                Spacer().frame(height: DEFAULT_HEIGHT_SPACING)
+                List {
+                    ForEach(self.subTaskDataList, id: \.self) { sub_td in
+                        Text(sub_td)
+                    }
+                    .onDelete(perform: self.delete)
+                    .onMove(perform: self.move)
                 }
-                .onDelete(perform: self.delete)
-                .onMove(perform: self.move)
+                Button(action: {
+                    self.done()
+                }) {
+                    Text("Save")
+                }
             }
-            Button(action: {
-                self.done()
-            }) {
-                Text("Save")
-            }
+            Spacer()
         }
-        .navigationBarBackButtonHidden(true) // not needed, but just in case
-        .navigationBarItems(
-            leading: MyBackButton(label: "Cancel") {
-                self.createMode = false
-            },
-            trailing: EditButton()
-        )
     }
     
     func delete(at offsets: IndexSet) {
@@ -89,7 +94,7 @@ struct TaskCreatorView: View {
     }
     
     func done() {
-        let task = TaskData(context: self.managedObjectContext)
+        let task = TaskData(context: self.moc)
         task.id = UUID()
         task.name = self.name
         task.order = Int64(self.order)
@@ -98,7 +103,7 @@ struct TaskCreatorView: View {
         
         var order = 0
         for sub_task_name in self.subTaskDataList {
-            let sub_task = SubTaskData(context: self.managedObjectContext)
+            let sub_task = SubTaskData(context: self.moc)
             sub_task.id = UUID()
             sub_task.name = sub_task_name
             sub_task.order = Int64(order)
@@ -108,7 +113,7 @@ struct TaskCreatorView: View {
         
         // Save
         do {
-            try self.managedObjectContext.save()
+            try self.moc.save()
         } catch let error {
             print("Could not save. \(error)")
         }
@@ -120,10 +125,12 @@ struct TaskCreatorView: View {
 
 
 struct TaskCreatorView_Previewer: View {
+    @Environment(\.managedObjectContext) private var managedObjectContext
     @ObservedObject var alarmData: AlarmData
     @State var createMode = true
     var body: some View {
         TaskCreatorView(
+            moc: managedObjectContext,
             alarmData: self.alarmData,
             createMode: self.$createMode,
             order: 1

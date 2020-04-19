@@ -7,9 +7,10 @@
 //
 
 import SwiftUI
+import CoreData
 
 struct AlarmCreatorView: View {
-    @Environment(\.managedObjectContext) var managedObjectContext
+    var moc: NSManagedObjectContext
     
     @Binding var createMode: Bool
     
@@ -42,14 +43,10 @@ struct AlarmCreatorView: View {
             }
             Spacer()
         }
-        .navigationBarBackButtonHidden(true) // not needed, but just in case
-        .navigationBarItems(leading: MyBackButton(label: "Cancel") {
-            self.createMode = false
-        })
     }
     
     func done() {
-        let alarm = AlarmData(context: self.managedObjectContext)
+        let alarm = AlarmData(context: self.moc)
         alarm.daysOfWeek_ = daysOfWeekToInt(daysOfWeek: self.daysOfWeek)
         alarm.id = UUID()
         alarm.name = self.name
@@ -81,7 +78,7 @@ struct AlarmCreatorView: View {
         
         // Save
         do {
-            try self.managedObjectContext.save()
+            try self.moc.save()
         } catch let error {
             print("Could not save. \(error)")
         }
@@ -92,9 +89,10 @@ struct AlarmCreatorView: View {
 }
 
 struct AlarmCreator_Previewer: View {
+    @Environment(\.managedObjectContext) var managedObjectContext
     @State var createMode = false
     var body: some View {
-        AlarmCreatorView(createMode: $createMode)
+        AlarmCreatorView(moc: managedObjectContext, createMode: $createMode)
     }
 }
 
