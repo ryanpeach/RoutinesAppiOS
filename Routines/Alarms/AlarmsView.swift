@@ -50,7 +50,10 @@ struct AlarmsView: View {
                                 tag: self.$tag,
                                 alarmData: al
                             )
-                            NavigationLink(destination: TaskListView(alarmData: al), tag: al.id, selection: self.$tag) {
+                            NavigationLink(destination: TaskListView(
+                                alarmId: al.id,
+                                alarmName: al.name
+                            ), tag: al.id, selection: self.$tag) {
                                 EmptyView()
                             }
                         }
@@ -80,14 +83,8 @@ struct AlarmsView: View {
             let alarmData = alarmDataList[index]
             self.managedObjectContext.delete(alarmData)
         }
-        
-        // Save
-        do {
-            try self.managedObjectContext.save()
-        } catch let error {
-            print("Could not save. \(error)")
-        }
     }
+    
 }
 
 

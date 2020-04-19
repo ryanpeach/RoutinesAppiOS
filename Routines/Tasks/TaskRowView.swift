@@ -40,7 +40,7 @@ struct TaskRowForeground: View {
         HStack {
             Spacer().frame(width: 5)
             TaskCheckbox(
-                taskData: self.taskData
+                taskData: self._taskData
             )
             Spacer().frame(width: 10)
             Text(self.taskData.name)

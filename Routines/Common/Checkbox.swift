@@ -14,6 +14,21 @@ enum DoneEnum {
     case None
 }
 
+//func resetCheckboxes(moc: NSManagedObjectContext) {
+//    let taskDataList = FetchRequest<TaskData>(entity: TaskData.entity(), sortDescriptors: []).wrappedValue
+//    // You can't use taskDataList on this one because it's in init
+//    for taskData in taskDataList {
+//        taskData.resetDone()
+//    }
+//
+//    // Save
+//    do {
+//        try moc.save()
+//    } catch let error {
+//        print("Could not save. \(error)")
+//    }
+//}
+
 struct SubTaskCheckbox: View {
     @ObservedObject var subTaskData: SubTaskData
     
@@ -43,6 +58,11 @@ struct SubTaskCheckbox: View {
 struct TaskCheckbox: View {
     
     @ObservedObject var taskData: TaskData
+    
+    init(taskData: ObservedObject<TaskData>) {
+        taskData.wrappedValue.resetDone()
+        self._taskData = taskData
+    }
     
     var done: DoneEnum {
         if self.taskData.done {

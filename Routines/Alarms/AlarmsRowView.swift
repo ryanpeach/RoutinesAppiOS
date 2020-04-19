@@ -65,10 +65,12 @@ struct AlarmsRowView: View {
         ZStack {
             AlarmRowForeground(alarmData: self.alarmData)
                 .onTapGesture(count: 1) {
+                    //self.resetCheckboxes()
                     self.tag = self.alarmData.id
                 }
                 .contextMenu {
                     Button(action: {
+                        //self.resetCheckboxes()
                         self.tag = self.alarmData.id
                     }) {
                         HStack {
@@ -106,6 +108,22 @@ struct AlarmsRowView: View {
             ) { EmptyView() }
         }.frame(height:100)
     }
+    
+    /*
+    func resetCheckboxes() {
+        // You can't use taskDataList on this one because it's in init
+        for taskData in self.alarmData.taskDataList {
+            taskData.resetDone()
+        }
+        
+        // Save
+        do {
+            try self.managedObjectContext.save()
+        } catch let error {
+            print("Could not save. \(error)")
+        }
+    }
+     */
 }
 
 struct AlarmsRow_Previewer: View {

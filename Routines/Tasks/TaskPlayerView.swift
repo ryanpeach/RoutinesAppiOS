@@ -25,10 +25,14 @@ struct CountdownTimer: View {
 
 struct TaskPlayerView: View {
     @Environment(\.managedObjectContext) var managedObjectContext
-    var fetchRequest: FetchRequest<TaskData>
-    var taskDataList: FetchedResults<TaskData> {
-        fetchRequest.wrappedValue
-    }
+    @FetchRequest(
+        entity: TaskData.entity(),
+        sortDescriptors: [
+            NSSortDescriptor(
+                keyPath: \TaskData.order,
+                ascending: true
+            )
+    ]) var taskDataListUnfiltered: FetchedResults<TaskData>
     @FetchRequest(
         entity: SubTaskData.entity(),
         sortDescriptors: [
@@ -37,6 +41,24 @@ struct TaskPlayerView: View {
                 ascending: true
             )
     ]) var subTaskDataListUnfiltered: FetchedResults<SubTaskData>
+    
+    var taskDataList: [TaskData] {
+        var out: [TaskData] = []
+        for td in taskDataListUnfiltered {
+            if td.alarmData.id == self.alarmId {
+                out.append(td)
+            }
+        }
+        return out
+    }
+    
+    var taskData: TaskData? {
+        if taskDataList.count == 0 {
+            return nil
+        } else {
+            return self.taskDataList[self.taskIdx]
+        }
+    }
     
     var subTaskDataList: [SubTaskData] {
         if self.taskData == nil {
@@ -51,6 +73,7 @@ struct TaskPlayerView: View {
         return out
     }
     
+    @State var alarmId: UUID
     @Binding var taskIdx: Int
     
     // For the timer
@@ -60,29 +83,6 @@ struct TaskPlayerView: View {
     @State var lastTime: Date = Date()
     @State var durationBeforePause: TimeInterval = 0
     @State var durationSoFar: TimeInterval = 0
-
-    var taskData: TaskData? {
-        if taskDataList.count == 0 {
-            return nil
-        } else {
-            return self.taskDataList[self.taskIdx]
-        }
-    }
-    
-    init(alarmData: AlarmData, taskIdx: Binding<Int>) {
-        self._taskIdx = taskIdx
-        fetchRequest = FetchRequest<TaskData>(
-            entity: TaskData.entity(),
-            sortDescriptors: [
-                NSSortDescriptor(
-                    keyPath: \TaskData.order,
-                    ascending: true
-                )
-            ],
-            predicate: NSPredicate(
-                format: "alarmData.id == %@", alarmData.id.uuidString
-        ))
-    }
     
     var body: some View {
         VStack {
@@ -108,7 +108,7 @@ struct TaskPlayerView: View {
                 HStack {
                     Spacer()
                     Button(action: {
-                        if self.subTaskDataList.allSatisfy({$0.done}) ?? true {
+                        if self.subTaskDataList.allSatisfy({$0.done}) {
                             self.taskData!.lastDuration_ = self.durationSoFar
                             self.taskData!.done = true
                             self.taskData!.lastEdited = Date()
@@ -221,7 +221,7 @@ struct TaskDetailView_Previewer: View {
     @State var taskPlayerIdx: Int = 0
     var body: some View {
         TaskPlayerView(
-            alarmData: self.alarmData,
+            alarmId: self.alarmData.id,
             taskIdx: self.$taskPlayerIdx
         )
     }

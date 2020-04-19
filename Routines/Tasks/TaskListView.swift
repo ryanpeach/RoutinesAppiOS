@@ -13,6 +13,15 @@ struct TaskListView: View {
     @Environment(\.managedObjectContext) var managedObjectContext
     @Environment(\.editMode) var editMode
     @FetchRequest(
+        entity: AlarmData.entity(),
+        sortDescriptors: [
+            NSSortDescriptor(
+                keyPath: \AlarmData.time_,
+                ascending: true
+            )
+    ]) var alarmDataListUnfiltered: FetchedResults<AlarmData>
+    
+    @FetchRequest(
         entity: TaskData.entity(),
         sortDescriptors: [
             NSSortDescriptor(
@@ -20,8 +29,9 @@ struct TaskListView: View {
                 ascending: true
             )
     ]) var taskDataListUnfiltered: FetchedResults<TaskData>
-
-    @ObservedObject var alarmData_: AlarmData
+    
+    var alarmId: UUID
+    var alarmName: String
     
     @State var createMode = false
     @State var inEditing = false
@@ -30,17 +40,16 @@ struct TaskListView: View {
     
     var taskDataList: [TaskData] {
         var out: [TaskData] = []
-        for td in taskDataListUnfiltered {
-            if td.alarmData.id == self.alarmData_.id {
+        for td in self.taskDataListUnfiltered {
+            if td.alarmData.id == self.alarmId {
                 out.append(td)
             }
         }
         return out
     }
     
-    init(alarmData: AlarmData) {
-        alarmData_ = alarmData
-        resetCheckboxes()
+    var alarmData: AlarmData {
+        return alarmDataListUnfiltered.first(where: {$0.id == self.alarmId})!
     }
     
     var body: some View {
@@ -49,7 +58,7 @@ struct TaskListView: View {
             // Add Item Button
             NavigationLink(
                 destination: TaskPlayerView(
-                    alarmData: self.alarmData_,
+                    alarmId: self.alarmId,
                     taskIdx: self.$taskPlayerIdx
                 )
             ){
@@ -83,7 +92,7 @@ struct TaskListView: View {
                 .onDelete(perform: self.delete)
                 .onMove(perform: self.move)
             }
-            .navigationBarTitle(Text(self.alarmData_.name))
+            .navigationBarTitle(Text(self.alarmName))
             .navigationBarItems(trailing: EditButton())
             
             // Add Item Button
@@ -97,9 +106,9 @@ struct TaskListView: View {
             }.sheet(isPresented: self.$createMode) {
                 TaskCreatorView(
                     moc: self.managedObjectContext,
-                    alarmData: self.alarmData_,
+                    alarmData: self.alarmData,
                     createMode: self.$createMode,
-                    order: self.alarmData_.taskDataList.count
+                    order: self.taskDataList.count
                 )
             }
         }
@@ -110,8 +119,8 @@ struct TaskListView: View {
         taskData.id = UUID()
         taskData.name = "New Task"
         taskData.duration_ = 0
-        taskData.order = Int64(self.alarmData_.taskDataList.count)
-        self.alarmData_.addToTaskData(taskData)
+        taskData.order = Int64(self.taskDataList.count)
+        self.alarmData.addToTaskData(taskData)
         
         // Save
         do {
@@ -121,33 +130,21 @@ struct TaskListView: View {
         }
     }
     
-    func resetCheckboxes() {
-        let moc = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-        for taskData in alarmData_.taskDataList {
-            taskData.resetDone()
-        }
-        
-        // Save
-        do {
-            try moc.save()
-        } catch let error {
-            print("Could not save. \(error)")
-        }
-    }
-    
-    
     func delete(at offsets: IndexSet) {
         for index in offsets {
-            let taskData = self.alarmData_.taskDataList[index]
+            let taskData = self.taskDataList[index]
             self.managedObjectContext.delete(taskData)
         }
         
         // Save
+        // Save on delete has caused some problems in the past
+        /*
         do {
             try self.managedObjectContext.save()
         } catch let error {
             print("Could not save. \(error)")
         }
+        */
     }
     
     func move(from source: IndexSet, to destination: Int) {
@@ -187,7 +184,8 @@ struct TaskListView_Previewer: View {
     @ObservedObject var alarmData: AlarmData
     var body: some View {
         TaskListView(
-            alarmData: self.alarmData
+            alarmId: self.alarmData.id,
+            alarmName: self.alarmData.name
         )
     }
 }
