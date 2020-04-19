@@ -29,6 +29,27 @@ struct TaskPlayerView: View {
     var taskDataList: FetchedResults<TaskData> {
         fetchRequest.wrappedValue
     }
+    @FetchRequest(
+        entity: SubTaskData.entity(),
+        sortDescriptors: [
+            NSSortDescriptor(
+                keyPath: \SubTaskData.order,
+                ascending: true
+            )
+    ]) var subTaskDataListUnfiltered: FetchedResults<SubTaskData>
+    
+    var subTaskDataList: [SubTaskData] {
+        if self.taskData == nil {
+            return []
+        }
+        var out: [SubTaskData] = []
+        for sub_td in subTaskDataListUnfiltered {
+            if sub_td.taskData.id == self.taskData!.id {
+                out.append(sub_td)
+            }
+        }
+        return out
+    }
     
     @Binding var taskIdx: Int
     
@@ -46,10 +67,6 @@ struct TaskPlayerView: View {
         } else {
             return self.taskDataList[self.taskIdx]
         }
-    }
-    
-    var subTaskList: [SubTaskData] {
-        return self.taskData?.subTaskDataList ?? []
     }
     
     init(alarmData: AlarmData, taskIdx: Binding<Int>) {
@@ -77,7 +94,7 @@ struct TaskPlayerView: View {
                 ).font(Font.largeTitle)
                 Spacer().frame(height: DEFAULT_HEIGHT_SPACING)
                 List {
-                    ForEach(subTaskList) { sub_td in
+                    ForEach(self.subTaskDataList, id: \.id) { sub_td in
                         HStack {
                             SubTaskCheckbox(
                                 subTaskData: sub_td
@@ -91,7 +108,7 @@ struct TaskPlayerView: View {
                 HStack {
                     Spacer()
                     Button(action: {
-                        if self.taskData?.subTaskDataList.allSatisfy({$0.done}) ?? true {
+                        if self.subTaskDataList.allSatisfy({$0.done}) ?? true {
                             self.taskData!.lastDuration_ = self.durationSoFar
                             self.taskData!.done = true
                             self.taskData!.lastEdited = Date()

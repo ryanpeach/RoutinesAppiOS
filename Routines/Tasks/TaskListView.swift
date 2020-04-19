@@ -38,7 +38,6 @@ struct TaskListView: View {
         return out
     }
     
-    
     init(alarmData: AlarmData) {
         alarmData_ = alarmData
         resetCheckboxes()
@@ -144,13 +143,11 @@ struct TaskListView: View {
         }
         
         // Save
-        /*
         do {
             try self.managedObjectContext.save()
         } catch let error {
             print("Could not save. \(error)")
         }
-        */
     }
     
     func move(from source: IndexSet, to destination: Int) {
@@ -161,13 +158,19 @@ struct TaskListView: View {
             idx += 1
         }
         
-        let element = range.remove(at: source.first!)
-        range.insert(element, at: destination)
+        range.move(fromOffsets: source, toOffset: destination)
         
+        // Set the new order
         var count: Int = 0
         for idx in range {
-            self.taskDataList[idx].order = Int64(count)
+            let td = self.taskDataList[idx]
+            td.order = Int64(count)
             count += 1
+        }
+        
+        // Update the order
+        for td in self.taskDataList {
+            td.objectWillChange.send()
         }
         
         // Save
@@ -176,8 +179,6 @@ struct TaskListView: View {
         } catch let error {
             print("Could not save. \(error)")
         }
-        
-        self.alarmData_.objectWillChange.send()
     }
     
 }

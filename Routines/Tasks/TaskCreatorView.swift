@@ -48,14 +48,21 @@ struct TaskCreatorView: View {
         VStack {
             Spacer().frame(height: DEFAULT_HEIGHT_SPACING)
             VStack {
-                TitleTextField(text: self.$name)
-                Spacer().frame(height: DEFAULT_HEIGHT_SPACING)
-                TimePickerRelativeView(time: self.$duration)
-                Spacer().frame(height: DEFAULT_HEIGHT_SPACING)
-                NewSubTaskView(newSubTask: self.$newSubTask, addSubTask: self.addSubTask)
-                Spacer().frame(height: DEFAULT_HEIGHT_SPACING)
-                Text("Subtasks:")
-                Spacer().frame(height: DEFAULT_HEIGHT_SPACING)
+                HStack {
+                    Spacer()
+                    EditButton()
+                    Spacer().frame(width: DEFAULT_LEFT_ALIGN_SPACE)
+                }
+                VStack {
+                    TitleTextField(text: self.$name)
+                    Spacer().frame(height: DEFAULT_HEIGHT_SPACING)
+                    TimePickerRelativeView(time: self.$duration)
+                    Spacer().frame(height: DEFAULT_HEIGHT_SPACING)
+                    NewSubTaskView(newSubTask: self.$newSubTask, addSubTask: self.addSubTask)
+                    Spacer().frame(height: DEFAULT_HEIGHT_SPACING)
+                    Text("Subtasks:")
+                    Spacer().frame(height: DEFAULT_HEIGHT_SPACING)
+                }
                 List {
                     ForEach(self.subTaskDataList, id: \.self) { sub_td in
                         Text(sub_td)

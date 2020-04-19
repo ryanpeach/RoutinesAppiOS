@@ -11,6 +11,24 @@ import SwiftUI
 
 struct TaskEditorView: View {
     @Environment(\.managedObjectContext) var managedObjectContext
+    @FetchRequest(
+        entity: SubTaskData.entity(),
+        sortDescriptors: [
+            NSSortDescriptor(
+                keyPath: \SubTaskData.order,
+                ascending: true
+            )
+    ]) var subTaskDataListUnfiltered: FetchedResults<SubTaskData>
+    
+    var subTaskDataList: [SubTaskData] {
+        var out: [SubTaskData] = []
+        for sub_td in subTaskDataListUnfiltered {
+            if sub_td.taskData.id == self.taskData.id {
+                out.append(sub_td)
+            }
+        }
+        return out
+    }
     
     @ObservedObject var taskData: TaskData
     @State var newSubTask: String = ""
@@ -40,7 +58,7 @@ struct TaskEditorView: View {
             Text("Subtasks:")
             Spacer().frame(height: DEFAULT_HEIGHT_SPACING)
             List {
-                ForEach(self.taskData.subTaskDataList, id: \.id) { sub_td in
+                ForEach(self.subTaskDataList, id: \.id) { sub_td in
                     Text(sub_td.name)
                 }
                 .onDelete(perform: self.delete)
@@ -52,22 +70,32 @@ struct TaskEditorView: View {
     
     func delete(at offsets: IndexSet) {
         for index in offsets {
-            let subTaskData = self.taskData.subTaskDataList[index]
+            let subTaskData = self.subTaskDataList[index]
             self.managedObjectContext.delete(subTaskData)
         }
     }
     
     func move(from source: IndexSet, to destination: Int) {
-        var arr = self.taskData.subTaskDataList
-        let element = arr.remove(at: source.first!)
-        arr.insert(element, at: destination)
+        var range: [Int] = []
+        var idx: Int = 0
+        for _ in self.subTaskDataList {
+            range.append(idx)
+            idx += 1
+        }
         
-        // Reindex
-        // TODO: Better reindexing
-        var count = 0
-        for sub_td in arr {
-            sub_td.order = Int64(count)
+        range.move(fromOffsets: source, toOffset: destination)
+        
+        // Set the new order
+        var count: Int = 0
+        for idx in range {
+            let td = self.subTaskDataList[idx]
+            td.order = Int64(count)
             count += 1
+        }
+        
+        // Update the order
+        for sub_td in self.subTaskDataList {
+            sub_td.objectWillChange.send()
         }
         
         // Save
@@ -76,9 +104,6 @@ struct TaskEditorView: View {
         } catch let error {
             print("Could not save. \(error)")
         }
-        
-        self.taskData.objectWillChange.send()
-        self.taskData.alarmData.objectWillChange.send()
     }
     
     func addSubTask() {
