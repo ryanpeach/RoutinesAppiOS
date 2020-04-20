@@ -94,13 +94,7 @@ struct TaskListView: View {
         self.alarmData.addToTaskData(taskData)
         
         // Save
-        /*
-        do {
-            try self.managedObjectContext.save()
-        } catch let error {
-            print("Could not save. \(error)")
-        }
-        */
+        self.save()
     }
     
     func delete(at offsets: IndexSet) {
@@ -110,14 +104,8 @@ struct TaskListView: View {
         }
         
         // Save
-        // Save on delete has caused some problems in the past
-        /*
-        do {
-            try self.managedObjectContext.save()
-        } catch let error {
-            print("Could not save. \(error)")
-        }
-        */
+        self.save()
+        self.alarmData.objectWillChange.send()
     }
     
     func move(from source: IndexSet, to destination: Int) {
@@ -144,13 +132,16 @@ struct TaskListView: View {
         }
         
         // Save
-        /*
+        self.save()
+        self.alarmData.objectWillChange.send()
+    }
+    
+    func save() {
         do {
             try self.managedObjectContext.save()
         } catch let error {
             print("Could not save. \(error)")
         }
-        */
     }
     
 }
