@@ -55,7 +55,7 @@ struct TaskListView: View {
                         )
                     
                         NavigationLink(destination: TaskEditorView(
-                                taskData_: td
+                                taskData: td
                         ), tag: td.id, selection: self.$taskEditUUID) {
                             EmptyView()
                         }

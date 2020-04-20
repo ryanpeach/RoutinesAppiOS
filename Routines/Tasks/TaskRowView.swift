@@ -95,15 +95,18 @@ struct TaskRowView: View {
     }
 }
 
-/*
+
 struct TaskRowView_Previewer: View {
     @ObservedObject var taskData: TaskData
+    @State var inEditing: Bool = false
     @State var tag: UUID?
     @State var taskPlayerIdx: Int = 0
     var body: some View {
         TaskRowView(
-            taskData: self.taskData,
-            taskPlayerIdx: self.$taskPlayerIdx
+            taskData: taskData,
+            inEditing: $inEditing,
+            taskEditUUID: $tag,
+            taskPlayerIdx: $taskPlayerIdx
         )
     }
 }
@@ -121,4 +124,4 @@ struct TaskRowView_Previews: PreviewProvider {
         )
     }
 }
-*/
+
