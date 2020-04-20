@@ -89,11 +89,13 @@ struct TaskEditorView: View {
         }
         
         // Save
+        /*
         do {
             try self.managedObjectContext.save()
         } catch let error {
             print("Could not save. \(error)")
         }
+        */
     }
     
     func addSubTask() {
@@ -105,11 +107,13 @@ struct TaskEditorView: View {
             self.taskData.addToSubTaskData(subTaskData)
             
             // Save
+            /*
             do {
                 try self.managedObjectContext.save()
             } catch let error {
                 print("Could not save. \(error)")
             }
+            */
             
             // Delete the item in the new sub task
             self.newSubTask = ""
