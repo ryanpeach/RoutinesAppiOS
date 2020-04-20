@@ -89,6 +89,7 @@ struct TaskListView: View {
         .navigationBarTitle(Text(self.alarmData.name))
         .navigationBarItems(trailing: EditButton())
         .onAppear {
+            self.taskEditUUID = nil
             self.newTaskDataList = self.alarmData.taskDataList
         }
         .onDisappear {
