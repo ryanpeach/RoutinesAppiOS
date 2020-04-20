@@ -1,0 +1,10 @@
+ I Ryan Peach maintain all rights to commercialize this code. You may not
+ release this code or any subset of this code in any way that competes with this
+ app.
+
+I have however provided the code for anyone to download for personal
+modification and use (meaning if you are programmer, you can get the app for
+free), education, and upstream contributions. If you make a contribution, I will
+seriously consider putting it in the main app. I am not a Swift developer so any
+help is greatly appreciated. And if you make good enough contributions we can
+compromise profit sharing or payment.
