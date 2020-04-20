@@ -189,7 +189,8 @@ struct TaskPlayerView: View {
     }
     
     func previous() {
-        let cnt = self.alarmData.taskDataList.count
+        let tdl = self.alarmData.taskDataList
+        let cnt = tdl.count
         if self.taskIdx > 0 {
             self.deleteNotification()
             self.taskIdx -= 1
@@ -201,11 +202,15 @@ struct TaskPlayerView: View {
             self.lastTime = Date()
             self.scheduleNotification()
             self.alarmData.objectWillChange.send()
+            if !self.done {
+                self.taskData = tdl[self.taskIdx]
+            }
         }
     }
     
     func next() {
-        let cnt = self.alarmData.taskDataList.count
+        let tdl = self.alarmData.taskDataList
+        let cnt = tdl.count
         if self.taskIdx < cnt {
             self.deleteNotification()
             self.taskIdx += 1
@@ -217,6 +222,9 @@ struct TaskPlayerView: View {
             self.lastTime = Date()
             self.scheduleNotification()
             self.alarmData.objectWillChange.send()
+            if !self.done {
+                self.taskData = tdl[self.taskIdx]
+            }
         }
     }
 }
