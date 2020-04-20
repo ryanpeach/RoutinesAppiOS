@@ -38,6 +38,7 @@ struct TaskCreatorView: View {
     @ObservedObject var alarmData: AlarmData
     @Binding var createMode: Bool
     let order: Int
+    let onSave: () -> ()
     
     @State private var name: String = "New Task"
     @State private var duration: RelativeTime = RelativeTime.fromSeconds(seconds: 0)
@@ -73,6 +74,7 @@ struct TaskCreatorView: View {
                 }
                 Button(action: {
                     self.done()
+                    self.onSave()
                 }) {
                     Text("Save")
                 }
@@ -143,7 +145,8 @@ struct TaskCreatorView_Previewer: View {
             moc: managedObjectContext,
             alarmData: self.alarmData,
             createMode: self.$createMode,
-            order: 1
+            order: 1,
+            onSave: {}
         )
     }
 }

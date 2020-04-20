@@ -14,6 +14,7 @@ struct TaskListView: View {
     
     var alarmData: AlarmData
     
+    @State var newTaskDataList: [TaskData] = []
     @State var createMode = false
     @State var inEditing = false
     @State var taskPlayerIdx: Int = 0
@@ -44,7 +45,7 @@ struct TaskListView: View {
             }
             Spacer().frame(height: DEFAULT_HEIGHT_SPACING)
             List{
-                ForEach(self.taskDataList, id: \.order) { td in
+                ForEach(self.newTaskDataList, id: \.order) { td in
                     ZStack {
                         TaskRowView(
                             taskData: td,
@@ -63,8 +64,7 @@ struct TaskListView: View {
                 .onDelete(perform: self.delete)
                 .onMove(perform: self.move)
             }
-            .navigationBarTitle(Text(self.alarmData.name))
-            .navigationBarItems(trailing: EditButton())
+            
             
             // Add Item Button
             Button(action: {
@@ -79,9 +79,20 @@ struct TaskListView: View {
                     moc: self.managedObjectContext,
                     alarmData: self.alarmData,
                     createMode: self.$createMode,
-                    order: self.taskDataList.count
+                    order: self.taskDataList.count,
+                    onSave: {
+                        self.newTaskDataList = self.alarmData.taskDataList
+                    }
                 )
             }
+        }
+        .navigationBarTitle(Text(self.alarmData.name))
+        .navigationBarItems(trailing: EditButton())
+        .onAppear {
+            self.newTaskDataList = self.alarmData.taskDataList
+        }
+        .onDisappear {
+            self.newTaskDataList = []
         }
     }
     
@@ -100,6 +111,7 @@ struct TaskListView: View {
     func delete(at offsets: IndexSet) {
         for index in offsets {
             let taskData = self.taskDataList[index]
+            self.newTaskDataList.remove(at: index)
             self.managedObjectContext.delete(taskData)
         }
         
@@ -116,6 +128,7 @@ struct TaskListView: View {
             idx += 1
         }
         
+        self.newTaskDataList.move(fromOffsets: source, toOffset: destination)
         range.move(fromOffsets: source, toOffset: destination)
         
         // Set the new order
