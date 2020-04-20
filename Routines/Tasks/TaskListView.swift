@@ -26,7 +26,7 @@ struct TaskListView: View {
     
     var body: some View {
         VStack {
-            // Spacer().frame(height: DEFAULT_HEIGHT_SPACING)
+            Spacer().frame(height: DEFAULT_HEIGHT_SPACING)
             // Add Item Button
             NavigationLink(
                 destination: TaskPlayerView(
