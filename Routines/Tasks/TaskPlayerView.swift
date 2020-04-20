@@ -31,7 +31,7 @@ struct TaskPlayerView: View {
     }
     
     var taskData: TaskData? {
-        if taskDataList.count == 0 {
+        if self.taskIdx >= taskDataList.count {
             return nil
         } else {
             return self.taskDataList[self.taskIdx]
@@ -50,7 +50,7 @@ struct TaskPlayerView: View {
     }
     
     @ObservedObject var alarmData: AlarmData
-    @Binding var taskIdx: Int
+    @State var taskIdx: Int = 0
     
     // For the timer
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
@@ -131,13 +131,13 @@ struct TaskPlayerView: View {
             }
         }
         .onReceive(timer) { input in
-            if self.isPlay {
+            if self.isPlay && (self.taskIdx < self.taskDataList.count) {
                 self.lastTime = Date()
                 if self.startTime == nil {
                     self.startTime = Date()
                 }
                 self.durationSoFar = min(
-                    60*60+(self.taskData?.duration_ ?? 0),
+                    60*60+(self.taskDataList[self.taskIdx].duration_),
                     self.startTime!.distance(to: self.lastTime) + self.durationBeforePause
                 )
             }
@@ -198,7 +198,7 @@ struct TaskDetailView_Previewer: View {
     var body: some View {
         TaskPlayerView(
             alarmData: self.alarmData,
-            taskIdx: self.$taskPlayerIdx
+            taskIdx: self.taskPlayerIdx
         )
     }
 }

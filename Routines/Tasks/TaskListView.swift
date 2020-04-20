@@ -31,7 +31,7 @@ struct TaskListView: View {
             NavigationLink(
                 destination: TaskPlayerView(
                     alarmData: self.alarmData,
-                    taskIdx: self.$taskPlayerIdx
+                    taskIdx: self.taskPlayerIdx
                 )
             ){
                 HStack {
