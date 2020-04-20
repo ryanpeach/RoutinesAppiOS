@@ -59,11 +59,6 @@ struct TaskCheckbox: View {
     
     @ObservedObject var taskData: TaskData
     
-    init(taskData: ObservedObject<TaskData>) {
-        taskData.wrappedValue.resetDone()
-        self._taskData = taskData
-    }
-    
     var done: DoneEnum {
         if self.taskData.done {
             return DoneEnum.Done

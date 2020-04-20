@@ -14,109 +14,89 @@ struct TaskEditorView: View {
     
     @ObservedObject var taskData: TaskData
     @State var newSubTask: String = ""
+    @State var taskName: String = ""
+    @State var newSubTaskDataList: [String] = []
+    @State var taskDuration: RelativeTime = RelativeTime.fromSeconds(seconds: 0)
     
-    var subTaskDataList: [SubTaskData] {
-        var out: [SubTaskData] = []
-        for sub_td in self.taskData.subTaskDataList {
-           out.append(sub_td)
-       }
-       return out
-   }
-
     var body: some View {
         VStack {
-            TitleTextField(text: self.$taskData.name)
+            TitleTextField(text: self.$taskName)
             Spacer().frame(height: DEFAULT_HEIGHT_SPACING)
-            TimePickerRelativeView(time: self.$taskData.duration)
+            TimePickerRelativeView(time: self.$taskDuration)
             Spacer().frame(height: DEFAULT_HEIGHT_SPACING)
-            HStack {
-                Spacer().frame(width: DEFAULT_LEFT_ALIGN_SPACE, height: DEFAULT_HEIGHT_SPACING)
-                ReturnTextField(
-                    label: "New Subtask",
-                    text: self.$newSubTask,
-                    onCommit: self.addSubTask
-                )
-                Button(action: {
-                    self.addSubTask()
-                }) {
-                    Image(systemName: "plus")
-                        .frame(width: DEFAULT_LEFT_ALIGN_SPACE, height: 30)
-                }
-                Spacer().frame(width: DEFAULT_HEIGHT_SPACING)
-            }
+            NewSubTaskView(
+                newSubTask: self.$newSubTask,
+                addSubTask: self.addSubTask
+            )
             Spacer().frame(height: DEFAULT_HEIGHT_SPACING)
             Text("Subtasks:")
             Spacer().frame(height: DEFAULT_HEIGHT_SPACING)
             List {
-                ForEach(self.subTaskDataList, id: \.id) { sub_td in
-                    Text(sub_td.name)
+                ForEach(self.newSubTaskDataList, id: \.self) { sub_td_name in
+                    Text(sub_td_name)
                 }
                 .onDelete(perform: self.delete)
                 .onMove(perform: self.move)
             }
+            .navigationBarItems(trailing: EditButton())
         }
-        .navigationBarItems(trailing: EditButton())
+        .onAppear {
+            self.taskName = self.taskData.name
+            self.taskDuration = self.taskData.duration
+            self.newSubTaskDataList = []
+            for sub_td in self.taskData.subTaskDataList {
+                self.newSubTaskDataList.append(sub_td.name)
+            }
+        }
+        .onDisappear {
+            self.taskData.name = self.taskName
+            self.taskData.duration = self.taskDuration
+            self.addSubTasks()
+            // Save
+            self.save()
+        }
     }
     
     func delete(at offsets: IndexSet) {
-        for index in offsets {
-            let subTaskData = self.subTaskDataList[index]
-            self.managedObjectContext.delete(subTaskData)
+        for i in offsets {
+            self.newSubTaskDataList.remove(at: i)
         }
     }
     
     func move(from source: IndexSet, to destination: Int) {
-        var range: [Int] = []
-        var idx: Int = 0
-        for _ in self.subTaskDataList {
-            range.append(idx)
-            idx += 1
-        }
-        
-        range.move(fromOffsets: source, toOffset: destination)
-        
-        // Set the new order
-        var count: Int = 0
-        for idx in range {
-            let td = self.subTaskDataList[idx]
-            td.order = Int64(count)
-            count += 1
-        }
-        
-        // Update the order
-        for sub_td in self.subTaskDataList {
-            sub_td.objectWillChange.send()
-        }
-        
-        // Save
-        /*
-        do {
-            try self.managedObjectContext.save()
-        } catch let error {
-            print("Could not save. \(error)")
-        }
-        */
+        self.newSubTaskDataList.move(fromOffsets: source, toOffset: destination)
     }
     
     func addSubTask() {
         if self.newSubTask != "" {
-            let subTaskData = SubTaskData(context: self.managedObjectContext)
-            subTaskData.id = UUID()
-            subTaskData.order = Int64(self.taskData.subTaskDataList.count)
-            subTaskData.name = self.newSubTask
-            self.taskData.addToSubTaskData(subTaskData)
-            
-            // Save
-            /*
-            do {
-                try self.managedObjectContext.save()
-            } catch let error {
-                print("Could not save. \(error)")
-            }
-            */
+            self.newSubTaskDataList.append(self.newSubTask)
             
             // Delete the item in the new sub task
             self.newSubTask = ""
+        }
+    }
+    
+    func addSubTasks() {
+        for sub_td in self.taskData.subTaskDataList {
+            self.managedObjectContext.delete(sub_td)
+        }
+        var order: Int = 0
+        for sub_td_name in self.newSubTaskDataList {
+            let subTaskData = SubTaskData(context: self.managedObjectContext)
+            subTaskData.id = UUID()
+            subTaskData.name = sub_td_name
+            subTaskData.order = Int64(order)
+            self.taskData.addToSubTaskData(subTaskData)
+            order += 1
+        }
+    }
+    
+    func save() {
+        // Save
+        do {
+            try self.managedObjectContext.save()
+        } catch let error {
+            print("Could not save. \(error)")
         }
     }
     
@@ -126,9 +106,11 @@ struct TaskEditorView_Previewer: View {
     @State var inEditing: Bool = true
     @ObservedObject var taskData: TaskData
     var body: some View {
-        TaskEditorView(
-            taskData: self.taskData
-        )
+        NavigationView {
+            TaskEditorView(
+                taskData: self.taskData
+            )
+        }
     }
 }
 

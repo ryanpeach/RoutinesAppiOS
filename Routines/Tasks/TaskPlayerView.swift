@@ -9,11 +9,11 @@
 import SwiftUI
 
 struct CountdownTimer: View {
-    @ObservedObject var taskData: TaskData
+    let taskData: TaskData?
     @Binding var durationSoFar: TimeInterval
     
     var body: some View {
-        let this = RelativeTime.fromSeconds(seconds: (taskData.duration.timeInterval-durationSoFar))
+        let this = RelativeTime.fromSeconds(seconds: ((taskData?.duration.timeInterval ?? 0)-durationSoFar))
         if this.timeInterval < 0 {
             return Text("-"+this.stringMS()).foregroundColor(Color.red)
         } else {
@@ -26,33 +26,23 @@ struct CountdownTimer: View {
 struct TaskPlayerView: View {
     @Environment(\.managedObjectContext) var managedObjectContext
     
-    var taskDataList: [TaskData] {
-        return self.alarmData.taskDataList
-    }
-    
-    var taskData: TaskData {
-        return self.taskDataList[self.taskIdx]
-    }
-    
-    var subTaskDataList: [SubTaskData] {
-        var out: [SubTaskData] = []
-        for sub_td in self.taskData.subTaskDataList {
-            out.append(sub_td)
-        }
-        return out
-    }
-    
     @ObservedObject var alarmData: AlarmData
     @State var taskIdx: Int = 0
     
     // For the timer
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    @State var taskData: TaskData?
     @State var isPlay: Bool = true
-    @State var done: Bool = false
+    @State var done: Bool = true
     @State var startTime: Date?
     @State var lastTime: Date = Date()
     @State var durationBeforePause: TimeInterval = 0
     @State var durationSoFar: TimeInterval = 0
+    
+    // These update taskData
+    @State var taskLastDuration: [TimeInterval?] = []
+    @State var taskDone: [Bool?] = []
+    @State var taskLastEdited: [Date?] = []
     
     var body: some View {
         VStack {
@@ -64,7 +54,7 @@ struct TaskPlayerView: View {
                 ).font(Font.largeTitle)
                 Spacer().frame(height: DEFAULT_HEIGHT_SPACING)
                 List {
-                    ForEach(self.subTaskDataList, id: \.id) { sub_td in
+                    ForEach(self.taskData?.subTaskDataList ?? [], id: \.id) { sub_td in
                         HStack {
                             SubTaskCheckbox(
                                 subTaskData: sub_td
@@ -73,30 +63,28 @@ struct TaskPlayerView: View {
                         }
                     }
                 }
-                .navigationBarTitle(Text(taskData.name))
+                
                 Spacer().frame(height: DEFAULT_HEIGHT_SPACING)
                 HStack {
                     Spacer()
                     Button(action: {
                         withAnimation {
-                            if self.subTaskDataList.count == 0 || self.subTaskDataList.allSatisfy({$0.done}) {
-                                self.taskData.lastDuration_ = self.durationSoFar
-                                self.taskData.done = true
-                                self.taskData.lastEdited = Date()
+                            guard let td = self.taskData else {
+                                print("No Task Data")
+                                return
+                            }
+                            let stdl = td.subTaskDataList
+                            if stdl.count == 0 || stdl.allSatisfy({$0.done}) {
+                                self.taskLastDuration[self.taskIdx] = self.durationSoFar
+                                self.taskDone[self.taskIdx] = true
+                                self.taskLastEdited[self.taskIdx] = Date()
                                 self.next()
                             }
                         }
                     }) {
-                        if self.subTaskDataList.count == 0 || self.subTaskDataList.allSatisfy({$0.done}) {
-                            Image(systemName: "checkmark.circle")
-                                .resizable()
-                                .frame(width: 100.0, height: 100.0)
-                        } else {
-                            Image(systemName: "checkmark.circle")
-                                .resizable()
-                                .frame(width: 100.0, height: 100.0)
-                                .foregroundColor(Color.gray)
-                        }
+                        Image(systemName: "checkmark.circle")
+                            .resizable()
+                            .frame(width: 100.0, height: 100.0)
                     }
                     Spacer()
                 }
@@ -140,18 +128,46 @@ struct TaskPlayerView: View {
                     self.startTime = Date()
                 }
                 self.durationSoFar = min(
-                    60*60+(self.taskDataList[self.taskIdx].duration_),
+                    60*60+(self.taskData!.duration_),
                     self.startTime!.distance(to: self.lastTime) + self.durationBeforePause
                 )
             }
         }
+        .onAppear {
+            let tdl = self.alarmData.taskDataList
+            for td in tdl {
+                td.resetDone()
+                self.taskLastDuration.append(nil)
+                self.taskDone.append(nil)
+                self.taskLastEdited.append(nil)
+            }
+            if self.taskIdx < tdl.count {
+                self.taskData = tdl[self.taskIdx]
+                self.done = false
+                self.isPlay = true
+            }
+        }
+        .onDisappear() {
+            self.done = true
+            self.isPlay = false
+            let tdl = self.alarmData.taskDataList
+            for idx in tdl.indices {
+                tdl[idx].lastDuration_ = self.taskLastDuration[idx] ?? tdl[idx].lastDuration_
+                tdl[idx].done = self.taskDone[idx] ?? tdl[idx].done
+                tdl[idx].lastEdited = self.taskLastEdited[idx] ?? tdl[idx].lastEdited
+            }
+            self.taskLastDuration = []
+            self.taskDone = []
+            self.taskLastEdited = []
+        }
+        .navigationBarTitle(Text(self.done ? "" : self.taskData!.name))
     }
     
     func deleteNotification() {
         if !self.done {
-            if self.taskData.notificationId != nil {
+            if self.taskData!.notificationId != nil {
                 LocalNotificationManager.deleteNotification(
-                    id: self.taskData.notificationId!
+                    id: self.taskData!.notificationId!
                 )
             }
         }
@@ -161,11 +177,11 @@ struct TaskPlayerView: View {
         LocalNotificationManager.requestPermission()
         if !self.done {
             self.deleteNotification()
-            let time = (self.taskData.duration.timeInterval-self.durationSoFar)
+            let time = (self.taskData!.duration.timeInterval-self.durationSoFar)
             if time > 0 {
-                self.taskData.notificationId = LocalNotificationManager.scheduleNotificationTimeInterval(
+                self.taskData!.notificationId = LocalNotificationManager.scheduleNotificationTimeInterval(
                     time: time,
-                    title: "Timer Done: \(self.taskData.name)",
+                    title: "Timer Done: \(self.taskData!.name)",
                     body: "Get on with your day!"
                 )
             }
@@ -173,10 +189,13 @@ struct TaskPlayerView: View {
     }
     
     func previous() {
+        let cnt = self.alarmData.taskDataList.count
         if self.taskIdx > 0 {
             self.deleteNotification()
-            self.done = false
             self.taskIdx -= 1
+            if self.taskIdx < cnt {
+                self.done = false
+            }
             self.durationSoFar = 0
             self.startTime = Date()
             self.lastTime = Date()
@@ -186,12 +205,12 @@ struct TaskPlayerView: View {
     }
     
     func next() {
-        if self.taskIdx < self.taskDataList.count {
+        let cnt = self.alarmData.taskDataList.count
+        if self.taskIdx < cnt {
             self.deleteNotification()
-            if self.taskIdx == self.taskDataList.count - 1 {
+            self.taskIdx += 1
+            if self.taskIdx == cnt {
                 self.done = true
-            } else {
-                self.taskIdx += 1
             }
             self.durationSoFar = 0
             self.startTime = Date()
@@ -222,6 +241,7 @@ struct TaskDetailView_Previews: PreviewProvider {
         let taskData = TaskData(context: moc)
         taskData.id = UUID()
         taskData.name = "Get out of bed."
+        taskData.order = 0
         alarmData.addToTaskData(taskData)
         return TaskDetailView_Previewer(
             alarmData: alarmData

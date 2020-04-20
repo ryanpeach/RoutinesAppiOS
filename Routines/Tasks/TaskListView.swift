@@ -11,7 +11,6 @@ import CoreData
 
 struct TaskListView: View {
     @Environment(\.managedObjectContext) var managedObjectContext
-    @Environment(\.editMode) var editMode
     
     var alarmData: AlarmData
     

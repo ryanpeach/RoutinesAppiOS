@@ -19,7 +19,8 @@ struct NewSubTaskView: View {
             ReturnTextField(
                 label: "New Subtask",
                 text: self.$newSubTask,
-                onCommit: self.addSubTask
+                onCommit: {}
+                //onCommit: self.addSubTask
             )
             Button(action: {
                 self.addSubTask()
