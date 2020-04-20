@@ -25,31 +25,9 @@ struct CountdownTimer: View {
 
 struct TaskPlayerView: View {
     @Environment(\.managedObjectContext) var managedObjectContext
-    @FetchRequest(
-        entity: TaskData.entity(),
-        sortDescriptors: [
-            NSSortDescriptor(
-                keyPath: \TaskData.order,
-                ascending: true
-            )
-    ]) var taskDataListUnfiltered: FetchedResults<TaskData>
-    @FetchRequest(
-        entity: SubTaskData.entity(),
-        sortDescriptors: [
-            NSSortDescriptor(
-                keyPath: \SubTaskData.order,
-                ascending: true
-            )
-    ]) var subTaskDataListUnfiltered: FetchedResults<SubTaskData>
     
     var taskDataList: [TaskData] {
-        var out: [TaskData] = []
-        for td in taskDataListUnfiltered {
-            if td.alarmData.id == self.alarmId {
-                out.append(td)
-            }
-        }
-        return out
+        return self.alarmData.taskDataList
     }
     
     var taskData: TaskData? {
@@ -61,19 +39,17 @@ struct TaskPlayerView: View {
     }
     
     var subTaskDataList: [SubTaskData] {
-        if self.taskData == nil {
+        guard let td = self.taskData else {
             return []
         }
         var out: [SubTaskData] = []
-        for sub_td in subTaskDataListUnfiltered {
-            if sub_td.taskData.id == self.taskData!.id {
-                out.append(sub_td)
-            }
+        for sub_td in td.subTaskDataList {
+            out.append(sub_td)
         }
         return out
     }
     
-    @State var alarmId: UUID
+    @ObservedObject var alarmData: AlarmData
     @Binding var taskIdx: Int
     
     // For the timer
@@ -221,7 +197,7 @@ struct TaskDetailView_Previewer: View {
     @State var taskPlayerIdx: Int = 0
     var body: some View {
         TaskPlayerView(
-            alarmId: self.alarmData.id,
+            alarmData: self.alarmData,
             taskIdx: self.$taskPlayerIdx
         )
     }

@@ -51,8 +51,7 @@ struct AlarmsView: View {
                                 alarmData: al
                             )
                             NavigationLink(destination: TaskListView(
-                                alarmId: al.id,
-                                alarmName: al.name
+                                alarmData: al
                             ), tag: al.id, selection: self.$tag) {
                                 EmptyView()
                             }

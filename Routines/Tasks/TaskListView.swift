@@ -12,26 +12,8 @@ import CoreData
 struct TaskListView: View {
     @Environment(\.managedObjectContext) var managedObjectContext
     @Environment(\.editMode) var editMode
-    @FetchRequest(
-        entity: AlarmData.entity(),
-        sortDescriptors: [
-            NSSortDescriptor(
-                keyPath: \AlarmData.time_,
-                ascending: true
-            )
-    ]) var alarmDataListUnfiltered: FetchedResults<AlarmData>
     
-    @FetchRequest(
-        entity: TaskData.entity(),
-        sortDescriptors: [
-            NSSortDescriptor(
-                keyPath: \TaskData.order,
-                ascending: true
-            )
-    ]) var taskDataListUnfiltered: FetchedResults<TaskData>
-    
-    var alarmId: UUID
-    var alarmName: String
+    var alarmData: AlarmData
     
     @State var createMode = false
     @State var inEditing = false
@@ -39,17 +21,7 @@ struct TaskListView: View {
     @State var taskEditUUID: UUID?
     
     var taskDataList: [TaskData] {
-        var out: [TaskData] = []
-        for td in self.taskDataListUnfiltered {
-            if td.alarmData.id == self.alarmId {
-                out.append(td)
-            }
-        }
-        return out
-    }
-    
-    var alarmData: AlarmData {
-        return alarmDataListUnfiltered.first(where: {$0.id == self.alarmId})!
+        return self.alarmData.taskDataList
     }
     
     var body: some View {
@@ -58,7 +30,7 @@ struct TaskListView: View {
             // Add Item Button
             NavigationLink(
                 destination: TaskPlayerView(
-                    alarmId: self.alarmId,
+                    alarmData: self.alarmData,
                     taskIdx: self.$taskPlayerIdx
                 )
             ){
@@ -92,7 +64,7 @@ struct TaskListView: View {
                 .onDelete(perform: self.delete)
                 .onMove(perform: self.move)
             }
-            .navigationBarTitle(Text(self.alarmName))
+            .navigationBarTitle(Text(self.alarmData.name))
             .navigationBarItems(trailing: EditButton())
             
             // Add Item Button
@@ -184,8 +156,7 @@ struct TaskListView_Previewer: View {
     @ObservedObject var alarmData: AlarmData
     var body: some View {
         TaskListView(
-            alarmId: self.alarmData.id,
-            alarmName: self.alarmData.name
+            alarmData: self.alarmData
         )
     }
 }

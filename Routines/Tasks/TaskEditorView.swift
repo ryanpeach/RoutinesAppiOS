@@ -11,27 +11,17 @@ import SwiftUI
 
 struct TaskEditorView: View {
     @Environment(\.managedObjectContext) var managedObjectContext
-    @FetchRequest(
-        entity: SubTaskData.entity(),
-        sortDescriptors: [
-            NSSortDescriptor(
-                keyPath: \SubTaskData.order,
-                ascending: true
-            )
-    ]) var subTaskDataListUnfiltered: FetchedResults<SubTaskData>
-    
-    var subTaskDataList: [SubTaskData] {
-        var out: [SubTaskData] = []
-        for sub_td in subTaskDataListUnfiltered {
-            if sub_td.taskData.id == self.taskData.id {
-                out.append(sub_td)
-            }
-        }
-        return out
-    }
     
     @ObservedObject var taskData: TaskData
     @State var newSubTask: String = ""
+    
+    var subTaskDataList: [SubTaskData] {
+        var out: [SubTaskData] = []
+        for sub_td in self.taskData.subTaskDataList {
+           out.append(sub_td)
+       }
+       return out
+   }
 
     var body: some View {
         VStack {
