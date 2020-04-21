@@ -178,6 +178,9 @@ struct TaskPlayerView: View {
                 self.timerObj!.invalidate()
                 self.timerObj = nil
             }
+            if !self.done {
+                self.taskLastDuration[self.taskIdx] = self.durationSoFar
+            }
             self.done = true
             self.isPlay = false
             let tdl = self.alarmData.taskDataList
@@ -245,7 +248,7 @@ struct TaskPlayerView: View {
             self.startTime = Date()
             self.lastTime = Date()
             self.scheduleNotification()
-            self.alarmData.objectWillChange.send()
+            //self.alarmData.objectWillChange.send()
             if !self.done {
                 self.taskData = tdl[self.taskIdx]
             }
@@ -267,7 +270,7 @@ struct TaskPlayerView: View {
             self.startTime = Date()
             self.lastTime = Date()
             self.scheduleNotification()
-            self.alarmData.objectWillChange.send()
+            //self.alarmData.objectWillChange.send()
             if !self.done {
                 self.taskData = tdl[self.taskIdx]
             }
