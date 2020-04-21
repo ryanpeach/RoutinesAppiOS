@@ -593,7 +593,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = Peach.Routines.Debug;
-				PRODUCT_DISPLAY_NAME = "Routines Debug";
+				PRODUCT_DISPLAY_NAME = "SubRoutines Debug";
 				PRODUCT_NAME = Routines;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -614,7 +614,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = Peach.Routines.Release;
-				PRODUCT_DISPLAY_NAME = Routines;
+				PRODUCT_DISPLAY_NAME = SubRoutines;
 				PRODUCT_NAME = Routines;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -773,7 +773,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = Peach.Routines.Staging;
-				PRODUCT_DISPLAY_NAME = "Routines Staging";
+				PRODUCT_DISPLAY_NAME = "SubRoutines Staging";
 				PRODUCT_NAME = Routines;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;

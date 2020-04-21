@@ -55,7 +55,7 @@ struct DayOfWeekButton: View {
             self.action()
         }) {
             Text(text).foregroundColor(
-                self.isActive ? Color.blue : Color.black
+                self.isActive ? Color.blue : Color.gray
             )
         }
     }

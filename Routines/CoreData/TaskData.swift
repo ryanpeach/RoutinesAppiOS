@@ -70,7 +70,12 @@ extension TaskData {
                 subTaskData.resetDone()
             }
             
-            self.objectWillChange.send()
+            let stdl = self.subTaskDataList
+            if stdl.count > 0 && !stdl.allSatisfy({$0.done}) {
+                self.done = false
+            }
+            
+            //self.objectWillChange.send()
         }
     }
 }

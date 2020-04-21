@@ -36,9 +36,9 @@ struct TaskListView: View {
             ){
                 HStack {
                     if self.taskPlayerIdx == 0 {
-                        Text("Begin")
+                        Text("Begin").font(.system(size: 22))
                     } else {
-                        Text("Starting From: \(self.taskDataList[self.taskPlayerIdx].name)")
+                        Text("Starting From: \(self.taskDataList[self.taskPlayerIdx].name)").font(.system(size: 22))
                     }
                     Image(systemName: "play")
                 }
@@ -89,7 +89,15 @@ struct TaskListView: View {
         .navigationBarTitle(Text(self.alarmData.name))
         .navigationBarItems(trailing: EditButton())
         .onAppear {
+            // Reset Checkboxes
+            for td in self.taskDataList {
+                td.resetDone()
+            }
+            self.save()
+            
+            // Reset self variables
             self.taskEditUUID = nil
+            self.taskPlayerIdx = 0
             self.newTaskDataList = self.alarmData.taskDataList
         }
         .onDisappear {
@@ -163,9 +171,11 @@ struct TaskListView: View {
 struct TaskListView_Previewer: View {
     @ObservedObject var alarmData: AlarmData
     var body: some View {
-        TaskListView(
-            alarmData: self.alarmData
-        )
+        NavigationView {
+            TaskListView(
+                alarmData: self.alarmData
+            )
+        }
     }
 }
 

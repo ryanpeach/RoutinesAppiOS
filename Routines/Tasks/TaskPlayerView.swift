@@ -38,11 +38,22 @@ struct TaskPlayerView: View {
     @State var lastTime: Date = Date()
     @State var durationBeforePause: TimeInterval = 0
     @State var durationSoFar: TimeInterval = 0
+    @State var showingAlert: Bool = false
     
     // These update taskData
     @State var taskLastDuration: [TimeInterval?] = []
     @State var taskDone: [Bool?] = []
     @State var taskLastEdited: [Date?] = []
+    @State var taskNotificationId: [String?] = []
+    
+    var doneCriteria: Bool {
+        guard let td = self.taskData else {
+            print("No Task Data")
+            return false
+        }
+        let stdl = td.subTaskDataList
+        return stdl.count == 0 || stdl.allSatisfy({$0.done})
+    }
     
     var body: some View {
         VStack {
@@ -68,23 +79,23 @@ struct TaskPlayerView: View {
                 HStack {
                     Spacer()
                     Button(action: {
-                        withAnimation {
-                            guard let td = self.taskData else {
-                                print("No Task Data")
-                                return
-                            }
-                            let stdl = td.subTaskDataList
-                            if stdl.count == 0 || stdl.allSatisfy({$0.done}) {
-                                self.taskLastDuration[self.taskIdx] = self.durationSoFar
-                                self.taskDone[self.taskIdx] = true
-                                self.taskLastEdited[self.taskIdx] = Date()
-                                self.next()
-                            }
+                        if self.doneCriteria {
+                            self.taskLastDuration[self.taskIdx] = self.durationSoFar
+                            self.taskDone[self.taskIdx] = true
+                            self.taskLastEdited[self.taskIdx] = Date()
+                            self.next()
+                        } else {
+                            self.showingAlert = true
                         }
                     }) {
                         Image(systemName: "checkmark.circle")
                             .resizable()
                             .frame(width: 100.0, height: 100.0)
+                            // .foregroundColor(self.doneCriteria ? Color.blue : Color.gray) TODO: Doesn't work...
+                    }
+                    .alert(isPresented: $showingAlert) {
+                        Alert(title: Text("Not Done Yet!"),
+                              message: Text("You can only click the checkmark when all tasks are done. If you want to skip, use the forward skip button below it instead."), dismissButton: .default(Text("I'm going to finish!")))
                     }
                     Spacer()
                 }
@@ -134,12 +145,19 @@ struct TaskPlayerView: View {
             }
         }
         .onAppear {
+            self.showingAlert = false
             let tdl = self.alarmData.taskDataList
             for td in tdl {
-                td.resetDone()
+                // Delete Notifications when you start the player
+                if td.notificationId != nil {
+                    LocalNotificationManager.deleteNotification(
+                        id: td.notificationId!
+                    )
+                }
                 self.taskLastDuration.append(nil)
                 self.taskDone.append(nil)
                 self.taskLastEdited.append(nil)
+                self.taskNotificationId.append(nil)
             }
             if self.taskIdx < tdl.count {
                 self.taskData = tdl[self.taskIdx]
@@ -155,19 +173,31 @@ struct TaskPlayerView: View {
                 tdl[idx].lastDuration_ = self.taskLastDuration[idx] ?? tdl[idx].lastDuration_
                 tdl[idx].done = self.taskDone[idx] ?? tdl[idx].done
                 tdl[idx].lastEdited = self.taskLastEdited[idx] ?? tdl[idx].lastEdited
+                // Let's actually delete notifications
+                if tdl[idx].notificationId != nil {
+                    LocalNotificationManager.deleteNotification(
+                        id: tdl[idx].notificationId!
+                    )
+                }
+                if self.taskNotificationId[idx] != nil {
+                    LocalNotificationManager.deleteNotification(
+                        id: self.taskNotificationId[idx]!
+                    )
+                }
             }
             self.taskLastDuration = []
             self.taskDone = []
             self.taskLastEdited = []
+            self.taskNotificationId = []
         }
         .navigationBarTitle(Text(self.done ? "" : self.taskData!.name))
     }
     
     func deleteNotification() {
         if !self.done {
-            if self.taskData!.notificationId != nil {
+            if self.taskNotificationId[self.taskIdx] != nil {
                 LocalNotificationManager.deleteNotification(
-                    id: self.taskData!.notificationId!
+                    id: self.taskNotificationId[self.taskIdx]!
                 )
             }
         }
@@ -179,7 +209,7 @@ struct TaskPlayerView: View {
             self.deleteNotification()
             let time = (self.taskData!.duration.timeInterval-self.durationSoFar)
             if time > 0 {
-                self.taskData!.notificationId = LocalNotificationManager.scheduleNotificationTimeInterval(
+                self.taskNotificationId[self.taskIdx] = LocalNotificationManager.scheduleNotificationTimeInterval(
                     time: time,
                     title: "Timer Done: \(self.taskData!.name)",
                     body: "Get on with your day!"
