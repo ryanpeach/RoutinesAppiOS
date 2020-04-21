@@ -264,9 +264,12 @@ struct TaskPlayerView: View {
             self.taskIdx += 1
             if self.taskIdx == cnt {
                 self.done = true
+                self.taskDataDuration = 0
+                self.durationSoFar = 0
+            } else {
+                self.taskDataDuration = tdl[self.taskIdx].duration_
+                self.durationSoFar = self.taskLastDuration[self.taskIdx] ?? 0
             }
-            self.taskDataDuration = tdl[self.taskIdx].duration_
-            self.durationSoFar = self.taskLastDuration[self.taskIdx] ?? 0
             self.startTime = Date()
             self.lastTime = Date()
             self.scheduleNotification()
