@@ -9,11 +9,11 @@
 import SwiftUI
 
 struct CountdownTimer: View {
-    let taskData: TaskData?
+    @Binding var taskDataDuration: TimeInterval
     @Binding var durationSoFar: TimeInterval
     
     var body: some View {
-        let this = RelativeTime.fromSeconds(seconds: ((taskData?.duration.timeInterval ?? 0)-durationSoFar))
+        let this = RelativeTime.fromSeconds(seconds: taskDataDuration-durationSoFar)
         if this.timeInterval < 0 {
             return Text("-"+this.stringMS()).foregroundColor(Color.red)
         } else {
@@ -30,12 +30,14 @@ struct TaskPlayerView: View {
     @State var taskIdx: Int = 0
     
     // For the timer
-    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    // let timerObj = Timer.publish(every: 1, on: .main, in: .common)
+    @State var timerObj: Timer?
     @State var taskData: TaskData?
     @State var isPlay: Bool = true
     @State var done: Bool = true
     @State var startTime: Date?
     @State var lastTime: Date = Date()
+    @State var taskDataDuration: TimeInterval = 0
     @State var durationBeforePause: TimeInterval = 0
     @State var durationSoFar: TimeInterval = 0
     @State var showingAlert: Bool = false
@@ -45,6 +47,21 @@ struct TaskPlayerView: View {
     @State var taskDone: [Bool?] = []
     @State var taskLastEdited: [Date?] = []
     @State var taskNotificationId: [String?] = []
+    
+    func getTimer() -> Timer {
+        return Timer.scheduledTimer(withTimeInterval: 1, repeats: true) {_ in
+            if self.isPlay && !self.done {
+                self.lastTime = Date()
+                if self.startTime == nil {
+                    self.startTime = Date()
+                }
+                self.durationSoFar = min(
+                    60*60+(self.taskData!.duration_),
+                    self.startTime!.distance(to: self.lastTime) + self.durationBeforePause + (self.taskLastDuration[self.taskIdx] ?? 0)
+                )
+            }
+        }
+    }
     
     var doneCriteria: Bool {
         guard let td = self.taskData else {
@@ -60,7 +77,7 @@ struct TaskPlayerView: View {
             if !self.done {
                 Spacer().frame(height: DEFAULT_HEIGHT_SPACING)
                 CountdownTimer(
-                    taskData: self.taskData,
+                    taskDataDuration: self.$taskDataDuration,
                     durationSoFar: self.$durationSoFar
                 ).font(Font.largeTitle)
                 Spacer().frame(height: DEFAULT_HEIGHT_SPACING)
@@ -80,7 +97,6 @@ struct TaskPlayerView: View {
                     Spacer()
                     Button(action: {
                         if self.doneCriteria {
-                            self.taskLastDuration[self.taskIdx] = self.durationSoFar
                             self.taskDone[self.taskIdx] = true
                             self.taskLastEdited[self.taskIdx] = Date()
                             self.next()
@@ -132,20 +148,10 @@ struct TaskPlayerView: View {
                 }
             }
         }
-        .onReceive(timer) { input in
-            if self.isPlay && !self.done {
-                self.lastTime = Date()
-                if self.startTime == nil {
-                    self.startTime = Date()
-                }
-                self.durationSoFar = min(
-                    60*60+(self.taskData!.duration_),
-                    self.startTime!.distance(to: self.lastTime) + self.durationBeforePause
-                )
-            }
-        }
         .onAppear {
+            self.timerObj = self.getTimer()
             self.showingAlert = false
+            self.startTime = Date();
             let tdl = self.alarmData.taskDataList
             for td in tdl {
                 // Delete Notifications when you start the player
@@ -154,18 +160,24 @@ struct TaskPlayerView: View {
                         id: td.notificationId!
                     )
                 }
-                self.taskLastDuration.append(nil)
-                self.taskDone.append(nil)
-                self.taskLastEdited.append(nil)
-                self.taskNotificationId.append(nil)
+                self.taskLastDuration.append(td.lastDuration_)
+                self.taskDone.append(td.done)
+                self.taskLastEdited.append(td.lastEdited)
+                self.taskNotificationId.append(td.notificationId)
             }
             if self.taskIdx < tdl.count {
                 self.taskData = tdl[self.taskIdx]
+                self.taskDataDuration = tdl[self.taskIdx].duration_
+                self.durationSoFar = self.taskLastDuration[self.taskIdx] ?? 0
                 self.done = false
                 self.isPlay = true
             }
         }
         .onDisappear() {
+            if self.timerObj != nil {
+                self.timerObj!.invalidate()
+                self.timerObj = nil
+            }
             self.done = true
             self.isPlay = false
             let tdl = self.alarmData.taskDataList
@@ -223,11 +235,13 @@ struct TaskPlayerView: View {
         let cnt = tdl.count
         if self.taskIdx > 0 {
             self.deleteNotification()
+            self.taskLastDuration[self.taskIdx] = self.durationSoFar
             self.taskIdx -= 1
             if self.taskIdx < cnt {
                 self.done = false
             }
-            self.durationSoFar = 0
+            self.taskDataDuration = tdl[self.taskIdx].duration_
+            self.durationSoFar = self.taskLastDuration[self.taskIdx] ?? 0
             self.startTime = Date()
             self.lastTime = Date()
             self.scheduleNotification()
@@ -243,11 +257,13 @@ struct TaskPlayerView: View {
         let cnt = tdl.count
         if self.taskIdx < cnt {
             self.deleteNotification()
+            self.taskLastDuration[self.taskIdx] = self.durationSoFar
             self.taskIdx += 1
             if self.taskIdx == cnt {
                 self.done = true
             }
-            self.durationSoFar = 0
+            self.taskDataDuration = tdl[self.taskIdx].duration_
+            self.durationSoFar = self.taskLastDuration[self.taskIdx] ?? 0
             self.startTime = Date()
             self.lastTime = Date()
             self.scheduleNotification()

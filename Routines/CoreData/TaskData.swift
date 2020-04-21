@@ -40,6 +40,7 @@ extension TaskData {
     func resetDone() {
         if self.lastEdited == nil {
             self.done = false
+            self.lastEdited = nil
             for subTaskData in self.subTaskDataList {
                 subTaskData.resetDone()
             }
@@ -64,6 +65,7 @@ extension TaskData {
             
             if isAfterResetTime && (!hasBeenEdited) {
                 self.done = false
+                self.lastEdited = nil
             }
             
             for subTaskData in self.subTaskDataList {
@@ -73,6 +75,7 @@ extension TaskData {
             let stdl = self.subTaskDataList
             if stdl.count > 0 && !stdl.allSatisfy({$0.done}) {
                 self.done = false
+                self.lastEdited = nil
             }
             
             //self.objectWillChange.send()
