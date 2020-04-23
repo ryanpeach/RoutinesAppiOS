@@ -45,6 +45,7 @@ struct TaskCreatorView: View {
     
     @State var newSubTask: String = ""
     @State var subTaskDataList: [String] = []
+    @State var alertDuplicate: Bool = false
 
     var body: some View {
         VStack {
@@ -60,7 +61,13 @@ struct TaskCreatorView: View {
                     Spacer().frame(height: DEFAULT_HEIGHT_SPACING)
                     TimePickerRelativeView(time: self.$duration)
                     Spacer().frame(height: DEFAULT_HEIGHT_SPACING)
-                    NewSubTaskView(newSubTask: self.$newSubTask, addSubTask: self.addSubTask)
+                    NewSubTaskView(
+                        newSubTask: self.$newSubTask,
+                        addSubTask: self.addSubTask
+                    ).alert(isPresented: $alertDuplicate) {
+                        Alert(title: Text("Duplicate Subtask"),
+                              message: Text("Subtasks can not contain duplicate names."), dismissButton: .default(Text("Ok")))
+                    }
                     Spacer().frame(height: DEFAULT_HEIGHT_SPACING)
                     Text("Subtasks:")
                     Spacer().frame(height: DEFAULT_HEIGHT_SPACING)
@@ -95,7 +102,11 @@ struct TaskCreatorView: View {
     
     func addSubTask() {
         if self.newSubTask != "" {
-            self.subTaskDataList.append(self.newSubTask)
+            if !self.subTaskDataList.contains(self.newSubTask) {
+                self.subTaskDataList.append(self.newSubTask)
+            } else {
+                self.alertDuplicate = true
+            }
             
             // Delete the item in the new sub task
             self.newSubTask = ""

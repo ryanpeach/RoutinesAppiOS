@@ -80,6 +80,11 @@ struct AlarmsView: View {
     func delete(at offsets: IndexSet) {
         for index in offsets {
             let alarmData = alarmDataList[index]
+            for notificationId in alarmData.notificationIds {
+                LocalNotificationManager.deleteNotification(
+                    id: notificationId
+                )
+            }
             self.managedObjectContext.delete(alarmData)
         }
     }

@@ -12,6 +12,10 @@ import CoreData
 
 struct AlarmRowForeground: View {
     @ObservedObject var alarmData: AlarmData
+    @State var alarmName: String = ""
+    @State var alarmDuration: RelativeTime = RelativeTime.fromSeconds(seconds: 0)
+    @State var alarmTime: RelativeTime = RelativeTime.fromSeconds(seconds: 0)
+    
     var body: some View {
         // Our foreground
         HStack {
@@ -20,14 +24,14 @@ struct AlarmRowForeground: View {
                 HStack {
                     Spacer().frame(width: DEFAULT_LEFT_ALIGN_SPACE)
                     VStack {
-                        Text(self.alarmData.name).font(Font.title)
+                        Text(self.alarmName).font(Font.title)
                     }
                     VStack {
                         HStack{
                             Spacer()
                             HStack{
                                 Text("Time: ")
-                                Text(self.alarmData.time.stringHMS())
+                                Text(self.alarmTime.stringHMS())
                             }
                             Spacer().frame(width: DEFAULT_LEFT_ALIGN_SPACE)
                         }
@@ -35,7 +39,7 @@ struct AlarmRowForeground: View {
                             Spacer()
                             HStack {
                                 Text("Duration: ")
-                                Text(self.alarmData.duration.stringHMS())
+                                Text(self.alarmDuration.stringHMS())
                             }
                             Spacer().frame(width: DEFAULT_LEFT_ALIGN_SPACE)
                         }
@@ -48,6 +52,11 @@ struct AlarmRowForeground: View {
                 }
                 Spacer()
             }
+        }
+        .onAppear() {
+            self.alarmName = self.alarmData.name
+            self.alarmDuration = self.alarmData.duration
+            self.alarmTime = self.alarmData.time
         }
     }
 }

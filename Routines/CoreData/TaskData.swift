@@ -37,10 +37,15 @@ extension TaskData {
         return subTaskDataList.sorted(by: { $0.order < $1.order })
     }
     
+    private func resetDone_() {
+        self.done = false
+        self.lastEdited = nil
+        self.lastDuration_ = 0
+    }
+    
     func resetDone() {
         if self.lastEdited == nil {
-            self.done = false
-            self.lastEdited = nil
+            self.resetDone_()
             for subTaskData in self.subTaskDataList {
                 subTaskData.resetDone()
             }
@@ -64,8 +69,7 @@ extension TaskData {
             let hasBeenEdited = self.lastEdited! > Calendar.current.date(from: resetTimeToday)!
             
             if isAfterResetTime && (!hasBeenEdited) {
-                self.done = false
-                self.lastEdited = nil
+                self.resetDone_()
             }
             
             for subTaskData in self.subTaskDataList {
@@ -74,11 +78,8 @@ extension TaskData {
             
             let stdl = self.subTaskDataList
             if stdl.count > 0 && !stdl.allSatisfy({$0.done}) {
-                self.done = false
-                self.lastEdited = nil
+                self.resetDone_()
             }
-            
-            //self.objectWillChange.send()
         }
     }
 }

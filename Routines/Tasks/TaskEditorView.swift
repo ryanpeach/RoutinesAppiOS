@@ -17,6 +17,7 @@ struct TaskEditorView: View {
     @State var taskName: String = ""
     @State var newSubTaskDataList: [String] = []
     @State var taskDuration: RelativeTime = RelativeTime.fromSeconds(seconds: 0)
+    @State var alertDuplicate: Bool = false
     
     var body: some View {
         VStack {
@@ -27,7 +28,10 @@ struct TaskEditorView: View {
             NewSubTaskView(
                 newSubTask: self.$newSubTask,
                 addSubTask: self.addSubTask
-            )
+            ).alert(isPresented: $alertDuplicate) {
+                Alert(title: Text("Duplicate Subtask"),
+                      message: Text("Subtasks can not contain duplicate names."), dismissButton: .default(Text("Ok")))
+            }
             Spacer().frame(height: DEFAULT_HEIGHT_SPACING)
             Text("Subtasks:")
             Spacer().frame(height: DEFAULT_HEIGHT_SPACING)
@@ -69,7 +73,11 @@ struct TaskEditorView: View {
     
     func addSubTask() {
         if self.newSubTask != "" {
-            self.newSubTaskDataList.append(self.newSubTask)
+            if !self.newSubTaskDataList.contains(self.newSubTask) {
+                self.newSubTaskDataList.append(self.newSubTask)
+            } else {
+                self.alertDuplicate = true
+            }
             
             // Delete the item in the new sub task
             self.newSubTask = ""
@@ -77,7 +85,9 @@ struct TaskEditorView: View {
     }
     
     func addSubTasks() {
+        var wasDone = Dictionary<String, Bool>() // This isn't perfect but it will do
         for sub_td in self.taskData.subTaskDataList {
+            wasDone[sub_td.name] = sub_td.done
             self.managedObjectContext.delete(sub_td)
         }
         var order: Int = 0
@@ -86,6 +96,7 @@ struct TaskEditorView: View {
             subTaskData.id = UUID()
             subTaskData.name = sub_td_name
             subTaskData.order = Int64(order)
+            subTaskData.done = wasDone[sub_td_name] ?? false
             self.taskData.addToSubTaskData(subTaskData)
             order += 1
         }

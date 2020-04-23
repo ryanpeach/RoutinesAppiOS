@@ -108,6 +108,15 @@ struct DaysOfWeekPicker: View {
                 isActive: self.$hasSaturday
             )
         }
+        .onAppear() {
+            self.hasMonday = self.daysOfWeek.contains(DayOfWeek.Monday)
+            self.hasTuesday = self.daysOfWeek.contains(DayOfWeek.Tuesday)
+            self.hasWednesday = self.daysOfWeek.contains(DayOfWeek.Wednesday)
+            self.hasThursday = self.daysOfWeek.contains(DayOfWeek.Thursday)
+            self.hasFriday = self.daysOfWeek.contains(DayOfWeek.Friday)
+            self.hasSaturday = self.daysOfWeek.contains(DayOfWeek.Saturday)
+            self.hasSunday = self.daysOfWeek.contains(DayOfWeek.Sunday)
+        }
     }
     
     func getDaysOfWeek() {

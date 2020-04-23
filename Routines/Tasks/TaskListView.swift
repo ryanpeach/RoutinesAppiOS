@@ -45,7 +45,7 @@ struct TaskListView: View {
             }
             Spacer().frame(height: DEFAULT_HEIGHT_SPACING)
             List{
-                ForEach(self.newTaskDataList, id: \.order) { td in
+                ForEach(self.newTaskDataList, id: \.id) { td in
                     ZStack {
                         TaskRowView(
                             taskData: td,
@@ -101,8 +101,18 @@ struct TaskListView: View {
             self.newTaskDataList = self.alarmData.taskDataList
         }
         .onDisappear {
-            self.newTaskDataList = []
+            // self.newTaskDataList = []
+            self.saveChanges()
         }
+    }
+    
+    func saveChanges() {
+        var count = 0
+        for td in self.newTaskDataList {
+            td.order = Int64(count)
+            count += 1
+        }
+        self.save()
     }
     
     func createNewTask() {
@@ -126,36 +136,11 @@ struct TaskListView: View {
         
         // Save
         self.save()
-        self.alarmData.objectWillChange.send()
+        // self.alarmData.objectWillChange.send()
     }
     
     func move(from source: IndexSet, to destination: Int) {
-        var range: [Int] = []
-        var idx: Int = 0
-        for _ in self.taskDataList {
-            range.append(idx)
-            idx += 1
-        }
-        
         self.newTaskDataList.move(fromOffsets: source, toOffset: destination)
-        range.move(fromOffsets: source, toOffset: destination)
-        
-        // Set the new order
-        var count: Int = 0
-        for idx in range {
-            let td = self.taskDataList[idx]
-            td.order = Int64(count)
-            count += 1
-        }
-        
-        // Update the order
-        for td in self.taskDataList {
-            td.objectWillChange.send()
-        }
-        
-        // Save
-        self.save()
-        self.alarmData.objectWillChange.send()
     }
     
     func save() {
