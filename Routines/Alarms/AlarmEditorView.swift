@@ -14,20 +14,29 @@ struct AlarmEditorView: View {
     @Binding var inEditing: Bool
     @ObservedObject var alarmData: AlarmData
     
+    @State var newTime: Date = Date()
+    @State var newDaysOfWeeks: [DayOfWeek] = []
+    
     var body: some View {
         VStack {
             Spacer()
             TitleTextField(text: self.$alarmData.name)
             Spacer().frame(height: 30)
-            TimePickerAbsolute(currentDate: self.$alarmData.time.today)
-            DaysOfWeekPicker(daysOfWeek: self.$alarmData.daysOfWeek)
+            TimePickerAbsolute(currentDate: self.$newTime)
+            DaysOfWeekPicker(daysOfWeek: self.$newDaysOfWeeks)
             Spacer()
         }
         .navigationBarBackButtonHidden(true) // not needed, but just in case
         .navigationBarItems(leading: MyBackButton(label: "Back") {
+            self.alarmData.time.today = self.newTime
+            self.alarmData.daysOfWeek = self.newDaysOfWeeks
             self.inEditing = false
             self.setNotifications()
         })
+        .onAppear {
+            self.newTime = self.alarmData.time.today
+            self.newDaysOfWeeks = self.alarmData.daysOfWeek
+        }
     }
     
     func setNotifications() {
@@ -58,6 +67,16 @@ struct AlarmEditorView: View {
             notificationIds.append(id)
         }
         self.alarmData.notificationIds = notificationIds
+        self.save()
+    }
+    
+    func save() {
+        // Save
+        do {
+            try self.managedObjectContext.save()
+        } catch let error {
+            print("Could not save. \(error)")
+        }
     }
 }
 
