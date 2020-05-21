@@ -237,8 +237,10 @@ struct TaskPlayerView: View {
         let tdl = self.alarmData.taskDataList
         let cnt = tdl.count
         if self.taskIdx > 0 {
-            self.deleteNotification()
-            self.taskLastDuration[self.taskIdx] = self.durationSoFar
+            if !self.done {
+                self.deleteNotification()
+                self.taskLastDuration[self.taskIdx] = self.durationSoFar
+            }
             self.taskIdx -= 1
             if self.taskIdx < cnt {
                 self.done = false

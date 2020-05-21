@@ -77,13 +77,11 @@ struct AlarmCreatorView: View {
         alarm.notificationIds = notificationIds
         
         // Save
-        /*
         do {
             try self.moc.save()
         } catch let error {
             print("Could not save. \(error)")
         }
-        */
         
         // Bring me back
         self.createMode = false
